@@ -206,6 +206,54 @@ func _run() -> void:
 	press("pause")
 	await wait_physics()
 
+	# 6b) Ahumadero: construir, cargar y sacar ahumados.
+	s.camp.wood = 10
+	s.player.earn(Money.from_units(120))
+	await look(Vector3(-2.9, 0.05, -0.6), 90, -45)
+	check(ctx_kind() == "build", "se puede construir el ahumadero (%s)" % ctx_kind())
+	press("interact")
+	await wait_physics()
+	guard = 0
+	while ui.current_activity() != null and guard < 10:
+		await hit_check()
+		guard += 1
+	check(s.camp.has_building("smokehouse"), "ahumadero construido")
+	await look(Vector3(-2.9, 0.05, -0.6), 90, -25)
+	check(ctx_kind() == "smoker", "se puede usar el ahumadero (%s)" % ctx_kind())
+	s.camp.wood = 1
+	s.player.add_item("fish_big", 2)
+	press("interact")
+	await wait_physics()
+	check(ui.active_panel() == ui.smoker, "panel del ahumadero")
+	game.load_smoker()
+	check(PlayerActions.smoker_status(s) == PlayerActions.SMOKER_SMOKING, "ahumando")
+	press("pause")
+	await wait_physics()
+	var smoke: Node3D = piece("SmokehousePlot").get_node("After/Smoke")
+	await wait_physics(2)
+	check(smoke.visible, "sale humo de la chimenea")
+	for i in game.content.balance.smoke_ticks:
+		Simulation.step(s, game.content)
+	s.player.hunger_bp = PlayerState.FULL
+	s.player.thirst_bp = PlayerState.FULL
+	check(game.collect_smoker().ok and s.player.count("fish_big_smoked") == 2, "saca dos tarariras ahumadas")
+
+	# 6c) La noche: oscurece, no pica y hay faroles.
+	var day_night: DayNight = main.get_node("DayNight")
+	var porch: OmniLight3D = main.get_node("World/Shack/PorchLight")
+	day_night.apply_now()
+	var porch_day := porch.light_energy
+	var day_tick: int = s.tick
+	s.tick = (s.current_day() - 1) * s.ticks_per_day + DayTime.night_offset_ticks(s, game.content) + 20
+	day_night.apply_now()
+	check(day_night.nightness > 0.9, "de noche está oscuro (%.2f)" % day_night.nightness)
+	check(porch.light_energy > porch_day, "el farol de la choza brilla más de noche")
+	await look(Vector3(-3.0, 0.05, -15.6), 6, -38)
+	check(ctx_kind() == "none" and String(ui.context().get("text", "")).contains("noche"), "de noche no se puede pescar")
+	s.tick = day_tick
+	day_night.apply_now()
+	await wait_physics()
+
 	# 7) Guardar, empezar de cero y cargar.
 	var saved := game.save_game() as CommandResult
 	check(saved.ok, "guardado: " + saved.message)
@@ -232,6 +280,21 @@ func _run() -> void:
 	check(game.state.current_day() == day + 1, "despierta al día siguiente")
 	check(player.global_position.distance_to(spawn) < 0.5, "despierta en la choza")
 	check(game.state.player.faint_count == 1, "se cuenta el desmayo")
+	ui.report.request_close()
+	await wait_physics()
+
+	# 8b) Si termina la jornada y no estás en la cama, dormís afuera y amanecés en la choza.
+	player.apply_pose({"position": Vector3(8, 0.05, 6), "yaw": 0.0, "pitch": 0.0})
+	game.state.player.hunger_bp = PlayerState.FULL
+	game.state.player.thirst_bp = PlayerState.FULL
+	day = game.state.current_day()
+	game.state.tick = day * game.state.ticks_per_day - 2
+	t0 = Time.get_ticks_msec()
+	while ui.active_panel() != ui.report and Time.get_ticks_msec() - t0 < 4000:
+		await wait_physics()
+	check(ui.active_panel() == ui.report and game.state.reports[-1].slept_outside, "informe: dormiste afuera")
+	check(player.global_position.distance_to(spawn) < 0.5, "amanece en la choza")
+	check(game.state.player.hunger_bp < PlayerState.FULL, "dormir afuera da hambre")
 	ui.report.request_close()
 	await wait_physics()
 

@@ -14,8 +14,9 @@ signal state_replaced
 signal notice_posted(text: String)
 ## Cambió la billetera, la mochila o las herramientas del personaje.
 signal player_changed
-## El personaje se desmayó: la jornada terminó y despierta en su casa.
-signal fainted(report: DayReport)
+## La jornada terminó fuera de la cama (desmayo o dormir afuera): despierta en su choza.
+## Se emite ANTES del autoguardado para que se guarde la pose de la choza.
+signal woke_at_home(report: DayReport)
 ## Cambió el campamento: madera o construcciones.
 signal camp_changed
 
@@ -79,6 +80,8 @@ func _run_step() -> void:
 		_handle_faint(report)
 	elif report != null:
 		last_close_usec = last_step_usec
+		if report.slept_outside:
+			_wake_at_home(report)
 		_after_day_closed(report)
 
 
@@ -89,11 +92,15 @@ func _handle_faint(report_if_closed: DayReport) -> void:
 	if report == null:
 		report = Simulation.advance_to_end_of_day(state, content, true)
 	clock.reset()
-	state.player_pose = {}
 	_log("faint day %d" % report.day)
+	_wake_at_home(report)
+	_after_day_closed(report)
+
+
+func _wake_at_home(report: DayReport) -> void:
+	state.player_pose = {}
 	player_changed.emit()
-	_after_day_closed(report, true)
-	fainted.emit(report)
+	woke_at_home.emit(report)
 
 
 func push_pause(reason: String) -> void:
@@ -141,6 +148,14 @@ func drink_lake() -> CommandResult:
 
 func boil_water() -> CommandResult:
 	return _player_command("boil_water", PlayerActions.boil_water(state, content))
+
+
+func load_smoker() -> CommandResult:
+	return _player_command("load_smoker", PlayerActions.load_smoker(state, content))
+
+
+func collect_smoker() -> CommandResult:
+	return _player_command("collect_smoker", PlayerActions.collect_smoker(state, content))
 
 
 func cook_and_eat(fish_id: String) -> CommandResult:
@@ -199,7 +214,7 @@ func record_fact(subject: String, fact: String) -> void:
 	facts_changed.emit()
 
 
-func _after_day_closed(report: DayReport, _from_faint: bool = false) -> void:
+func _after_day_closed(report: DayReport) -> void:
 	for c in report.completed_projects:
 		project_state_changed.emit(String(c["project_id"]))
 	# Una colecta pudo llegar a la meta en el cierre: la obra arranca mañana.

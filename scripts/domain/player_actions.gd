@@ -38,6 +38,8 @@ static func cast_line(state: GameState, content: GameContent, spot: String = "sh
 	var rod := best_rod(state, content)
 	if rod == null:
 		return {"ok": false, "code": "no_rod", "message": Texts.t("ERR_NO_ROD")}
+	if DayTime.is_night(state, content):
+		return {"ok": false, "code": "night", "message": Texts.t("ERR_NIGHT_NO_FISH")}
 	if bag_free(state, content) <= 0:
 		return {"ok": false, "code": "bag_full", "message": Texts.t("ERR_BAG_FULL")}
 	var b := content.balance
@@ -148,6 +150,84 @@ static func build(state: GameState, content: GameContent, building_id: String) -
 		state.player.spend(def.money_cents())
 	state.camp.buildings.append(building_id)
 	return CommandResult.success(Texts.t("MSG_BUILT", {"name": Texts.t(def.name_key)}))
+
+
+# --- Ahumadero -----------------------------------------------------------------
+
+const SMOKER_EMPTY := "empty"
+const SMOKER_SMOKING := "smoking"
+const SMOKER_READY := "ready"
+
+
+static func smoker_status(state: GameState) -> String:
+	if state.camp.smoker_items.is_empty():
+		return SMOKER_EMPTY
+	return SMOKER_READY if state.tick >= state.camp.smoker_ready_tick else SMOKER_SMOKING
+
+
+## Carga el pescado crudo de la mochila (hasta la capacidad) y prende el fuego con una madera.
+static func load_smoker(state: GameState, content: GameContent) -> CommandResult:
+	if not state.camp.has_building("smokehouse"):
+		return CommandResult.failure("no_smokehouse", Texts.t("ERR_NO_SMOKEHOUSE"))
+	if smoker_status(state) != SMOKER_EMPTY:
+		return CommandResult.failure("smoker_busy", Texts.t("ERR_SMOKER_BUSY"))
+	if state.camp.wood < 1:
+		return CommandResult.failure("missing_wood", Texts.t("ERR_MISSING_WOOD", {"missing": 1}))
+	var room := content.balance.smoker_capacity
+	var load := {}
+	var pl := state.player
+	for item_id in _sorted(pl.bag.keys()):
+		var def := content.find_item(item_id)
+		if def == null or def.smoked_into.is_empty() or room <= 0:
+			continue
+		var n := mini(room, pl.count(item_id))
+		load[item_id] = n
+		room -= n
+	if load.is_empty():
+		return CommandResult.failure("no_fish", Texts.t("ERR_NO_FISH"))
+	var total := 0
+	for item_id in load:
+		pl.remove_item(item_id, load[item_id])
+		total += int(load[item_id])
+	state.camp.smoker_items = load
+	state.camp.smoker_ready_tick = state.tick + content.balance.smoke_ticks
+	state.camp.wood -= 1
+	return CommandResult.success(Texts.t("MSG_SMOKER_LOADED", {"n": total}), {"count": total})
+
+
+## Saca lo ahumado que entre en la mochila; lo que no entra queda en el ahumadero.
+static func collect_smoker(state: GameState, content: GameContent) -> CommandResult:
+	match smoker_status(state):
+		SMOKER_EMPTY:
+			return CommandResult.failure("smoker_empty", Texts.t("ERR_SMOKER_EMPTY"))
+		SMOKER_SMOKING:
+			return CommandResult.failure("smoker_not_ready", Texts.t("ERR_SMOKER_NOT_READY"))
+	var free := bag_free(state, content)
+	if free <= 0:
+		return CommandResult.failure("bag_full", Texts.t("ERR_BAG_FULL"))
+	var taken := 0
+	for item_id in _sorted(state.camp.smoker_items.keys()):
+		var n := mini(free, int(state.camp.smoker_items[item_id]))
+		if n <= 0:
+			continue
+		state.player.add_item(content.find_item(item_id).smoked_into, n)
+		var left := int(state.camp.smoker_items[item_id]) - n
+		if left == 0:
+			state.camp.smoker_items.erase(item_id)
+		else:
+			state.camp.smoker_items[item_id] = left
+		free -= n
+		taken += n
+	if state.camp.smoker_items.is_empty():
+		state.camp.smoker_ready_tick = -1
+	var key := "MSG_SMOKER_COLLECTED" if state.camp.smoker_items.is_empty() else "MSG_SMOKER_COLLECTED_PARTIAL"
+	return CommandResult.success(Texts.t(key, {"n": taken}), {"count": taken})
+
+
+static func _sorted(keys: Array) -> Array:
+	var k := keys.duplicate()
+	k.sort()
+	return k
 
 
 # --- Comer y tomar ------------------------------------------------------------

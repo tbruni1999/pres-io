@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/presentation/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/world/lakeside.tscn" id="2_lakeside"]
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/ui/ui_root.tscn" id="4_ui_root"]
+[ext_resource type="Script" path="res://scripts/presentation/world/day_night.gd" id="3_day_night"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="4_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ui_root.tscn" id="5_ui_root"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.36, 0.55, 0.78, 1)
@@ -47,8 +48,11 @@ directional_shadow_mode = 1
 
 [node name="World" parent="." instance=ExtResource("2_lakeside")]
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
+[node name="DayNight" type="Node" parent="."]
+script = ExtResource("3_day_night")
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
 position = Vector3(0.5, 0.05, -0.2)
 rotation_degrees = Vector3(0, 180, 0)
 
-[node name="UI" parent="." instance=ExtResource("4_ui_root")]
+[node name="UI" parent="." instance=ExtResource("5_ui_root")]

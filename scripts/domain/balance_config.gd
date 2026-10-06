@@ -5,6 +5,16 @@ extends Resource
 
 ## Pasos administrativos (1 s de simulación cada uno) por jornada.
 @export var ticks_per_day: int = 480
+## Reloj del juego (minutos desde las 00:00): la jornada va de 06:00 a 24:00.
+@export var day_start_minute: int = 360
+@export var day_end_minute: int = 1440
+## Desde el atardecer baja la luz; desde la noche no pica nada ni pasan comerciantes.
+@export var dusk_minute: int = 1170
+@export var night_minute: int = 1260
+## Si la jornada termina y no estás en la cama, dormís a la intemperie:
+## hambre y sed bajan esto (sin bajar de slept_outside_floor_bp).
+@export var slept_outside_loss_bp: int = 1500
+@export var slept_outside_floor_bp: int = 1000
 ## Segundos reales por paso administrativo a velocidad normal.
 @export var step_seconds: float = 1.0
 ## Máximo de pasos administrativos que se procesan en un mismo fotograma.
@@ -50,8 +60,13 @@ extends Resource
 @export var dock_big_bonus_bp: int = 2000
 @export var dock_zone_bonus_bp: int = 500
 
+@export_group("Ahumadero")
+## Pescados por tanda y pasos que tarda una tanda (90 pasos = 3 h y 22 min de juego).
+@export var smoker_capacity: int = 8
+@export var smoke_ticks: int = 90
+
 @export_group("Comerciantes")
-@export var merchant_passes_per_day: int = 5
+@export var merchant_passes_per_day: int = 4
 ## Cuánto espera parado si nadie le compra (pasos de 1 s).
 @export var merchant_stop_ticks: int = 45
 ## El primero en pasar el día 1 (para conocer el juego).

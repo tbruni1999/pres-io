@@ -1,4 +1,4 @@
-# Esquema de guardado — versión 2
+# Esquema de guardado — versión 3
 
 Archivo JSON UTF-8 en `user://saves/<slot>.json`. Slots usados: `manual_1` (Esc → Guardar) y
 `autosave` (al cerrar cada jornada). Ajustes en `user://settings.cfg`, fuera de las partidas.
@@ -23,7 +23,7 @@ el guardado anterior.
 
 | Campo | Tipo | Notas |
 |---|---|---|
-| `schema_version` | número | `2` (el 1 se migra al cargar) |
+| `schema_version` | número | `3` (el 1 y el 2 se migran al cargar, en cadena) |
 | `game_version` | texto | p. ej. `0.1.0-h1` (informativo) |
 | `seed` | cadena decimal int64 | semilla de la partida |
 | `rng_seed`, `rng_state` | cadena decimal int64 | generador administrativo; se restaura exacto |
@@ -38,8 +38,8 @@ el guardado anterior.
 | `applied_operations[]` | lista | `key`, `tick` (cadena): operaciones ya aplicadas |
 | `facts[]` | lista | `subject` (`player`, `neighbor_rosa`), `facts` (lista de textos) |
 | `player_state` | objeto | billetera (`opening_cents`, `wallet_cents`, `earned_total_cents`, `spent_total_cents`, cadenas), `hunger_bp`, `thirst_bp` (0–10000), `bag` [{`id`, `count`}], `tools` [ids], `faint_count`, `donated_total_cents`, `fish_caught_total` y contadores del día |
-| `camp` | objeto | `wood`, `buildings` [ids], `passes` [{`id`, `merchant`, `start`, `status`, `stop_tick`, `leave_tick`, `bought`}] (ticks en cadena), `next_pass_id`, `branches_taken` [ids], `trees_cut` [{`tree`, `day`}] |
-| `reports[]` | lista | informes de cierre (últimos 30); dinero en cadenas; incluye la jornada del personaje (ganado, gastado, pescado, podrido, desmayo) |
+| `camp` | objeto | `wood`, `buildings` [ids], `passes` [{`id`, `merchant`, `start`, `status`, `stop_tick`, `leave_tick`, `bought`}] (ticks en cadena), `next_pass_id`, `branches_taken` [ids], `trees_cut` [{`tree`, `day`}], `smoker_items` [{`id`, `count`}] (crudo cargado), `smoker_ready_tick` (cadena, −1 = vacío) |
+| `reports[]` | lista | informes de cierre (últimos 30); dinero en cadenas; incluye la jornada del personaje (ganado, gastado, pescado, podrido, desmayo, `slept_outside`) |
 | `player` | objeto o null | `position` [x, y, z], `yaw` (rad), `pitch` (grados). Fuera del mapa → punto inicial |
 
 ## Validaciones de relación
@@ -53,10 +53,15 @@ Los guardados de H1 (escritorio y caja) conservan calendario (incluida su jornad
 fondo, obras, hechos e informes. Se agrega un personaje inicial y un campamento vacío; la agenda
 de comerciantes se arma en el próximo cierre.
 
+## Migración 2 → 3
+Se agrega el ahumadero vacío (`smoker_items` = [], `smoker_ready_tick` = "-1") y `slept_outside` = false en los informes.
+
 ## Fixtures
 - `tests/fixtures/save_v1_day2.json`: generado con el código de H1. Histórico, no se regenera.
-- `tests/fixtures/save_v2_day3.json`: generado con `tools/make_fixture.gd` (día 3, pozo arreglado por colecta, conservadora).
+- `tests/fixtures/save_v2_day3.json`: generado con el código de "Choza y lago". Histórico.
+- `tests/fixtures/save_v3_day2.json`: generado con `tools/make_fixture.gd` (día 2, durmió afuera el día 1, ahumadero con una tanda).
 
 ## Validaciones del personaje y el campamento
 - Billetera = inicial + ganado − gastado.
+- Ahumadero: si tiene carga, tiene hora de listo (y viceversa); solo se carga lo que se puede ahumar.
 - Objetos, herramientas, construcciones y comerciantes deben existir en el contenido.

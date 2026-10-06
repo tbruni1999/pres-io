@@ -12,12 +12,20 @@ var next_pass_id: int = 1
 var branches_taken: PackedStringArray = PackedStringArray()
 ## tree_id -> jornada en que se taló.
 var trees_cut: Dictionary = {}
-## Pescado que se pudrió en el último cierre (para el informe).
-var rotten_today: int = 0
+## Ahumadero: item crudo -> cantidad cargada, y tick en que la tanda está lista (-1 = vacío).
+var smoker_items: Dictionary = {}
+var smoker_ready_tick: int = -1
 
 
 func has_building(id: String) -> bool:
 	return buildings.has(id)
+
+
+func smoker_count() -> int:
+	var n := 0
+	for k in smoker_items:
+		n += int(smoker_items[k])
+	return n
 
 
 func find_pass(pass_id: int) -> Dictionary:
@@ -46,7 +54,18 @@ func to_dict() -> Dictionary:
 		"next_pass_id": next_pass_id,
 		"branches_taken": Array(branches_taken),
 		"trees_cut": cut,
+		"smoker_items": _items_to_list(smoker_items),
+		"smoker_ready_tick": str(smoker_ready_tick),
 	}
+
+
+static func _items_to_list(d: Dictionary) -> Array:
+	var out: Array = []
+	var keys := d.keys()
+	keys.sort()
+	for k in keys:
+		out.append({"id": k, "count": d[k]})
+	return out
 
 
 static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> CampState:
@@ -81,4 +100,14 @@ static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> Cam
 	for t in r.get_array(d, "trees_cut", w):
 		if t is Dictionary:
 			c.trees_cut[r.get_string(t, "tree", w + ".trees_cut")] = r.get_small_int(t, "day", w + ".trees_cut", 1, 1_000_000)
+	for it in r.get_array(d, "smoker_items", w):
+		if it is Dictionary:
+			var id := r.get_string(it, "id", w + ".smoker_items")
+			var def := content.find_item(id)
+			if def == null or def.smoked_into.is_empty():
+				r.fail(w + ".smoker_items", "no se puede ahumar '%s'" % id)
+			c.smoker_items[id] = r.get_small_int(it, "count", w + ".smoker_items", 1, 100000)
+	c.smoker_ready_tick = r.get_big_int(d, "smoker_ready_tick", w, -1, 1 << 62)
+	if c.smoker_items.is_empty() != (c.smoker_ready_tick < 0):
+		r.fail(w, "ahumadero inconsistente (carga y hora de listo)")
 	return c

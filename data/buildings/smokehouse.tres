@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1_s")
-id = "dock"
-name_key = "BUILD_DOCK"
-wood = 20
-money_uc = 150
-checks = 10
-order = 4
+id = "smokehouse"
+name_key = "BUILD_SMOKEHOUSE"
+wood = 10
+money_uc = 120
+checks = 6
+order = 3

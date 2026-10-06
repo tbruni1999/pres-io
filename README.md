@@ -5,7 +5,7 @@ un lago y un camino de tierra. Pescás, les vendés a los comerciantes que pasan
 construís, y de a poco el lugar crece. Diseño en [`docs/DESIGN.md`](docs/DESIGN.md).
 
 **Estado: "Choza y lago" jugable** — pesca con skillcheck, hambre y sed, desmayo, comerciantes
-con señas, madera, fogón, cartel y muelle. Detalle en [`docs/PROGRESS.md`](docs/PROGRESS.md).
+con señas, madera, fogón, cartel, ahumadero, muelle y noche. Detalle en [`docs/PROGRESS.md`](docs/PROGRESS.md).
 
 ![Don Ramiro y Turbo](docs/img/08_ramiro_parado.png)
 

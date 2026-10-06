@@ -92,6 +92,26 @@ func _run() -> void:
 	await _shot_at("16_desde_muelle", Vector3(5.5, 0.05, -26.5), Vector3(0.0, 0.0, -36.0))
 	await _shot_at("17_arbol_ramas", Vector3(-8.0, 0.05, -2.0), Vector3(-11.0, 0.8, -7.0))
 
+	# Ahumadero con humo, atardecer y noche.
+	s.camp.wood += 11
+	game.build("smokehouse")
+	s.player.add_item("fish_small", 3)
+	game.load_smoker()
+	await _frames(4)
+	await _shot_at("17b_ahumadero", Vector3(-8.5, 0.05, 4.0), Vector3(-4.8, 1.3, -0.6))
+	var dn: DayNight = main.get_node("DayNight")
+	var keep_tick: int = s.tick
+	var day0: int = (s.current_day() - 1) * s.ticks_per_day
+	s.tick = day0 + int(380.0 / 1080.0 * s.ticks_per_day * (1170.0 - 360.0) / 380.0)
+	dn.apply_now()
+	await _shot_at("17c_atardecer", Vector3(-6.0, 0.05, -12.0), Vector3(4.0, 0.5, -36.0))
+	s.tick = day0 + DayTime.night_offset_ticks(s, game.content) + 40
+	dn.apply_now()
+	await _shot_at("17d_noche_choza", Vector3(-3.0, 0.05, 8.0), Vector3(0.5, 1.0, 0.0))
+	await _shot_at("17e_noche_lago", Vector3(-3.0, 0.05, -15.0), Vector3(0.0, 0.5, -36.0))
+	s.tick = keep_tick
+	dn.apply_now()
+
 	# Otros comerciantes.
 	for q in s.camp.passes:
 		q["status"] = Merchants.GONE

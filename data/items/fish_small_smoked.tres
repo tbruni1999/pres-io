@@ -4,12 +4,7 @@
 
 [resource]
 script = ExtResource("1_s")
-id = "fish_small"
-name_key = "ITEM_FISH_SMALL"
-kind = 0
-food_bp = 2000
-perishable = true
-smoked_into = "fish_small_smoked"
-zone_bp = 2600
-needle_speed = 0.9
-checks = 1
+id = "fish_small_smoked"
+name_key = "ITEM_FISH_SMALL_SMOKED"
+kind = 1
+food_bp = 3000

@@ -9,6 +9,7 @@ const SESSION_SCRIPT := preload("res://scripts/application/game_session.gd")
 const TEST_SAVE_DIR := "user://test_saves"
 const FIXTURE_V1 := "res://tests/fixtures/save_v1_day2.json"
 const FIXTURE_V2 := "res://tests/fixtures/save_v2_day3.json"
+const FIXTURE_V3 := "res://tests/fixtures/save_v3_day2.json"
 
 var _failures: PackedStringArray = PackedStringArray()
 var _checks := 0
@@ -49,7 +50,15 @@ func _initialize() -> void:
 		"test_clock_never_drops_steps",
 		"test_dialogue_follows_state",
 		"test_fixture_v1_migrates",
-		"test_fixture_v2_loads",
+		"test_fixture_v2_migrates",
+		"test_fixture_v3_loads",
+		"test_clock_and_night",
+		"test_no_fishing_at_night",
+		"test_merchants_gone_before_night",
+		"test_sleeping_outside",
+		"test_smoker_cycle",
+		"test_smoked_fish_keeps_and_sells_better",
+		"test_session_wakes_home_when_day_ends_outside",
 	]
 	for t in tests:
 		_current = t
@@ -298,6 +307,7 @@ func test_sleep_freezes_needs() -> bool:
 	eq(rep.day, 1, "dormir cierra la jornada")
 	eq(s.player.hunger_bp, h, "mientras dormís no da hambre")
 	check(not rep.fainted, "dormir no desmaya")
+	check(not rep.slept_outside, "dormir en la cama no es dormir afuera")
 	return true
 
 
@@ -627,7 +637,7 @@ func test_session_faint_wakes_next_day() -> bool:
 	session._ready()
 	session.autosave_enabled = false
 	var got: Array = []
-	session.fainted.connect(func(rep: DayReport) -> void: got.append(rep))
+	session.woke_at_home.connect(func(rep: DayReport) -> void: got.append(rep))
 	session.state.player.thirst_bp = 1
 	session._process(1.0)
 	eq(got.size(), 1, "la sesión avisa del desmayo")
@@ -679,16 +689,159 @@ func test_fixture_v1_migrates() -> bool:
 	return true
 
 
-## Fixture generado con el código actual (schema 2). Se regenera con tools/make_fixture.gd.
-func test_fixture_v2_loads() -> bool:
+## Fixture generado con el código de "Choza y lago" (schema 2). Debe migrar a v3.
+func test_fixture_v2_migrates() -> bool:
 	var r := _load_fixture(FIXTURE_V2)
-	check(r["ok"], "el fixture v2 carga: %s" % r.get("message", ""))
+	check(r["ok"], "el fixture v2 carga migrado: %s" % r.get("message", ""))
 	if not r["ok"]:
 		return false
 	var s: GameState = r["state"]
 	eq(s.current_day(), 3, "día 3")
 	eq(s.get_project("well_repair").status, ProjectState.COMPLETED, "pozo arreglado por la colecta")
 	check(s.player.has_tool("cooler"), "tiene la conservadora")
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_EMPTY, "ahumadero vacío tras migrar")
+	return true
+
+
+## Fixture del esquema actual (3). Se regenera con tools/make_fixture.gd.
+func test_fixture_v3_loads() -> bool:
+	var r := _load_fixture(FIXTURE_V3)
+	check(r["ok"], "el fixture v3 carga: %s" % r.get("message", ""))
+	if not r["ok"]:
+		return false
+	var s: GameState = r["state"]
+	eq(s.current_day(), 2, "día 2")
+	check(s.camp.has_building("smokehouse"), "tiene ahumadero")
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_SMOKING, "con una tanda ahumándose")
+	check(s.reports[0].slept_outside, "el día 1 durmió afuera")
+	return true
+
+
+# --- Noche y ahumadero ----------------------------------------------------------
+
+func at_minute(s: GameState, minute: int) -> void:
+	var b := CONTENT.balance
+	var offset := (minute - b.day_start_minute) * s.ticks_per_day / (b.day_end_minute - b.day_start_minute)
+	s.tick = (s.current_day() - 1) * s.ticks_per_day + offset
+
+
+func test_clock_and_night() -> bool:
+	var s := new_state()
+	eq(DayTime.format_clock(DayTime.minute_of_day(s, CONTENT)), "06:00", "la jornada arranca a las 6")
+	check(not DayTime.is_night(s, CONTENT), "de mañana no es de noche")
+	at_minute(s, 15 * 60)
+	eq(DayTime.format_clock(DayTime.minute_of_day(s, CONTENT)), "15:00", "media tarde (cada paso son 2,25 minutos)")
+	at_minute(s, 21 * 60)
+	check(DayTime.is_night(s, CONTENT), "a las 21 es de noche")
+	s.tick = s.ticks_per_day - 1
+	check(DayTime.minute_of_day(s, CONTENT) < 24 * 60, "la jornada termina antes de medianoche")
+	return true
+
+
+func test_no_fishing_at_night() -> bool:
+	var s := new_state()
+	at_minute(s, 21 * 60 + 30)
+	var r := PlayerActions.cast_line(s, CONTENT)
+	eq(r["code"], "night", "de noche no pica")
+	check(String(r["message"]).length() > 0, "con mensaje")
+	return true
+
+
+func test_merchants_gone_before_night() -> bool:
+	for seed_value in [1, 2, 3, 4, 5]:
+		var s := new_state(seed_value)
+		s.camp.buildings.append("sign")
+		for d in 3:
+			var night_tick := (s.current_day() - 1) * s.ticks_per_day + DayTime.night_offset_ticks(s, CONTENT)
+			for p in s.camp.passes:
+				check(int(p["start"]) + CONTENT.find_merchant(p["merchant"]).crossing_ticks < night_tick, "la pasada %s cruza antes de la noche" % p["id"])
+			while s.tick < night_tick:
+				Simulation.step(fed(s), CONTENT)
+			for p in s.camp.passes:
+				check(p["status"] == Merchants.GONE, "a la noche ya no queda nadie en el camino (semilla %d, %s)" % [seed_value, p["status"]])
+			advance_fed(s)
+	return true
+
+
+func test_sleeping_outside() -> bool:
+	var s := fed(new_state())
+	s.player.hunger_bp = 5000
+	s.player.thirst_bp = 1200
+	s.tick = s.ticks_per_day - 1
+	var rep := Simulation.step(s, CONTENT)
+	check(rep != null and rep.slept_outside, "la jornada terminó afuera")
+	eq(s.player.hunger_bp, 5000 - CONTENT.balance.hunger_decay_bp - CONTENT.balance.slept_outside_loss_bp, "dormir afuera da hambre")
+	eq(s.player.thirst_bp, CONTENT.balance.slept_outside_floor_bp, "sin bajar del piso")
+	check(not s.player.faint_pending, "dormir afuera no es desmayo")
+	return true
+
+
+func test_smoker_cycle() -> bool:
+	var s := new_state()
+	s.player.add_item("fish_small", 6)
+	s.player.add_item("fish_big", 4)
+	s.player.add_item("bread", 1)
+	eq(PlayerActions.load_smoker(s, CONTENT).code, "no_smokehouse", "sin ahumadero no se ahúma")
+	s.camp.buildings.append("smokehouse")
+	eq(PlayerActions.load_smoker(s, CONTENT).code, "missing_wood", "hace falta una madera")
+	s.camp.wood = 2
+	var r := PlayerActions.load_smoker(s, CONTENT)
+	check(r.ok, "carga el ahumadero")
+	eq(r.data["count"], CONTENT.balance.smoker_capacity, "entran %d" % CONTENT.balance.smoker_capacity)
+	eq(s.player.bag_count(), 10 + 1 - CONTENT.balance.smoker_capacity, "lo demás queda en la mochila")
+	eq(s.player.count("bread"), 1, "el pan no se ahúma")
+	eq(s.camp.wood, 1, "gastó una madera")
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_SMOKING, "ahumando")
+	eq(PlayerActions.load_smoker(s, CONTENT).code, "smoker_busy", "no se carga dos veces")
+	eq(PlayerActions.collect_smoker(s, CONTENT).code, "smoker_not_ready", "todavía no está")
+	for i in CONTENT.balance.smoke_ticks:
+		Simulation.step(fed(s), CONTENT)
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_READY, "listo")
+	s.player.bag.clear()
+	s.player.add_item("bread", 1)
+	var c := PlayerActions.collect_smoker(s, CONTENT)
+	check(c.ok, "saca lo ahumado")
+	eq(c.data["count"], CONTENT.balance.bag_capacity - 1, "saca lo que entra en la mochila")
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_READY, "lo que no entró queda listo en el ahumadero")
+	s.player.bag.clear()
+	check(PlayerActions.collect_smoker(s, CONTENT).ok, "saca el resto")
+	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_EMPTY, "vacío")
+	return true
+
+
+func test_smoked_fish_keeps_and_sells_better() -> bool:
+	var s := new_state()
+	s.camp.buildings.append("smokehouse")
+	s.camp.wood = 1
+	s.player.add_item("fish_big", 2)
+	PlayerActions.load_smoker(s, CONTENT)
+	var rep := advance_fed(s)
+	eq(rep.rotten, 0, "lo que está en el ahumadero no se pudre")
+	check(PlayerActions.collect_smoker(s, CONTENT).ok, "a la mañana está listo")
+	eq(s.player.count("fish_big_smoked"), 2, "dos tarariras ahumadas")
+	var rep2 := advance_fed(s)
+	eq(rep2.rotten, 0, "lo ahumado no se pudre")
+	eq(s.player.count("fish_big_smoked"), 2, "siguen en la mochila")
+	for m in CONTENT.merchants:
+		var def := m as MerchantDefinition
+		check(def.buy_price_cents("fish_big_smoked") > def.buy_price_cents("fish_big"), "%s paga más lo ahumado" % def.id)
+	return true
+
+
+func test_session_wakes_home_when_day_ends_outside() -> bool:
+	var session: Node = SESSION_SCRIPT.new()
+	session._ready()
+	session.autosave_enabled = false
+	fed(session.state)
+	var got: Array = []
+	session.woke_at_home.connect(func(rep: DayReport) -> void: got.append(rep))
+	session.state.player_pose = {"position": Vector3(5, 0.05, 5), "yaw": 0.0, "pitch": 0.0}
+	session.state.tick = session.state.ticks_per_day - 1
+	session._process(1.0)
+	eq(got.size(), 1, "la sesión avisa que despierta en la choza")
+	check(got.size() == 1 and (got[0] as DayReport).slept_outside, "porque durmió afuera")
+	check(session.state.player_pose.is_empty(), "vuelve a la choza")
+	session.free()
 	return true
 
 

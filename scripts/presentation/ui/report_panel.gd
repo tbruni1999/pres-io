@@ -19,7 +19,12 @@ func on_open(args: Dictionary) -> void:
 	if rep == null:
 		return
 	var faint := rep.fainted
-	_content.add_child(UIKit.title(Texts.t("REPORT_FAINT_TITLE") if faint else Texts.t("REPORT_DAY_END", {"day": rep.day})))
+	var title := Texts.t("REPORT_DAY_END", {"day": rep.day})
+	if faint:
+		title = Texts.t("REPORT_FAINT_TITLE")
+	elif rep.slept_outside:
+		title = Texts.t("REPORT_SLEPT_OUT_TITLE")
+	_content.add_child(UIKit.title(title))
 	_content.add_child(UIKit.row(Texts.t("REPORT_EARNED"), "+" + Money.format(rep.earned_cents), UIKit.COLOR_GOOD))
 	_content.add_child(UIKit.row(Texts.t("REPORT_SPENT"), "-" + Money.format(rep.spent_cents - rep.faint_penalty_cents), UIKit.COLOR_BAD))
 	if faint:
@@ -28,7 +33,15 @@ func on_open(args: Dictionary) -> void:
 	if rep.rotten > 0:
 		_content.add_child(UIKit.row(Texts.t("REPORT_ROTTEN"), _fish(rep.rotten), UIKit.COLOR_BAD))
 	_content.add_child(UIKit.row(Texts.t("REPORT_WALLET"), Money.format(rep.wallet_end_cents), UIKit.COLOR_ACCENT))
-	var quip := ui.quip("FAINT", "QUIP") if faint else (Texts.t("REPORT_QUIP_ROTTEN") if rep.rotten > 0 else ui.quip("REPORT", "QUIP"))
+	if rep.slept_outside and not faint:
+		_content.add_child(UIKit.label(Texts.t("REPORT_SLEPT_OUT_LINE"), 16, UIKit.COLOR_BAD, true))
+	var quip := ui.quip("REPORT", "QUIP")
+	if faint:
+		quip = ui.quip("FAINT", "QUIP")
+	elif rep.slept_outside:
+		quip = ui.quip("SLEPT_OUT", "QUIP")
+	elif rep.rotten > 0:
+		quip = Texts.t("REPORT_QUIP_ROTTEN")
 	_content.add_child(UIKit.label(quip, 18, UIKit.COLOR_TEXT, true))
 
 

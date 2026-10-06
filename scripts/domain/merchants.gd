@@ -29,12 +29,14 @@ static func plan_day(state: GameState, content: GameContent, day: int) -> void:
 	var tpd := state.ticks_per_day
 	var day_start := (day - 1) * tpd
 	var slots := maxi(1, b.merchant_passes_per_day)
-	var spacing := tpd / slots
+	# Todos tienen que terminar de cruzar antes de la noche (el más lento tarda slowest_crossing).
+	var window_end := maxi(60, DayTime.night_offset_ticks(state, content) - _slowest_crossing(content) - b.merchant_stop_ticks)
+	var spacing := maxi(1, (window_end - 30) / slots)
 	if content.merchants.is_empty():
 		return
 	for i in slots:
 		var offset := 30 + i * spacing + state.rng.randi_range(0, maxi(0, spacing / 3))
-		offset = mini(offset, tpd - 20)
+		offset = mini(offset, window_end)
 		var merchant := _pick_merchant(state, content)
 		if day == 1 and i == 0 and content.find_merchant(content.balance.first_merchant) != null:
 			merchant = content.balance.first_merchant
@@ -45,6 +47,15 @@ static func plan_day(state: GameState, content: GameContent, day: int) -> void:
 			"status": SCHEDULED, "stop_tick": -1, "leave_tick": -1, "bought": 0,
 		})
 		camp.next_pass_id += 1
+
+
+static func _slowest_crossing(content: GameContent) -> int:
+	var slowest := 0
+	for m in content.merchants:
+		var def := m as MerchantDefinition
+		if def != null:
+			slowest = maxi(slowest, def.crossing_ticks)
+	return slowest
 
 
 static func _pick_merchant(state: GameState, content: GameContent) -> String:

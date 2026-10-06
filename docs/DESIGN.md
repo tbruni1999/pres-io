@@ -31,10 +31,13 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Mina | Se abre comprando el pico. |
 | Ascenso social | De vecino a referente **ayudando** (colectas, favores). |
 | Pozo y obras del barrio | No las hacés vos: son **beneficio comunitario** con colecta (vos aportás, los vecinos suman). |
+| Noche | La jornada va de 06:00 a 24:00. Desde las 19:30 atardece; desde las 21:00 es de noche: no pica nada y no pasan comerciantes. Si llegan las 24:00 y no estás en la cama, dormís afuera: amanecés en la choza con más hambre y sed. |
+| Ahumadero | 10 madera + 120 UC. Una tanda: hasta 8 pescados crudos + 1 madera, lista en ~3 h de juego. Lo ahumado no se pudre y se paga casi el doble. |
+| Mina | Va **después** del ahumadero. El pico lo trae un **comerciante nuevo** que empieza a pasar más adelante (progresión posterior). |
 
 ## Progresión prevista
-1. **Choza y lago** (hecho): pesca, comerciantes, madera, fogón, cartel, muelle.
-2. **Más actividades**: ahumadero, mejores cañas, minería con pico y comprador de mineral, contratar un ayudante.
+1. **Choza y lago** (hecho): pesca, comerciantes, madera, fogón, cartel, muelle, noche y ahumadero.
+2. **Más actividades**: un comerciante nuevo trae el pico → minería con comprador de mineral; contratar un ayudante.
 3. **Llegan vecinos** atraídos por lo que armaste: Rosa, colectas (el pozo), favores y confianza.
 4. **Referente → delegado**: caja común, primeras obras del barrio.
 5. **Alcalde → región → país**: impuestos, presupuestos, áreas; lo básico ya funciona solo.
@@ -55,3 +58,5 @@ Los lugares donde vendés también mejoran (de un comerciante que paga poco a un
 | Don Ramiro y Turbo | carreta a caballo, lento | 4 / 10 UC | 6 | pan 8, bidón de agua 6 |
 | La Chola | Fiat 600, rápido | 6 / 15 UC | 10 | hacha 120, conservadora 250, caña de fibra 300, pan 12 |
 | Coco | camión (solo con cartel) | 7 / 18 UC | 25 | pan 7, bidón 5 |
+
+Ahumado (mojarra / tararira): Ramiro 8 / 20, Chola 11 / 28, Coco 13 / 34.

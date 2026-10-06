@@ -53,6 +53,36 @@ ITEM_ROD_BASIC,Caña de bambú
 ITEM_ROD_GOOD,Caña de fibra
 ITEM_COOLER,Conservadora
 ITEM_AXE,Hacha
+ITEM_FISH_SMALL_SMOKED,Mojarra ahumada
+ITEM_FISH_BIG_SMOKED,Tararira ahumada
+BUILD_SMOKEHOUSE,Ahumadero
+OBJ_SMOKEHOUSE,Ahumadero: 10 madera + 120 UC (el ahumado no se pudre y vale más)
+OBJ_NIGHT,Es de noche: andá a dormir a la choza
+HUD_CLOCK,{time}
+ERR_NIGHT_NO_FISH,De noche no pica nada. Los peces también duermen.
+ERR_NO_SMOKEHOUSE,Primero hay que construir el ahumadero.
+ERR_SMOKER_BUSY,El ahumadero ya está cargado.
+ERR_SMOKER_EMPTY,El ahumadero está vacío.
+ERR_SMOKER_NOT_READY,"Todavía no está. El humo es lento, como vos."
+MSG_SMOKER_LOADED,Cargaste {n} pescados. A esperar.
+MSG_SMOKER_COLLECTED,Sacaste {n} ahumados. Olor a gloria.
+MSG_SMOKER_COLLECTED_PARTIAL,Sacaste {n}. El resto no entra en la mochila.
+ACTION_SMOKER,Usar el ahumadero
+ACTION_SMOKER_BUSY,Ahumando… listo a las {time}
+ACTION_SMOKER_READY,Sacar los ahumados
+ACTION_NIGHT_FISH,De noche no pica
+SMOKER_TITLE,Ahumadero
+SMOKER_EMPTY,Vacío. Entran {cap} pescados crudos por tanda.
+SMOKER_SMOKING,Ahumando {n} pescados. Listo a las {time}.
+SMOKER_READY,¡Listo! {n} pescados ahumados esperándote.
+SMOKER_LOAD,Cargar pescado crudo (1 madera)
+SMOKER_COLLECT,Sacar los ahumados
+SMOKER_HINT,Lo ahumado no se pudre y los comerciantes lo pagan casi el doble.
+REPORT_SLEPT_OUT_TITLE,Dormiste afuera
+REPORT_SLEPT_OUT_LINE,Te despertaste con más hambre y más sed.
+SLEPT_OUT_QUIP_1,Dormiste abajo de un árbol. Un sapo te usó de almohada.
+SLEPT_OUT_QUIP_2,Amaneciste en la choza. No sabés cómo. Turbo sí sabe.
+SLEPT_OUT_QUIP_3,Los mosquitos te agradecen la cena.
 BUILD_FIRE,Fogón
 BUILD_SIGN,Cartel «Vendo pescado»
 BUILD_DOCK,Muelle

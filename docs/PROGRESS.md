@@ -3,7 +3,7 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: "Choza y lago" (6 de octubre de 2026)
+## Estado actual: "Choza y lago" + noche y ahumadero (7 de octubre de 2026)
 
 Cambio de dirección pedido por Tomás después de probar H1: empezar sin nada, muy manual y grindero,
 con NPC graciosos. El H1 anterior (asentamiento, escritorio, caja) quedó en el historial de Git
@@ -22,6 +22,10 @@ con NPC graciosos. El H1 anterior (asentamiento, escritorio, caja) quedó en el 
    **cartel** (4 madera + 40 UC: los comerciantes paran solos y aparece Coco), **muelle** (20 madera + 150 UC: más tarariras).
 7. El pescado se pudre al terminar el día. Desmayo con castigo creciente. Dormir termina el día.
 8. Mochila (Tab), un objetivo a la vista arriba, guardar/cargar y autoguardado al cerrar cada día.
+9. **Noche**: reloj en el HUD (06:00 a 24:00), atardecer cálido, noche con luna, farol en la choza y
+   el fogón que ilumina. De noche no pica ni pasan comerciantes. Si no te acostás, dormís afuera.
+10. **Ahumadero** (10 madera + 120 UC): cargás hasta 8 pescados con 1 madera, sale humo de la chimenea
+    y a las ~3 h de juego sacás pescado ahumado que no se pudre y vale casi el doble.
 
 ### Verificado en este entorno
 Contenedor Linux, Intel Xeon 2,1 GHz (4 vCPU), sin GPU. Godot 4.7.2 oficial.
@@ -29,9 +33,9 @@ Contenedor Linux, Intel Xeon 2,1 GHz (4 vCPU), sin GPU. Godot 4.7.2 oficial.
 | Comprobación | Comando | Resultado |
 |---|---|---|
 | Importación | `godot --headless --path . --import` | sin errores |
-| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **33 pruebas, 191 comprobaciones OK** |
-| Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **44 comprobaciones OK** |
-| Render real | `xvfb-run ... godot --path . res://tools/screenshot_tour.tscn` | 21 capturas sin errores de script (llvmpipe) |
+| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **41 pruebas, 354 comprobaciones OK** |
+| Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **57 comprobaciones OK** |
+| Render real | `xvfb-run ... godot --path . res://tools/screenshot_tour.tscn` | 26 capturas sin errores de script (llvmpipe), incluidas atardecer y noche |
 
 Las pruebas de dominio cubren además de lo de H1: hambre/sed, cansancio, desmayo con castigo creciente,
 dormir sin hambre, pesca determinista por semilla y límite de mochila, agenda de comerciantes,
@@ -56,7 +60,7 @@ Escenas del pueblo (casas, pozo con tres estados, oficina, almacén, Rosa), la c
 (dominio y pruebas) y el diálogo de Rosa. Vuelven cuando lleguen vecinos.
 
 ## Siguiente paso propuesto
-1. Ajustar balance con lo que Tomás sienta jugando (velocidades de skillcheck, precios, sed).
-2. Ahumadero (el pescado ahumado no se pudre y vale más).
-3. Minería: pico, mina con skillcheck, comprador de mineral.
+1. Elegir cómo llega el primer vecino (opciones presentadas a Tomás).
+2. Ajustar balance con lo que Tomás sienta jugando (velocidades de skillcheck, precios, sed, duración de la noche).
+3. El comerciante nuevo que trae el pico → minería con skillcheck y comprador de mineral.
 4. Primer ayudante con sueldo por día.

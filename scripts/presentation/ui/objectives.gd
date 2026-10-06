@@ -6,6 +6,8 @@ extends RefCounted
 static func current(s: GameState, content: GameContent) -> String:
 	var pl := s.player
 	var t := content.balance.tired_threshold_bp
+	if DayTime.is_night(s, content):
+		return Texts.t("OBJ_NIGHT")
 	if pl.thirst_bp < t:
 		return Texts.t("OBJ_DRINK")
 	if pl.hunger_bp < t:

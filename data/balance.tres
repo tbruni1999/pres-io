@@ -5,6 +5,12 @@
 [resource]
 script = ExtResource("1_bal")
 ticks_per_day = 480
+day_start_minute = 360
+day_end_minute = 1440
+dusk_minute = 1170
+night_minute = 1260
+slept_outside_loss_bp = 1500
+slept_outside_floor_bp = 1000
 step_seconds = 1.0
 max_steps_per_frame = 4
 starting_cash_uc = 0
@@ -35,6 +41,8 @@ tree_wood = 3
 tree_regrow_days = 2
 dock_big_bonus_bp = 2000
 dock_zone_bonus_bp = 500
-merchant_passes_per_day = 5
+merchant_passes_per_day = 4
 merchant_stop_ticks = 45
 first_merchant = "ramiro"
+smoker_capacity = 8
+smoke_ticks = 90

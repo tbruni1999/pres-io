@@ -20,6 +20,7 @@ var hud := Hud.new()
 var skill_check := SkillCheck.new()
 var trade := TradePanel.new()
 var fire := FirePanel.new()
+var smoker := SmokerPanel.new()
 var bag := BagPanel.new()
 var report := ReportPanel.new()
 var pause_menu := PauseMenu.new()
@@ -54,7 +55,7 @@ func _ready() -> void:
 	_center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_center)
-	for p: GamePanel in [trade, fire, bag, report, pause_menu]:
+	for p: GamePanel in [trade, fire, smoker, bag, report, pause_menu]:
 		p.ui = self
 		p.close_requested.connect(close_panel)
 		_center.add_child(p)
@@ -70,7 +71,7 @@ func _ready() -> void:
 	_ambient.play()
 
 	Game.day_closed.connect(_on_day_closed)
-	Game.fainted.connect(_on_fainted)
+	Game.woke_at_home.connect(_on_woke_at_home)
 	Game.notice_posted.connect(post_notice)
 	Game.state_replaced.connect(cancel_activity)
 	if Game.has_save():
@@ -152,6 +153,8 @@ func _find_context() -> Dictionary:
 	var c := Game.content
 	match target.kind:
 		Interactable.Kind.FISH:
+			if DayTime.is_night(s, c):
+				return {"kind": "none", "text": Texts.t("ACTION_NIGHT_FISH")}
 			return {"kind": "fish", "spot": target.target_id, "text": Texts.t("ACTION_FISH_DOCK" if target.target_id == "dock" else "ACTION_FISH")}
 		Interactable.Kind.LAKE_WATER:
 			return {"kind": "lake", "text": Texts.t("ACTION_DRINK_LAKE")}
@@ -170,7 +173,17 @@ func _find_context() -> Dictionary:
 		Interactable.Kind.BUILD:
 			var b := c.find_building(target.target_id)
 			if s.camp.has_building(b.id):
-				return {"kind": "fire", "text": Texts.t("ACTION_FIRE")} if b.id == "fire" else {}
+				match b.id:
+					"fire":
+						return {"kind": "fire", "text": Texts.t("ACTION_FIRE")}
+					"smokehouse":
+						match PlayerActions.smoker_status(s):
+							PlayerActions.SMOKER_SMOKING:
+								return {"kind": "smoker", "text": Texts.t("ACTION_SMOKER_BUSY", {"time": SmokerPanel.ready_time(s, c)})}
+							PlayerActions.SMOKER_READY:
+								return {"kind": "smoker", "text": Texts.t("ACTION_SMOKER_READY")}
+						return {"kind": "smoker", "text": Texts.t("ACTION_SMOKER")}
+				return {}
 			var cost := Texts.t("COST_WOOD", {"n": b.wood}) if b.money_uc <= 0 else Texts.t("COST_WOOD_MONEY", {"n": b.wood, "money": Money.format(b.money_cents())})
 			return {"kind": "build", "id": b.id, "text": Texts.t("ACTION_BUILD", {"name": Texts.t(b.name_key), "cost": cost})}
 	return {}
@@ -226,6 +239,8 @@ func _use_context() -> void:
 			start_activity(hammer)
 		"fire":
 			open_panel(fire)
+		"smoker":
+			open_panel(smoker)
 		"sleep":
 			cancel_activity()
 			var rep := Game.sleep()
@@ -348,11 +363,12 @@ func _capture_mouse() -> void:
 
 
 func _on_day_closed(rep: DayReport) -> void:
-	if _active == null and not rep.fainted and Game.is_paused() == false:
+	if _active == null and not rep.fainted and not rep.slept_outside and not Game.is_paused():
 		post_notice(Texts.t("MSG_DAY_CLOSED", {"day": rep.day}))
 
 
-func _on_fainted(rep: DayReport) -> void:
+## Desmayo o dormir afuera: llevar al jugador a la choza antes del autoguardado y mostrar el informe.
+func _on_woke_at_home(rep: DayReport) -> void:
 	cancel_activity()
 	if _active != null:
 		close_panel()

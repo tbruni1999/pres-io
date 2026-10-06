@@ -15,6 +15,8 @@ enum Kind { CATCH, FOOD, TOOL }
 @export var drink_bp: int = 0
 ## Se echa a perder al cerrar la jornada si sigue en la mochila.
 @export var perishable: bool = false
+## En qué se convierte en el ahumadero ("" = no se ahúma).
+@export var smoked_into: String = ""
 
 @export_group("Pesca (pescados)")
 ## Ancho de la zona del skillcheck, en puntos básicos de la barra.

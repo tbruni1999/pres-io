@@ -3,7 +3,7 @@ extends RefCounted
 ## Fuente de verdad de la partida. Los objetos 3D y la UI solo la representan.
 ## No depende del SceneTree: se puede crear, simular y validar en pruebas headless.
 
-const SCHEMA_VERSION := 2
+const SCHEMA_VERSION := 3
 const PLAYER_BOUNDS := 75.0
 
 var world_seed: int = 0
@@ -126,8 +126,12 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	if version < 1:
 		return {"state": null, "errors": PackedStringArray(["versión de esquema inválida %d" % version]), "future_version": false}
 
+	# Migraciones en cadena desde versiones que existieron de verdad.
 	if version == 1:
 		d = migrate_v1_to_v2(d, content)
+		version = 2
+	if version == 2:
+		d = migrate_v2_to_v3(d)
 
 	var s := GameState.new()
 	var max_tick := 1 << 62
@@ -223,6 +227,22 @@ static func migrate_v1_to_v2(d: Dictionary, content: GameContent) -> Dictionary:
 				rep["fainted"] = false
 			if not rep.has("rotten"):
 				rep["rotten"] = 0
+	return out
+
+
+## v2 (choza y lago) -> v3 (noche y ahumadero): ahumadero vacío y marca de "dormiste afuera".
+static func migrate_v2_to_v3(d: Dictionary) -> Dictionary:
+	var out := d.duplicate(true)
+	out["schema_version"] = 3
+	var camp: Variant = out.get("camp")
+	if camp is Dictionary:
+		if not camp.has("smoker_items"):
+			camp["smoker_items"] = []
+		if not camp.has("smoker_ready_tick"):
+			camp["smoker_ready_tick"] = "-1"
+	for rep in out.get("reports", []):
+		if rep is Dictionary and not rep.has("slept_outside"):
+			rep["slept_outside"] = false
 	return out
 
 

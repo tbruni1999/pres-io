@@ -66,7 +66,7 @@ static func step(state: GameState, content: GameContent, resting: bool = false) 
 		_update_needs(state, content)
 	Merchants.update(state, content)
 	if state.tick % state.ticks_per_day == 0:
-		return _close_day(state, content, state.tick / state.ticks_per_day)
+		return _close_day(state, content, state.tick / state.ticks_per_day, resting)
 	return null
 
 
@@ -82,7 +82,7 @@ static func advance_to_end_of_day(state: GameState, content: GameContent, restin
 	return null
 
 
-static func _close_day(state: GameState, content: GameContent, day: int) -> DayReport:
+static func _close_day(state: GameState, content: GameContent, day: int, resting: bool = false) -> DayReport:
 	var report := DayReport.new()
 	report.day = day
 
@@ -128,7 +128,8 @@ static func _close_day(state: GameState, content: GameContent, day: int) -> DayR
 	# 6) Colectas que llegaron a la meta: la obra arranca en la jornada siguiente.
 	fund_collections(state, content)
 
-	# 6b) Lo perecedero que quedó en la mochila se echa a perder.
+	# 6b) Lo perecedero que quedó en la mochila se echa a perder
+	#     (lo que está en el ahumadero no está en la mochila).
 	var pl := state.player
 	var rotten := 0
 	for item_id in pl.bag.keys():
@@ -137,6 +138,13 @@ static func _close_day(state: GameState, content: GameContent, day: int) -> DayR
 			rotten += pl.count(item_id)
 			pl.remove_item(item_id, pl.count(item_id))
 	report.rotten = rotten
+
+	# 6c) Terminó la jornada y no estabas en la cama: dormiste a la intemperie.
+	if not resting:
+		var b := content.balance
+		report.slept_outside = true
+		pl.hunger_bp = maxi(mini(pl.hunger_bp, b.slept_outside_floor_bp), pl.hunger_bp - b.slept_outside_loss_bp)
+		pl.thirst_bp = maxi(mini(pl.thirst_bp, b.slept_outside_floor_bp), pl.thirst_bp - b.slept_outside_loss_bp)
 
 	# 7) Informe: la jornada del personaje y la reacción del barrio (derivada del estado).
 	report.earned_cents = pl.day_earned_cents
