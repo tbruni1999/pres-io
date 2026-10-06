@@ -1,0 +1,818 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/materials/ground_dirt.tres" id="1_ground_dirt"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/road_dirt.tres" id="3_road_dirt"]
+[ext_resource type="Material" path="res://assets/materials/plaza_earth.tres" id="4_plaza_earth"]
+[ext_resource type="Script" path="res://scripts/presentation/world/merchant_road.gd" id="5_merchant_roa"]
+[ext_resource type="PackedScene" path="res://scenes/props/shack.tscn" id="6_shack"]
+[ext_resource type="PackedScene" path="res://scenes/props/fire_plot.tscn" id="7_fire_plot"]
+[ext_resource type="PackedScene" path="res://scenes/props/sign_plot.tscn" id="8_sign_plot"]
+[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="9_metal_rust"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="10_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/sand.tres" id="11_sand"]
+[ext_resource type="Material" path="res://assets/materials/water.tres" id="12_water"]
+[ext_resource type="Material" path="res://assets/materials/foliage.tres" id="13_foliage"]
+[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="14_concrete_dar"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="15_interactable"]
+[ext_resource type="Material" path="res://assets/materials/concrete.tres" id="16_concrete"]
+[ext_resource type="PackedScene" path="res://scenes/props/dock_plot.tscn" id="17_dock_plot"]
+[ext_resource type="PackedScene" path="res://scenes/props/choppable_tree.tscn" id="18_choppable_tr"]
+[ext_resource type="PackedScene" path="res://scenes/props/branch_pile.tscn" id="19_branch_pile"]
+[ext_resource type="PackedScene" path="res://scenes/props/tree.tscn" id="20_tree"]
+[ext_resource type="Material" path="res://assets/materials/tire.tres" id="21_tire"]
+[ext_resource type="Material" path="res://assets/materials/grass_dry.tres" id="22_grass_dry"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(240, 1, 240)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2"]
+size = Vector2(240, 240)
+material = ExtResource("1_ground_dirt")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_9"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_10"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_11"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_12"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_13"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_15"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_16"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_17"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_18"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_19"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_20"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_22"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_23"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26"]
+size = Vector3(0.8, 0.7, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27"]
+size = Vector3(0.8, 0.7, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28"]
+size = Vector3(0.8, 0.7, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
+size = Vector3(0.8, 0.5, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(8, 4, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
+size = Vector3(8, 4, 8)
+
+[node name="Lakeside" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("BoxShape3D_1")
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_2")
+
+[node name="Road" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.012, 12.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(240, 0.02, 5)
+material = ExtResource("3_road_dirt")
+casts_shadow = false
+
+[node name="Path" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.013, 6.4)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.4, 0.02, 9)
+material = ExtResource("4_plaza_earth")
+casts_shadow = false
+
+[node name="MerchantRoad" type="Node3D" parent="."]
+position = Vector3(0, 0, 12.6)
+script = ExtResource("5_merchant_roa")
+
+[node name="Shack" parent="." instance=ExtResource("6_shack")]
+position = Vector3(0, 0, 0)
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+position = Vector3(0.5, 0.05, -0.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="FirePlot" parent="." instance=ExtResource("7_fire_plot")]
+position = Vector3(3.3, 0, 3.6)
+
+[node name="SignPlot" parent="." instance=ExtResource("8_sign_plot")]
+position = Vector3(-3.4, 0, 9.4)
+
+[node name="Mailbox" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 1.1, 9.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.35, 0.3, 0.5)
+material = ExtResource("9_metal_rust")
+
+[node name="MailPost" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 0.5, 9.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1, 0.08)
+material = ExtResource("10_wood_old")
+collide = true
+
+[node name="Lake" type="Node3D" parent="."]
+
+[node name="Sand" type="MeshInstance3D" parent="Lake"]
+position = Vector3(0, 0.006, -36)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(44, 0.008, 44)
+material = ExtResource("11_sand")
+casts_shadow = false
+segments = 64
+
+[node name="Water" type="MeshInstance3D" parent="Lake"]
+position = Vector3(0, 0.015, -36)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(37, 0.01, 37)
+material = ExtResource("12_water")
+casts_shadow = false
+segments = 64
+
+[node name="Shore00" type="StaticBody3D" parent="Lake"]
+position = Vector3(17.8, 1.2, -36)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore00"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="Shore01" type="StaticBody3D" parent="Lake"]
+position = Vector3(17.1935, 1.2, -31.393)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 75, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore01"]
+shape = SubResource("BoxShape3D_4")
+
+[node name="Shore02" type="StaticBody3D" parent="Lake"]
+position = Vector3(15.4153, 1.2, -27.1)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 60, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore02"]
+shape = SubResource("BoxShape3D_5")
+
+[node name="Shore03" type="StaticBody3D" parent="Lake"]
+position = Vector3(12.5865, 1.2, -23.4135)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 45, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore03"]
+shape = SubResource("BoxShape3D_6")
+
+[node name="Shore05" type="StaticBody3D" parent="Lake"]
+position = Vector3(4.607, 1.2, -18.8065)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 15, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore05"]
+shape = SubResource("BoxShape3D_7")
+
+[node name="Shore06" type="StaticBody3D" parent="Lake"]
+position = Vector3(0, 1.2, -18.2)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore06"]
+shape = SubResource("BoxShape3D_8")
+
+[node name="Shore07" type="StaticBody3D" parent="Lake"]
+position = Vector3(-4.607, 1.2, -18.8065)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -15, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore07"]
+shape = SubResource("BoxShape3D_9")
+
+[node name="Shore08" type="StaticBody3D" parent="Lake"]
+position = Vector3(-8.9, 1.2, -20.5847)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -30, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore08"]
+shape = SubResource("BoxShape3D_10")
+
+[node name="Shore09" type="StaticBody3D" parent="Lake"]
+position = Vector3(-12.5865, 1.2, -23.4135)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -45, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore09"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="Shore10" type="StaticBody3D" parent="Lake"]
+position = Vector3(-15.4153, 1.2, -27.1)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -60, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore10"]
+shape = SubResource("BoxShape3D_12")
+
+[node name="Shore11" type="StaticBody3D" parent="Lake"]
+position = Vector3(-17.1935, 1.2, -31.393)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -75, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore11"]
+shape = SubResource("BoxShape3D_13")
+
+[node name="Shore12" type="StaticBody3D" parent="Lake"]
+position = Vector3(-17.8, 1.2, -36)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore12"]
+shape = SubResource("BoxShape3D_14")
+
+[node name="Shore13" type="StaticBody3D" parent="Lake"]
+position = Vector3(-17.1935, 1.2, -40.607)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -105, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore13"]
+shape = SubResource("BoxShape3D_15")
+
+[node name="Shore14" type="StaticBody3D" parent="Lake"]
+position = Vector3(-15.4153, 1.2, -44.9)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -120, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore14"]
+shape = SubResource("BoxShape3D_16")
+
+[node name="Shore15" type="StaticBody3D" parent="Lake"]
+position = Vector3(-12.5865, 1.2, -48.5865)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -135, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore15"]
+shape = SubResource("BoxShape3D_17")
+
+[node name="Shore16" type="StaticBody3D" parent="Lake"]
+position = Vector3(-8.9, 1.2, -51.4153)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -150, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore16"]
+shape = SubResource("BoxShape3D_18")
+
+[node name="Shore17" type="StaticBody3D" parent="Lake"]
+position = Vector3(-4.607, 1.2, -53.1935)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -165, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore17"]
+shape = SubResource("BoxShape3D_19")
+
+[node name="Shore18" type="StaticBody3D" parent="Lake"]
+position = Vector3(0, 1.2, -53.8)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -180, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore18"]
+shape = SubResource("BoxShape3D_20")
+
+[node name="Shore19" type="StaticBody3D" parent="Lake"]
+position = Vector3(4.607, 1.2, -53.1935)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -195, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore19"]
+shape = SubResource("BoxShape3D_21")
+
+[node name="Shore20" type="StaticBody3D" parent="Lake"]
+position = Vector3(8.9, 1.2, -51.4153)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -210, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore20"]
+shape = SubResource("BoxShape3D_22")
+
+[node name="Shore21" type="StaticBody3D" parent="Lake"]
+position = Vector3(12.5865, 1.2, -48.5865)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -225, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore21"]
+shape = SubResource("BoxShape3D_23")
+
+[node name="Shore22" type="StaticBody3D" parent="Lake"]
+position = Vector3(15.4153, 1.2, -44.9)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -240, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore22"]
+shape = SubResource("BoxShape3D_24")
+
+[node name="Shore23" type="StaticBody3D" parent="Lake"]
+position = Vector3(17.1935, 1.2, -40.607)
+collision_layer = 1
+collision_mask = 0
+rotation_degrees = Vector3(0, -255, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Shore23"]
+shape = SubResource("BoxShape3D_25")
+
+[node name="Reeds0" type="MeshInstance3D" parent="Lake"]
+position = Vector3(17.4783, 0.6, -29.6384)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds1" type="MeshInstance3D" parent="Lake"]
+position = Vector3(13.1522, 0.6, -22.8478)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds2" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-14.2484, 0.6, -24.0442)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds3" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-17.9662, 0.6, -31.186)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds4" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-17.4783, 0.6, -42.3616)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds5" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-6.3616, 0.6, -53.4783)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds6" type="MeshInstance3D" parent="Lake"]
+position = Vector3(6.3616, 0.6, -53.4783)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="Reeds7" type="MeshInstance3D" parent="Lake"]
+position = Vector3(16.1081, 0.6, -45.3)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.6, 1.2, 0.6)
+material = ExtResource("13_foliage")
+casts_shadow = false
+hide_beyond = 90
+
+[node name="FishRock0" type="MeshInstance3D" parent="Lake"]
+position = Vector3(3.8672, 0.12, -17.8065)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.9, 0.25, 0.7)
+material = ExtResource("14_concrete_dar")
+
+[node name="RodStick0" type="MeshInstance3D" parent="Lake"]
+position = Vector3(4.1672, 0.5, -17.8065)
+rotation_degrees = Vector3(0, 0, -25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("10_wood_old")
+casts_shadow = false
+
+[node name="FishSpot0" type="StaticBody3D" parent="Lake"]
+position = Vector3(3.8672, 0.35, -17.8065)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("15_interactable")
+kind = 1
+target_id = "shore"
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/FishSpot0"]
+shape = SubResource("BoxShape3D_26")
+
+[node name="FishRock1" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-3.2299, 0.12, -17.6826)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.9, 0.25, 0.7)
+material = ExtResource("14_concrete_dar")
+
+[node name="RodStick1" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-2.9299, 0.5, -17.6826)
+rotation_degrees = Vector3(0, 0, -25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("10_wood_old")
+casts_shadow = false
+
+[node name="FishSpot1" type="StaticBody3D" parent="Lake"]
+position = Vector3(-3.2299, 0.35, -17.6826)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("15_interactable")
+kind = 1
+target_id = "shore"
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/FishSpot1"]
+shape = SubResource("BoxShape3D_27")
+
+[node name="FishRock2" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-9.8565, 0.12, -20.2263)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.9, 0.25, 0.7)
+material = ExtResource("14_concrete_dar")
+
+[node name="RodStick2" type="MeshInstance3D" parent="Lake"]
+position = Vector3(-9.5565, 0.5, -20.2263)
+rotation_degrees = Vector3(0, 0, -25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("10_wood_old")
+casts_shadow = false
+
+[node name="FishSpot2" type="StaticBody3D" parent="Lake"]
+position = Vector3(-9.8565, 0.35, -20.2263)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("15_interactable")
+kind = 1
+target_id = "shore"
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/FishSpot2"]
+shape = SubResource("BoxShape3D_28")
+
+[node name="DrinkStone" type="MeshInstance3D" parent="Lake"]
+position = Vector3(0, 0.06, -17.4)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.8, 0.12, 0.6)
+material = ExtResource("16_concrete")
+
+[node name="Drink" type="StaticBody3D" parent="Lake"]
+position = Vector3(0, 0.25, -17.4)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("15_interactable")
+kind = 6
+
+[node name="Shape" type="CollisionShape3D" parent="Lake/Drink"]
+shape = SubResource("BoxShape3D_29")
+
+[node name="DockPlot" parent="Lake" instance=ExtResource("17_dock_plot")]
+position = Vector3(9.5, 0, -19.5455)
+rotation_degrees = Vector3(0, 30, 0)
+
+[node name="Woods" type="Node3D" parent="."]
+
+[node name="Tree1" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(-12, 0, -8)
+rotation_degrees = Vector3(0, 0, 0)
+scale = Vector3(0.85, 0.85, 0.85)
+target_id = "tree_1"
+
+[node name="Tree2" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(-18, 0, 2)
+rotation_degrees = Vector3(0, 53, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+target_id = "tree_2"
+
+[node name="Tree3" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(-25, 0, -13)
+rotation_degrees = Vector3(0, 106, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+target_id = "tree_3"
+
+[node name="Tree4" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(14, 0, -3)
+rotation_degrees = Vector3(0, 159, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+target_id = "tree_4"
+
+[node name="Tree5" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(22, 0, 5)
+rotation_degrees = Vector3(0, 212, 0)
+scale = Vector3(1.17, 1.17, 1.17)
+target_id = "tree_5"
+
+[node name="Tree6" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(27, 0, -12)
+rotation_degrees = Vector3(0, 265, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+target_id = "tree_6"
+
+[node name="Tree7" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(-30, 0, -32)
+rotation_degrees = Vector3(0, 318, 0)
+scale = Vector3(0.93, 0.93, 0.93)
+target_id = "tree_7"
+
+[node name="Tree8" parent="Woods" instance=ExtResource("18_choppable_tr")]
+position = Vector3(31, 0, -34)
+rotation_degrees = Vector3(0, 11, 0)
+scale = Vector3(1.21, 1.21, 1.21)
+target_id = "tree_8"
+
+[node name="Branches1" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(-10, 0, -5.5)
+rotation_degrees = Vector3(0, 0, 0)
+target_id = "branches_1"
+
+[node name="Branches2" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(-16, 0, 4.5)
+rotation_degrees = Vector3(0, 71, 0)
+target_id = "branches_2"
+
+[node name="Branches3" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(12, 0, 0.5)
+rotation_degrees = Vector3(0, 142, 0)
+target_id = "branches_3"
+
+[node name="Branches4" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(20, 0, 7.5)
+rotation_degrees = Vector3(0, 213, 0)
+target_id = "branches_4"
+
+[node name="Branches5" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(-22.5, 0, -10.5)
+rotation_degrees = Vector3(0, 284, 0)
+target_id = "branches_5"
+
+[node name="Branches6" parent="Woods" instance=ExtResource("19_branch_pile")]
+position = Vector3(24.5, 0, -9.5)
+rotation_degrees = Vector3(0, 355, 0)
+target_id = "branches_6"
+
+[node name="Decor" type="Node3D" parent="."]
+
+[node name="FarTree0" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(-45, 0, 25)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="FarTree1" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(40, 0, 30)
+rotation_degrees = Vector3(0, 61, 0)
+
+[node name="FarTree2" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(-55, 0, -10)
+rotation_degrees = Vector3(0, 122, 0)
+
+[node name="FarTree3" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(55, 0, -5)
+rotation_degrees = Vector3(0, 183, 0)
+
+[node name="FarTree4" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(-40, 0, -60)
+rotation_degrees = Vector3(0, 244, 0)
+
+[node name="FarTree5" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(45, 0, -62)
+rotation_degrees = Vector3(0, 305, 0)
+
+[node name="FarTree6" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(0, 0, -70)
+rotation_degrees = Vector3(0, 6, 0)
+
+[node name="FarTree7" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(-15, 0, 40)
+rotation_degrees = Vector3(0, 67, 0)
+
+[node name="FarTree8" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(18, 0, 42)
+rotation_degrees = Vector3(0, 128, 0)
+
+[node name="FarTree9" parent="Decor" instance=ExtResource("20_tree")]
+position = Vector3(60, 0, 40)
+rotation_degrees = Vector3(0, 189, 0)
+
+[node name="Rock0" type="MeshInstance3D" parent="Decor"]
+position = Vector3(6, 0.15, 4)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.6, 0.36, 0.6)
+material = ExtResource("14_concrete_dar")
+
+[node name="Rock1" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-6, 0.1, 6)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.4, 0.24, 0.4)
+material = ExtResource("14_concrete_dar")
+
+[node name="Rock2" type="MeshInstance3D" parent="Decor"]
+position = Vector3(9, 0.2, -10)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.8, 0.48, 0.8)
+material = ExtResource("14_concrete_dar")
+
+[node name="Rock3" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-7, 0.125, -12)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.5, 0.3, 0.5)
+material = ExtResource("14_concrete_dar")
+
+[node name="Rock4" type="MeshInstance3D" parent="Decor"]
+position = Vector3(16, 0.175, 14.8)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.7, 0.42, 0.7)
+material = ExtResource("14_concrete_dar")
+
+[node name="OldTire" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-4.5, 0.11, 3.5)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.7, 0.22, 0.7)
+material = ExtResource("21_tire")
+
+[node name="FencePost0" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-8, 0.55, 9.8)
+rotation_degrees = Vector3(0, 0, -9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.1, 0.1)
+material = ExtResource("10_wood_old")
+
+[node name="FencePost1" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-10.2, 0.55, 9.8)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.1, 0.1)
+material = ExtResource("10_wood_old")
+
+[node name="FencePost2" type="MeshInstance3D" parent="Decor"]
+position = Vector3(-12.4, 0.55, 9.8)
+rotation_degrees = Vector3(0, 0, 9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.1, 0.1)
+material = ExtResource("10_wood_old")
+
+[node name="Edges" type="Node3D" parent="."]
+
+[node name="BermNorth" type="MeshInstance3D" parent="Edges"]
+position = Vector3(0, 1.5, -84)
+script = ExtResource("2_kit_shape")
+size = Vector3(176, 4, 8)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="BermSouth" type="MeshInstance3D" parent="Edges"]
+position = Vector3(0, 1.5, 84)
+script = ExtResource("2_kit_shape")
+size = Vector3(176, 4, 8)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="BermWestA" type="MeshInstance3D" parent="Edges"]
+position = Vector3(-84, 1.5, -37)
+script = ExtResource("2_kit_shape")
+size = Vector3(8, 4, 94)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="BermWestB" type="MeshInstance3D" parent="Edges"]
+position = Vector3(-84, 1.5, 49)
+script = ExtResource("2_kit_shape")
+size = Vector3(8, 4, 70)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="BermEastA" type="MeshInstance3D" parent="Edges"]
+position = Vector3(84, 1.5, -37)
+script = ExtResource("2_kit_shape")
+size = Vector3(8, 4, 94)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="BermEastB" type="MeshInstance3D" parent="Edges"]
+position = Vector3(84, 1.5, 49)
+script = ExtResource("2_kit_shape")
+size = Vector3(8, 4, 70)
+material = ExtResource("22_grass_dry")
+collide = true
+
+[node name="RoadWallW" type="StaticBody3D" parent="Edges"]
+position = Vector3(-84, 2, 12.6)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Edges/RoadWallW"]
+shape = SubResource("BoxShape3D_30")
+
+[node name="RoadWallE" type="StaticBody3D" parent="Edges"]
+position = Vector3(84, 2, 12.6)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Edges/RoadWallE"]
+shape = SubResource("BoxShape3D_31")

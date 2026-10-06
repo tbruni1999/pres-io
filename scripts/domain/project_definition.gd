@@ -16,8 +16,10 @@ extends Resource
 ## Servicio que modifica al completarse.
 @export var service_id: String = "water"
 @export var capacity_after: int = 0
-## Cargo con autoridad para aprobarlo.
-@export var required_office: String = "community_organizer"
+## Quién puede aprobarlo: un cargo del jugador o "community" (la colecta de los vecinos).
+@export var required_office: String = "community"
+## Se financia con una colecta comunitaria y se aprueba solo al llegar a la meta.
+@export var funded_by_collection: bool = false
 
 
 func cost_cents() -> int:

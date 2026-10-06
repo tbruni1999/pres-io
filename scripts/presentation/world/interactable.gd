@@ -1,18 +1,13 @@
 class_name Interactable
 extends StaticBody3D
 ## Objeto con el que el jugador puede interactuar (capa de física "interactable").
-## La interacción solo abre un diálogo, una inspección o el escritorio:
-## nunca modifica dinero ni estado por sí misma.
+## La interacción abre un panel o arranca una actividad; nunca modifica estado por sí misma.
+## El texto de la acción lo arma UIRoot según el estado actual.
 
-enum Kind { DIALOGUE, INSPECT, DESK }
+enum Kind { DIALOGUE, FISH, SLEEP, BRANCHES, TREE, BUILD, LAKE_WATER }
 
-@export var kind: Kind = Kind.INSPECT
-## Id estable del contenido (vecino, lugar u objeto): neighbor_rosa, well_main, office_desk.
+@export var kind: Kind = Kind.FISH
+## Id estable del contenido: lugar de pesca ("shore"/"dock"), árbol, montón de ramas, construcción.
 @export var target_id: String = ""
-@export var action_key: String = "ACTION_INSPECT"
 @export var name_key: String = ""
 @export var enabled: bool = true
-
-
-func prompt_text() -> String:
-	return Texts.t(action_key, {"name": Texts.t(name_key)})

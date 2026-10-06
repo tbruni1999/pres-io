@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/item_definition.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "fish_big"
+name_key = "ITEM_FISH_BIG"
+kind = 0
+food_bp = 4000
+perishable = true
+zone_bp = 1500
+needle_speed = 1.4
+checks = 2

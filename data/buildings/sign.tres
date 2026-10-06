@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BuildingDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/building_definition.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "sign"
+name_key = "BUILD_SIGN"
+wood = 4
+money_uc = 40
+checks = 4
+order = 2

@@ -1,0 +1,215 @@
+{
+	"applied_operations": [
+		{
+			"key": "collection:well_repair",
+			"tick": "90"
+		}
+	],
+	"camp": {
+		"branches_taken": [],
+		"buildings": [],
+		"next_pass_id": 16,
+		"passes": [
+			{
+				"bought": 0,
+				"id": 11,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "1009",
+				"status": "scheduled",
+				"stop_tick": "-1"
+			},
+			{
+				"bought": 0,
+				"id": 12,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "1096",
+				"status": "scheduled",
+				"stop_tick": "-1"
+			},
+			{
+				"bought": 0,
+				"id": 13,
+				"leave_tick": "-1",
+				"merchant": "chola",
+				"start": "1214",
+				"status": "scheduled",
+				"stop_tick": "-1"
+			},
+			{
+				"bought": 0,
+				"id": 14,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "1310",
+				"status": "scheduled",
+				"stop_tick": "-1"
+			},
+			{
+				"bought": 0,
+				"id": 15,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "1385",
+				"status": "scheduled",
+				"stop_tick": "-1"
+			}
+		],
+		"trees_cut": [],
+		"wood": 1
+	},
+	"facts": [
+		{
+			"facts": [
+				"collection_open"
+			],
+			"subject": "neighbor_rosa"
+		},
+		{
+			"facts": [],
+			"subject": "player"
+		}
+	],
+	"game_version": "0.2.0-vecino",
+	"office": "neighbor",
+	"player": {
+		"pitch": -5.0,
+		"position": [
+			1.0,
+			0.0500000007450581,
+			2.0
+		],
+		"yaw": 0.4
+	},
+	"player_state": {
+		"bag": [],
+		"day_earned_cents": "0",
+		"day_faint_penalty_cents": "0",
+		"day_fainted": false,
+		"day_fish": 0,
+		"day_spent_cents": "0",
+		"donated_total_cents": "100000",
+		"earned_total_cents": "150000",
+		"faint_count": 0,
+		"fish_caught_total": 1,
+		"hunger_bp": 9440,
+		"opening_cents": "2000",
+		"spent_total_cents": "125000",
+		"thirst_bp": 9160,
+		"tools": [
+			"rod_basic",
+			"cooler"
+		],
+		"wallet_cents": "27000"
+	},
+	"projects": [
+		{
+			"approved_day": 1,
+			"approved_tick": "90",
+			"completed_day": 1,
+			"completion_day": 1,
+			"id": "well_repair",
+			"operation_key": "collection:well_repair",
+			"operational_from_day": 2,
+			"paid_cents": "100000",
+			"site_id": "well_main",
+			"status": "completed"
+		}
+	],
+	"reports": [
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [
+				{
+					"operational_from_day": 2,
+					"project_id": "well_repair"
+				}
+			],
+			"day": 1,
+			"earned_cents": "150000",
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 1,
+			"fund_cents": "0",
+			"income_cents": "100000",
+			"next_water_capacity": 60,
+			"payment_lines": [
+				{
+					"amount_cents": "100000",
+					"reason_key": "PROJECT_WELL_REPAIR_NAME"
+				}
+			],
+			"payments_cents": "100000",
+			"reaction_key": "REACTION_WELL_DONE",
+			"rotten": 1,
+			"spent_cents": "125000",
+			"wallet_end_cents": "27000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		},
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 2,
+			"earned_cents": "0",
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 60,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"spent_cents": "0",
+			"wallet_end_cents": "27000",
+			"water_capacity": 60,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		}
+	],
+	"rng_seed": "20261006",
+	"rng_state": "597312067294770470",
+	"schema_version": 2,
+	"seed": "20261006",
+	"settlement": {
+		"base_water_capacity": 20,
+		"population": 0
+	},
+	"tick": "1000",
+	"ticks_per_day": 480,
+	"treasury": {
+		"cash_cents": "0",
+		"ledger": [
+			{
+				"amount_cents": "100000",
+				"day": 1,
+				"id": 1,
+				"kind": "income",
+				"operation_key": "donation:player:1",
+				"origin": "donation:player",
+				"reason_key": "LEDGER_PLAYER_DONATION",
+				"tick": "90"
+			},
+			{
+				"amount_cents": "100000",
+				"day": 1,
+				"id": 2,
+				"kind": "payment",
+				"operation_key": "collection:well_repair",
+				"origin": "project:well_repair",
+				"reason_key": "PROJECT_WELL_REPAIR_NAME",
+				"tick": "90"
+			}
+		],
+		"next_entry_id": 3,
+		"opening_cents": "0"
+	}
+}

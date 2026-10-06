@@ -10,7 +10,8 @@ const SERVICE_WATER := "water"
 
 # --- Comando: aprobar proyecto -------------------------------------------
 
-static func approve_project(state: GameState, content: GameContent, project_id: String, operation_key: String) -> CommandResult:
+## approver: "" = el jugador con su cargo actual; "community" = la colecta de los vecinos.
+static func approve_project(state: GameState, content: GameContent, project_id: String, operation_key: String, approver: String = "") -> CommandResult:
 	if operation_key.is_empty():
 		return CommandResult.failure("missing_operation_key", Texts.t("ERR_MISSING_OPERATION_KEY"))
 	# Misma operación recibida otra vez (doble clic, reintento): no se vuelve a cobrar.
@@ -21,7 +22,8 @@ static func approve_project(state: GameState, content: GameContent, project_id: 
 	var project := state.get_project(project_id)
 	if def == null or project == null:
 		return CommandResult.failure("unknown_project", Texts.t("ERR_UNKNOWN_PROJECT", {"id": project_id}))
-	if def.required_office != state.office:
+	var who := state.office if approver.is_empty() else approver
+	if def.required_office != who:
 		return CommandResult.failure("no_authority", Texts.t("ERR_NO_AUTHORITY"))
 	if project.status != ProjectState.AVAILABLE:
 		var key := "ERR_PROJECT_UNDER_CONSTRUCTION" if project.status == ProjectState.UNDER_CONSTRUCTION else "ERR_PROJECT_COMPLETED"
@@ -57,8 +59,12 @@ static func approve_project(state: GameState, content: GameContent, project_id: 
 # --- Paso administrativo y cierre de jornada ------------------------------
 
 ## Avanza un paso administrativo. Devuelve el informe si ese paso cerró una jornada.
-static func step(state: GameState, content: GameContent) -> DayReport:
+## resting: dormido o desmayado; hambre y sed no bajan.
+static func step(state: GameState, content: GameContent, resting: bool = false) -> DayReport:
 	state.tick += 1
+	if not resting:
+		_update_needs(state, content)
+	Merchants.update(state, content)
 	if state.tick % state.ticks_per_day == 0:
 		return _close_day(state, content, state.tick / state.ticks_per_day)
 	return null
@@ -66,10 +72,10 @@ static func step(state: GameState, content: GameContent) -> DayReport:
 
 ## Ejecuta los pasos que faltan de la jornada actual con la misma función step().
 ## No es una segunda implementación de la economía.
-static func advance_to_end_of_day(state: GameState, content: GameContent) -> DayReport:
+static func advance_to_end_of_day(state: GameState, content: GameContent, resting: bool = false) -> DayReport:
 	var remaining := state.ticks_left_in_day()
 	for i in remaining:
-		var report := step(state, content)
+		var report := step(state, content, resting)
 		if report != null:
 			return report
 	push_error("advance_to_end_of_day: no se cerró la jornada tras %d pasos" % remaining)
@@ -84,14 +90,22 @@ static func _close_day(state: GameState, content: GameContent, day: int) -> DayR
 	var capacity := water_capacity(state, content, day)
 	var demand := state.settlement.population
 
-	# 2-3) Movimientos de caja de la jornada. En H1 solo hay pagos de obra;
-	#      recaudación y funcionamiento se incorporan con la economía (H2).
+	# 2) Ingresos: lo que suman los demás vecinos a las colectas abiertas.
+	for id in content.project_ids():
+		if collection_open(state, content, id):
+			state.treasury.post_income(Money.from_units(content.balance.neighbors_daily_donation_uc),
+				"donation:neighbors", "LEDGER_NEIGHBORS_DONATION", day, state.tick - 1, "neighbors_donation:%s:%d" % [id, day])
+
+	# 3) Movimientos de caja de la jornada (aportes y pagos de obra).
 	var payments := 0
+	var income := 0
 	for e in state.treasury.entries_for_day(day):
 		if e["kind"] == TreasuryState.KIND_PAYMENT:
 			payments += int(e["amount_cents"])
 			report.payment_lines.append({"reason_key": e["reason_key"], "amount_cents": e["amount_cents"]})
-	report.income_cents = 0
+		else:
+			income += int(e["amount_cents"])
+	report.income_cents = income
 	report.payments_cents = payments
 	report.cash_end_cents = state.treasury.cash_cents
 	report.cash_start_cents = report.cash_end_cents + payments - report.income_cents
@@ -111,15 +125,97 @@ static func _close_day(state: GameState, content: GameContent, day: int) -> DayR
 			p.operational_from_day = day + 1
 			report.completed_projects.append({"project_id": id, "operational_from_day": day + 1})
 
-	# 7) Informe y reacción de la comunidad derivada del estado (no inventada).
+	# 6) Colectas que llegaron a la meta: la obra arranca en la jornada siguiente.
+	fund_collections(state, content)
+
+	# 6b) Lo perecedero que quedó en la mochila se echa a perder.
+	var pl := state.player
+	var rotten := 0
+	for item_id in pl.bag.keys():
+		var item := content.find_item(item_id)
+		if item != null and item.perishable:
+			rotten += pl.count(item_id)
+			pl.remove_item(item_id, pl.count(item_id))
+	report.rotten = rotten
+
+	# 7) Informe: la jornada del personaje y la reacción del barrio (derivada del estado).
+	report.earned_cents = pl.day_earned_cents
+	report.spent_cents = pl.day_spent_cents
+	report.fish_caught = pl.day_fish
+	report.fainted = pl.day_fainted
+	report.faint_penalty_cents = pl.day_faint_penalty_cents
+	report.wallet_end_cents = pl.wallet_cents
+	report.fund_cents = state.treasury.cash_cents
+	pl.reset_day()
 	report.next_water_capacity = water_capacity(state, content, day + 1)
 	report.reaction_key = _reaction_key(state, report)
 	state.reports.append(report)
 	while state.reports.size() > content.balance.report_history_limit:
 		state.reports.pop_front()
 
-	# 8) La fecha avanza porque state.tick ya pertenece a la jornada siguiente.
+	# 8) La fecha avanza porque state.tick ya pertenece a la jornada siguiente:
+	#    vuelven las ramas y se arma la agenda de comerciantes del día nuevo.
+	state.camp.branches_taken.clear()
+	Merchants.plan_day(state, content, day + 1)
 	return report
+
+
+# --- Personaje: hambre, sed y desmayo ------------------------------------
+
+static func _update_needs(state: GameState, content: GameContent) -> void:
+	var b := content.balance
+	var pl := state.player
+	pl.hunger_bp = maxi(0, pl.hunger_bp - b.hunger_decay_bp)
+	pl.thirst_bp = maxi(0, pl.thirst_bp - b.thirst_decay_bp)
+	if pl.hunger_bp == 0 or pl.thirst_bp == 0:
+		_faint(state, content)
+
+
+## Te desmayás: perdés una parte de tu plata que crece con cada desmayo.
+static func _faint(state: GameState, content: GameContent) -> void:
+	var b := content.balance
+	var pl := state.player
+	var bp := faint_penalty_bp(pl.faint_count, b)
+	var penalty := pl.wallet_cents * bp / 10000
+	if penalty > 0:
+		pl.spend(penalty)
+	pl.faint_count += 1
+	pl.day_fainted = true
+	pl.day_faint_penalty_cents += penalty
+	pl.hunger_bp = maxi(pl.hunger_bp, b.faint_wake_bp)
+	pl.thirst_bp = maxi(pl.thirst_bp, b.faint_wake_bp)
+	pl.faint_pending = true
+
+
+static func faint_penalty_bp(previous_faints: int, b: BalanceConfig) -> int:
+	return mini(b.faint_penalty_max_bp, b.faint_penalty_step_bp * (previous_faints + 1))
+
+
+static func is_tired(state: GameState, content: GameContent) -> bool:
+	var t := content.balance.tired_threshold_bp
+	return state.player.hunger_bp < t or state.player.thirst_bp < t
+
+
+# --- Colectas comunitarias --------------------------------------------------
+
+static func collection_open(state: GameState, content: GameContent, project_id: String) -> bool:
+	var def := content.find_project(project_id)
+	var p := state.get_project(project_id)
+	return def != null and def.funded_by_collection and p.status == ProjectState.AVAILABLE \
+		and state.has_fact("neighbor_rosa", "collection_open")
+
+
+## Si el fondo alcanza la meta de una colecta abierta, los vecinos aprueban la obra.
+static func fund_collections(state: GameState, content: GameContent) -> Array[String]:
+	var started: Array[String] = []
+	for id in content.project_ids():
+		if not collection_open(state, content, id):
+			continue
+		if state.treasury.available_cents() >= content.find_project(id).cost_cents():
+			var r := approve_project(state, content, id, "collection:%s" % id, "community")
+			if r.ok:
+				started.append(id)
+	return started
 
 
 # --- Servicios -------------------------------------------------------------

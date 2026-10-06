@@ -20,6 +20,11 @@ enum Shape { BOX, CYLINDER, CONE, SPHERE }
 	set(v):
 		material = v
 		_rebuild()
+## Lados de cilindros y conos (más lados = más redondo, más triángulos).
+@export var segments: int = 12:
+	set(v):
+		segments = maxi(3, v)
+		_rebuild()
 ## Crea un StaticBody3D con forma simple al ejecutar el juego.
 @export var collide: bool = false
 @export_flags_3d_physics var collision_layer_bits: int = 1
@@ -48,7 +53,7 @@ func _rebuild() -> void:
 	# Durante la carga de la escena se espera a _ready para construir una sola vez.
 	if not is_inside_tree():
 		return
-	var key := "%d|%s|%d" % [shape, size, material.get_instance_id() if material else 0]
+	var key := "%d|%s|%d|%d" % [shape, size, material.get_instance_id() if material else 0, segments]
 	if not Engine.is_editor_hint() and _mesh_cache.has(key):
 		mesh = _mesh_cache[key]
 		return
@@ -63,7 +68,7 @@ func _rebuild() -> void:
 			c.bottom_radius = size.x * 0.5
 			c.top_radius = 0.0 if shape == Shape.CONE else size.x * 0.5
 			c.height = size.y
-			c.radial_segments = 12
+			c.radial_segments = segments
 			c.rings = 0
 			m = c
 		Shape.SPHERE:

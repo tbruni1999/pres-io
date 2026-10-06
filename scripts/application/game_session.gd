@@ -12,9 +12,15 @@ signal facts_changed
 ## La partida activa fue reemplazada (nueva partida o carga): reconstruir visuales.
 signal state_replaced
 signal notice_posted(text: String)
+## Cambió la billetera, la mochila o las herramientas del personaje.
+signal player_changed
+## El personaje se desmayó: la jornada terminó y despierta en su casa.
+signal fainted(report: DayReport)
+## Cambió el campamento: madera o construcciones.
+signal camp_changed
 
 const CONTENT_PATH := "res://data/game_content.tres"
-const GAME_VERSION := "0.1.0-h1"
+const GAME_VERSION := "0.2.0-vecino"
 const DEFAULT_SEED := 20261005
 const MANUAL_SLOT := "manual_1"
 const AUTOSAVE_SLOT := "autosave"
@@ -25,7 +31,6 @@ var state: GameState
 var clock := SimClock.new()
 var saves := SaveService.new()
 var settings := SettingsStore.new()
-var dialogues: Dictionary = {}
 ## Callable sin argumentos que devuelve la pose del jugador para guardarla.
 var player_pose_provider: Callable
 var autosave_enabled := true
@@ -45,7 +50,6 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	content = load(CONTENT_PATH) as GameContent
 	clock.configure(content.balance)
-	dialogues["neighbor_rosa"] = DialogueService.load_file("res://data/dialogue/neighbor_rosa.json")
 	settings.load_settings()
 	settings.apply_audio()
 	new_game()
@@ -71,9 +75,25 @@ func _run_step() -> void:
 	var t0 := Time.get_ticks_usec()
 	var report := Simulation.step(state, content)
 	last_step_usec = Time.get_ticks_usec() - t0
-	if report != null:
+	if state.player.faint_pending:
+		_handle_faint(report)
+	elif report != null:
 		last_close_usec = last_step_usec
 		_after_day_closed(report)
+
+
+## Desmayo: el resto de la jornada pasa sin conciencia (sin hambre ni sed) y despierta en casa.
+func _handle_faint(report_if_closed: DayReport) -> void:
+	state.player.faint_pending = false
+	var report := report_if_closed
+	if report == null:
+		report = Simulation.advance_to_end_of_day(state, content, true)
+	clock.reset()
+	state.player_pose = {}
+	_log("faint day %d" % report.day)
+	player_changed.emit()
+	_after_day_closed(report, true)
+	fainted.emit(report)
 
 
 func push_pause(reason: String) -> void:
@@ -90,26 +110,86 @@ func is_paused() -> bool:
 
 # --- Comandos -------------------------------------------------------------
 
-func approve_project(project_id: String) -> CommandResult:
-	# Clave estable: aprobar la misma obra dos veces es la misma operación.
-	var op_key := "approve_project:%s" % project_id
-	var result := Simulation.approve_project(state, content, project_id, op_key)
-	_log("approve_project %s -> %s" % [project_id, result.code])
-	if result.ok and not result.is_duplicate():
-		treasury_changed.emit()
-		project_state_changed.emit(project_id)
+## Dormir: la jornada termina con los mismos pasos del reloj, sin hambre ni sed mientras dormís.
+func sleep() -> DayReport:
+	var t0 := Time.get_ticks_usec()
+	var report := Simulation.advance_to_end_of_day(state, content, true)
+	last_close_usec = Time.get_ticks_usec() - t0
+	clock.reset()
+	_log("sleep -> close_day %d" % report.day)
+	_after_day_closed(report)
+	return report
+
+
+# --- Comandos del personaje ---------------------------------------------------
+
+func cast_line(spot: String = "shore") -> Dictionary:
+	return PlayerActions.cast_line(state, content, spot)
+
+
+func land_fish(fish_id: String, perfect: bool) -> CommandResult:
+	return _player_command("land_fish", PlayerActions.land_fish(state, content, fish_id, perfect))
+
+
+func consume(item_id: String) -> CommandResult:
+	return _player_command("consume", PlayerActions.consume(state, content, item_id))
+
+
+func drink_lake() -> CommandResult:
+	return _player_command("drink_lake", PlayerActions.drink_lake(state, content))
+
+
+func boil_water() -> CommandResult:
+	return _player_command("boil_water", PlayerActions.boil_water(state, content))
+
+
+func cook_and_eat(fish_id: String) -> CommandResult:
+	return _player_command("cook_and_eat", PlayerActions.cook_and_eat(state, content, fish_id))
+
+
+func gather_branches(spot_id: String) -> CommandResult:
+	return _player_command("gather_branches", PlayerActions.gather_branches(state, content, spot_id))
+
+
+func chop_tree(tree_id: String, success: bool) -> CommandResult:
+	return _player_command("chop_tree", PlayerActions.chop_tree(state, content, tree_id, success))
+
+
+func build(building_id: String) -> CommandResult:
+	var result := PlayerActions.build(state, content, building_id)
+	_player_command("build", result)
+	if result.ok:
+		camp_changed.emit()
 	return result
 
 
-## Cierra la jornada actual ejecutando los pasos pendientes con la misma lógica del reloj.
-func close_current_day() -> DayReport:
-	var t0 := Time.get_ticks_usec()
-	var report := Simulation.advance_to_end_of_day(state, content)
-	last_close_usec = Time.get_ticks_usec() - t0
-	clock.reset()
-	_log("close_day %d" % report.day)
-	_after_day_closed(report)
-	return report
+# --- Comerciantes ---------------------------------------------------------------
+
+func hail_merchant(pass_id: int) -> CommandResult:
+	var result := Merchants.hail(state, content, pass_id)
+	_log("hail %d -> %s" % [pass_id, result.code])
+	return result
+
+
+func sell_to_merchant(pass_id: int, item_id: String, qty: int) -> CommandResult:
+	return _player_command("sell", Merchants.sell_to(state, content, pass_id, item_id, qty))
+
+
+func buy_from_merchant(pass_id: int, item_id: String) -> CommandResult:
+	return _player_command("buy", Merchants.buy_from(state, content, pass_id, item_id))
+
+
+func dismiss_merchant(pass_id: int) -> void:
+	Merchants.dismiss(state, pass_id)
+	_log("dismiss %d" % pass_id)
+
+
+func _player_command(command_name: String, result: CommandResult) -> CommandResult:
+	_log("%s -> %s" % [command_name, result.code])
+	if result.ok:
+		player_changed.emit()
+		camp_changed.emit()
+	return result
 
 
 func record_fact(subject: String, fact: String) -> void:
@@ -119,13 +199,17 @@ func record_fact(subject: String, fact: String) -> void:
 	facts_changed.emit()
 
 
-func _after_day_closed(report: DayReport) -> void:
+func _after_day_closed(report: DayReport, _from_faint: bool = false) -> void:
 	for c in report.completed_projects:
 		project_state_changed.emit(String(c["project_id"]))
+	# Una colecta pudo llegar a la meta en el cierre: la obra arranca mañana.
+	for id in content.project_ids():
+		project_state_changed.emit(id)
 	if report.next_water_capacity != report.water_capacity:
 		service_changed.emit(Simulation.SERVICE_WATER)
-	if not report.payment_lines.is_empty():
-		treasury_changed.emit()
+	treasury_changed.emit()
+	player_changed.emit()
+	camp_changed.emit()
 	if autosave_enabled:
 		last_autosave = save_game(AUTOSAVE_SLOT)
 		if not last_autosave.ok:
@@ -168,6 +252,8 @@ func _replaced() -> void:
 	state_replaced.emit()
 	treasury_changed.emit()
 	facts_changed.emit()
+	player_changed.emit()
+	camp_changed.emit()
 
 
 func _log(line: String) -> void:

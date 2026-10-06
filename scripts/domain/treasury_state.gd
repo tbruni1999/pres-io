@@ -1,11 +1,12 @@
 class_name TreasuryState
 extends RefCounted
-## Única autoridad sobre el dinero del asentamiento.
+## Única autoridad sobre el fondo comunitario del asentamiento (no la billetera del jugador).
 ## Invariante: cash = opening + ingresos - pagos, verificable con el libro de movimientos.
-## En H1 solo existen el fondo inicial y pagos de obra (sin impuestos ni funcionamiento).
+## Por ahora: aportes a colectas (ingresos) y pagos de obra. Sin impuestos todavía.
 
 const KIND_PAYMENT := "payment"
-const KINDS := [KIND_PAYMENT]
+const KIND_INCOME := "income"
+const KINDS := [KIND_PAYMENT, KIND_INCOME]
 const MAX_CENTS := 1_000_000_000_000
 
 var opening_cents: int = 0
@@ -22,7 +23,7 @@ static func create(opening: int) -> TreasuryState:
 	return t
 
 
-## Sin sobres presupuestarios todavía (H2): todo el efectivo está disponible.
+## Sin sobres presupuestarios todavía: todo el efectivo está disponible.
 func available_cents() -> int:
 	return cash_cents
 
@@ -59,6 +60,24 @@ func post_payment(amount_cents: int, origin: String, reason_key: String, day: in
 	return true
 
 
+func post_income(amount_cents: int, origin: String, reason_key: String, day: int, tick: int, operation_key: String) -> bool:
+	if amount_cents <= 0:
+		return false
+	cash_cents += amount_cents
+	ledger.append({
+		"id": next_entry_id,
+		"day": day,
+		"tick": tick,
+		"kind": KIND_INCOME,
+		"origin": origin,
+		"reason_key": reason_key,
+		"amount_cents": amount_cents,
+		"operation_key": operation_key,
+	})
+	next_entry_id += 1
+	return true
+
+
 func total_payments() -> int:
 	var total := 0
 	for e in ledger:
@@ -67,9 +86,12 @@ func total_payments() -> int:
 	return total
 
 
-## H1 no tiene fuentes de ingreso: la recaudación llega en H2.
 func total_income() -> int:
-	return 0
+	var total := 0
+	for e in ledger:
+		if e["kind"] == KIND_INCOME:
+			total += int(e["amount_cents"])
+	return total
 
 
 func is_consistent() -> bool:

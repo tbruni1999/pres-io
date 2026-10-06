@@ -4,85 +4,29 @@
 	"role_key": "RESIDENT_ROSA_ROLE",
 	"entries": [
 		{
-			"id": "done_promised",
-			"when": {"projects": {"well_repair": "completed"}, "facts": ["promised_well"]},
-			"text": "DLG_ROSA_DONE_PROMISED",
-			"options": [
-				{"text": "DLG_OPT_WHAT_NEXT", "next": "next_needs"},
-				{"text": "DLG_OPT_BYE"}
-			]
-		},
-		{
 			"id": "done",
 			"when": {"projects": {"well_repair": "completed"}},
 			"text": "DLG_ROSA_DONE",
-			"options": [
-				{"text": "DLG_OPT_WHAT_NEXT", "next": "next_needs"},
-				{"text": "DLG_OPT_BYE"}
-			]
+			"options": [{"text": "DLG_OPT_BYE"}]
 		},
 		{
 			"id": "in_progress",
 			"when": {"projects": {"well_repair": "under_construction"}},
 			"text": "DLG_ROSA_IN_PROGRESS",
-			"options": [
-				{"text": "DLG_OPT_BYE"}
-			]
+			"options": [{"text": "DLG_OPT_BYE"}]
 		},
 		{
 			"id": "intro",
-			"when": {"projects": {"well_repair": "available"}, "missing_facts": ["water_complaint_heard"]},
+			"when": {"projects": {"well_repair": "available"}, "missing_facts": ["collection_open"]},
 			"text": "DLG_ROSA_INTRO",
-			"set_facts": ["water_complaint_heard"],
-			"options": [
-				{"text": "DLG_OPT_WHATS_WRONG", "next": "pump_detail"},
-				{"text": "DLG_OPT_PROMISE", "next": "promise", "set_facts": ["promised_well"]},
-				{"text": "DLG_OPT_NOT_NOW"}
-			]
+			"set_facts": ["water_complaint_heard", "collection_open"],
+			"options": [{"text": "DLG_OPT_BYE"}]
 		},
 		{
-			"id": "waiting_promised",
-			"when": {"projects": {"well_repair": "available"}, "facts": ["promised_well"]},
-			"text": "DLG_ROSA_WAITING_PROMISED",
-			"options": [
-				{"text": "DLG_OPT_WHATS_WRONG", "next": "pump_detail"},
-				{"text": "DLG_OPT_BYE"}
-			]
-		},
-		{
-			"id": "waiting",
+			"id": "collecting",
 			"when": {"projects": {"well_repair": "available"}},
-			"text": "DLG_ROSA_WAITING",
-			"options": [
-				{"text": "DLG_OPT_WHATS_WRONG", "next": "pump_detail"},
-				{"text": "DLG_OPT_PROMISE", "next": "promise", "set_facts": ["promised_well"]},
-				{"text": "DLG_OPT_BYE"}
-			]
-		},
-		{
-			"id": "pump_detail",
-			"only_via_next": true,
-			"text": "DLG_ROSA_PUMP_DETAIL",
-			"options": [
-				{"text": "DLG_OPT_PROMISE", "next": "promise", "set_facts": ["promised_well"], "when": {"missing_facts": ["promised_well"]}},
-				{"text": "DLG_OPT_THINK"}
-			]
-		},
-		{
-			"id": "promise",
-			"only_via_next": true,
-			"text": "DLG_ROSA_PROMISE",
-			"options": [
-				{"text": "DLG_OPT_BYE"}
-			]
-		},
-		{
-			"id": "next_needs",
-			"only_via_next": true,
-			"text": "DLG_ROSA_NEXT_NEEDS",
-			"options": [
-				{"text": "DLG_OPT_BYE"}
-			]
+			"text": "DLG_ROSA_COLLECTING",
+			"options": [{"text": "DLG_OPT_BYE"}]
 		}
 	]
 }

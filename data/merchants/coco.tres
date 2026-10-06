@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MerchantDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/merchant_definition.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "coco"
+name_key = "MERCHANT_COCO"
+vehicle = "truck"
+crossing_ticks = 45
+buys = {"fish_big": 18, "fish_small": 7}
+max_buy = 25
+sells = {"bread": 7, "water_jug": 5}
+requires_building = "sign"
+weight = 2
+lines_prefix = "COCO"

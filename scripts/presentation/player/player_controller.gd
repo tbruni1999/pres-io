@@ -1,11 +1,11 @@
 class_name PlayerController
 extends CharacterBody3D
 ## Jugador en primera persona: caminar, mirar e interactuar.
-## La interacción usa una única consulta de rayo desde la cámara (alcance 2,5 m)
+## El objetivo se busca con una única consulta de rayo desde la cámara (alcance 2,5 m)
 ## que respeta paredes: si lo primero que toca es un muro, no hay objetivo.
+## Qué hacer con ese objetivo lo decide UIRoot.
 
 signal focus_changed(target: Interactable)
-signal interaction_requested(target: Interactable)
 
 const LAYER_WORLD := 1
 const LAYER_INTERACTABLE := 4
@@ -13,6 +13,8 @@ const REFERENCE_ASPECT := 16.0 / 9.0
 
 @export var walk_speed: float = 4.0
 @export var run_speed: float = 6.0
+## Con hambre o sed baja: camina lento y no corre.
+@export var tired_speed: float = 2.5
 @export var acceleration: float = 30.0
 @export var interact_range: float = 2.5
 @export var step_distance: float = 0.75
@@ -53,9 +55,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		var invert := -1.0 if Game.settings.invert_y else 1.0
 		_pitch = clampf(_pitch - motion.relative.y * sens * invert, -85.0, 85.0)
 		_head.rotation_degrees.x = _pitch
-	elif event.is_action_pressed("interact") and _focus != null:
-		get_viewport().set_input_as_handled()
-		interaction_requested.emit(_focus)
 
 
 func _physics_process(delta: float) -> void:
@@ -69,7 +68,9 @@ func _physics_process(delta: float) -> void:
 		dir.y = 0.0
 		if dir.length_squared() > 1.0:
 			dir = dir.normalized()
-		if Input.is_action_pressed("sprint"):
+		if Simulation.is_tired(Game.state, Game.content):
+			speed = tired_speed
+		elif Input.is_action_pressed("sprint"):
 			speed = run_speed
 		target = dir * speed
 	velocity.x = move_toward(velocity.x, target.x, acceleration * delta)

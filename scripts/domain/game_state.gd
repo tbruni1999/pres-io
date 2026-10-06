@@ -3,7 +3,7 @@ extends RefCounted
 ## Fuente de verdad de la partida. Los objetos 3D y la UI solo la representan.
 ## No depende del SceneTree: se puede crear, simular y validar en pruebas headless.
 
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
 const PLAYER_BOUNDS := 75.0
 
 var world_seed: int = 0
@@ -14,6 +14,8 @@ var ticks_per_day: int = 360
 var office: String = ""
 var settlement: SettlementState
 var treasury: TreasuryState
+var player: PlayerState
+var camp: CampState
 ## project_id -> ProjectState
 var projects: Dictionary = {}
 ## Claves de operación ya aplicadas -> tick en que se aplicaron (evita dobles cobros).
@@ -34,10 +36,13 @@ static func create_new(content: GameContent, seed_value: int) -> GameState:
 	s.office = b.starting_office
 	s.settlement = SettlementState.create(b)
 	s.treasury = TreasuryState.create(b.starting_cash_cents())
+	s.player = PlayerState.create(b)
+	s.camp = CampState.new()
 	for id in content.project_ids():
 		s.projects[id] = ProjectState.create(content.find_project(id))
 	for subject in content.fact_subjects:
 		s.facts[subject] = {}
+	Merchants.plan_day(s, content, 1)
 	return s
 
 
@@ -98,6 +103,8 @@ func to_dict(game_version: String) -> Dictionary:
 		"office": office,
 		"settlement": settlement.to_dict(),
 		"treasury": treasury.to_dict(),
+		"player_state": player.to_dict(),
+		"camp": camp.to_dict(),
 		"projects": project_list,
 		"applied_operations": ops,
 		"facts": fact_list,
@@ -119,6 +126,9 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	if version < 1:
 		return {"state": null, "errors": PackedStringArray(["versión de esquema inválida %d" % version]), "future_version": false}
 
+	if version == 1:
+		d = migrate_v1_to_v2(d, content)
+
 	var s := GameState.new()
 	var max_tick := 1 << 62
 	s.world_seed = r.get_big_int(d, "seed", "root", DictReader.INT64_MIN, DictReader.INT64_MAX)
@@ -129,6 +139,8 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	s.office = r.get_string(d, "office", "root")
 	s.settlement = SettlementState.from_dict(r.get_dict(d, "settlement", "root"), r)
 	s.treasury = TreasuryState.from_dict(r.get_dict(d, "treasury", "root"), r)
+	s.player = PlayerState.from_dict(r.get_dict(d, "player_state", "root"), r, content)
+	s.camp = CampState.from_dict(r.get_dict(d, "camp", "root"), r, content)
 
 	for item in r.get_array(d, "projects", "root"):
 		if not (item is Dictionary):
@@ -189,6 +201,29 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 		return {"state": null, "errors": r.errors, "future_version": false}
 	s.rng.state = rng_state
 	return {"state": s, "errors": PackedStringArray(), "future_version": false}
+
+
+## v1 (H1, escritorio y caja comunitaria) -> v2 (vecino con billetera, hambre y sed).
+## Conserva calendario, fondo, obras, hechos e informes; agrega un personaje inicial.
+static func migrate_v1_to_v2(d: Dictionary, content: GameContent) -> Dictionary:
+	var out := d.duplicate(true)
+	out["schema_version"] = 2
+	out["player_state"] = PlayerState.create(content.balance).to_dict()
+	# Sin agenda de comerciantes: se arma vacía y desde el próximo cierre se planifica.
+	out["camp"] = CampState.new().to_dict()
+	# Los informes v1 no tenían la jornada del personaje: se completan en cero.
+	for rep in out.get("reports", []):
+		if rep is Dictionary:
+			for key in ["earned_cents", "spent_cents", "faint_penalty_cents", "wallet_end_cents", "fund_cents"]:
+				if not rep.has(key):
+					rep[key] = "0"
+			if not rep.has("fish_caught"):
+				rep["fish_caught"] = 0
+			if not rep.has("fainted"):
+				rep["fainted"] = false
+			if not rep.has("rotten"):
+				rep["rotten"] = 0
+	return out
 
 
 ## Relaciones entre partes: pagos de obras en el libro, claves de operación, fechas.

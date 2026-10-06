@@ -1,0 +1,217 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/camp_piece.gd" id="1_camp_piece"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="3_wood_new"]
+[ext_resource type="Material" path="res://assets/materials/tape_white.tres" id="4_tape_white"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="5_interactable"]
+[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="6_concrete_dar"]
+[ext_resource type="Material" path="res://assets/materials/bark.tres" id="7_bark"]
+[ext_resource type="Material" path="res://assets/materials/flame.tres" id="8_flame"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="9_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="10_wood_old"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1.2, 0.4, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(1.2, 0.6, 1.2)
+
+[node name="FirePlot" type="Node3D"]
+script = ExtResource("1_camp_piece")
+mode = 0
+target_id = "fire"
+
+[node name="Before" type="Node3D" parent="."]
+
+[node name="Stake0" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.6, 0.25, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake1" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.6, 0.25, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake2" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.6, 0.25, 0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake3" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.6, 0.25, 0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="StringA" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.2, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringB" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, 0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.2, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringC" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.6, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1.2)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringD" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.6, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1.2)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="Build" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 0.2, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_interactable")
+kind = 5
+
+[node name="Shape" type="CollisionShape3D" parent="Before/Build"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="After" type="Node3D" parent="."]
+visible = false
+
+[node name="Stone0" type="MeshInstance3D" parent="After"]
+position = Vector3(0.5, 0.1, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone1" type="MeshInstance3D" parent="After"]
+position = Vector3(0.3536, 0.1, 0.3536)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone2" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.1, 0.5)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone3" type="MeshInstance3D" parent="After"]
+position = Vector3(-0.3536, 0.1, 0.3536)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone4" type="MeshInstance3D" parent="After"]
+position = Vector3(-0.5, 0.1, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone5" type="MeshInstance3D" parent="After"]
+position = Vector3(-0.3536, 0.1, -0.3536)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone6" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.1, -0.5)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="Stone7" type="MeshInstance3D" parent="After"]
+position = Vector3(0.3536, 0.1, -0.3536)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.2, 0.28)
+material = ExtResource("6_concrete_dar")
+
+[node name="LogA" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.12, 0)
+rotation_degrees = Vector3(0, 30, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.7, 0.1, 0.1)
+material = ExtResource("7_bark")
+
+[node name="LogB" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.16, 0)
+rotation_degrees = Vector3(0, -40, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.7, 0.1, 0.1)
+material = ExtResource("7_bark")
+
+[node name="Flame" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.4, 0)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.35, 0.5, 0.35)
+material = ExtResource("8_flame")
+casts_shadow = false
+
+[node name="Pot" type="MeshInstance3D" parent="After"]
+position = Vector3(0.35, 0.75, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.25, 0.3)
+material = ExtResource("9_metal_dark")
+
+[node name="PotBar" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.9, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.3, 0.03, 0.03)
+material = ExtResource("9_metal_dark")
+casts_shadow = false
+
+[node name="PotPostL" type="MeshInstance3D" parent="After"]
+position = Vector3(-0.65, 0.45, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.9, 0.04)
+material = ExtResource("10_wood_old")
+casts_shadow = false
+
+[node name="PotPostR" type="MeshInstance3D" parent="After"]
+position = Vector3(0.65, 0.45, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.9, 0.04)
+material = ExtResource("10_wood_old")
+casts_shadow = false
+
+[node name="FireLight" type="OmniLight3D" parent="After"]
+position = Vector3(0, 0.8, 0)
+light_color = Color(1, 0.6, 0.25, 1)
+light_energy = 1.2
+omni_range = 4.0
+shadow_enabled = false
+
+[node name="Use" type="StaticBody3D" parent="After"]
+position = Vector3(0, 0.3, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_interactable")
+kind = 5
+
+[node name="Shape" type="CollisionShape3D" parent="After/Use"]
+shape = SubResource("BoxShape3D_2")

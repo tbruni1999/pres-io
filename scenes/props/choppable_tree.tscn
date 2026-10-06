@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/camp_piece.gd" id="1_camp_piece"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/bark.tres" id="3_bark"]
+[ext_resource type="Material" path="res://assets/materials/foliage.tres" id="4_foliage"]
+[ext_resource type="Material" path="res://assets/materials/foliage_dark.tres" id="5_foliage_dark"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="6_interactable"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="7_wood_new"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.5, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(0.5, 0.4, 0.5)
+
+[node name="ChoppableTree" type="Node3D"]
+script = ExtResource("1_camp_piece")
+mode = 1
+
+[node name="Before" type="Node3D" parent="."]
+
+[node name="Trunk" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 1.5, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.4, 3, 0.4)
+material = ExtResource("3_bark")
+
+[node name="Canopy" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 3.6, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(3.4, 2.6, 3.4)
+material = ExtResource("4_foliage")
+hide_beyond = 130
+
+[node name="Canopy2" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.7, 4.4, 0.4)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(2.4, 2, 2.4)
+material = ExtResource("5_foliage_dark")
+hide_beyond = 130
+
+[node name="Chop" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 1, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_interactable")
+kind = 4
+
+[node name="Shape" type="CollisionShape3D" parent="Before/Chop"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="After" type="Node3D" parent="."]
+visible = false
+
+[node name="Stump" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.17, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.42, 0.35, 0.42)
+material = ExtResource("3_bark")
+
+[node name="StumpTop" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.355, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.36, 0.02, 0.36)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Sprout" type="MeshInstance3D" parent="After"]
+position = Vector3(0.12, 0.5, 0.05)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(0.2, 0.35, 0.2)
+material = ExtResource("4_foliage")
+
+[node name="Growing" type="StaticBody3D" parent="After"]
+position = Vector3(0, 0.2, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_interactable")
+kind = 4
+
+[node name="Shape" type="CollisionShape3D" parent="After/Growing"]
+shape = SubResource("BoxShape3D_2")

@@ -3,9 +3,26 @@
 [ext_resource type="Script" path="res://scripts/domain/game_content.gd" id="1_gc"]
 [ext_resource type="Resource" path="res://data/balance.tres" id="2_bal"]
 [ext_resource type="Resource" path="res://data/projects/well_repair.tres" id="3_well"]
+[ext_resource type="Resource" path="res://data/items/fish_small.tres" id="4_fish_small"]
+[ext_resource type="Resource" path="res://data/items/fish_big.tres" id="5_fish_big"]
+[ext_resource type="Resource" path="res://data/items/bread.tres" id="6_bread"]
+[ext_resource type="Resource" path="res://data/items/water_jug.tres" id="7_water_jug"]
+[ext_resource type="Resource" path="res://data/items/rod_basic.tres" id="8_rod_basic"]
+[ext_resource type="Resource" path="res://data/items/rod_good.tres" id="9_rod_good"]
+[ext_resource type="Resource" path="res://data/items/cooler.tres" id="10_cooler"]
+[ext_resource type="Resource" path="res://data/items/axe.tres" id="11_axe"]
+[ext_resource type="Resource" path="res://data/merchants/ramiro.tres" id="12_ramiro"]
+[ext_resource type="Resource" path="res://data/merchants/chola.tres" id="13_chola"]
+[ext_resource type="Resource" path="res://data/merchants/coco.tres" id="14_coco"]
+[ext_resource type="Resource" path="res://data/buildings/fire.tres" id="15_fire"]
+[ext_resource type="Resource" path="res://data/buildings/sign.tres" id="16_sign"]
+[ext_resource type="Resource" path="res://data/buildings/dock.tres" id="17_dock"]
 
 [resource]
 script = ExtResource("1_gc")
 balance = ExtResource("2_bal")
 projects = [ExtResource("3_well")]
+items = [ExtResource("4_fish_small"), ExtResource("5_fish_big"), ExtResource("6_bread"), ExtResource("7_water_jug"), ExtResource("8_rod_basic"), ExtResource("9_rod_good"), ExtResource("10_cooler"), ExtResource("11_axe")]
+merchants = [ExtResource("12_ramiro"), ExtResource("13_chola"), ExtResource("14_coco")]
+buildings = [ExtResource("15_fire"), ExtResource("16_sign"), ExtResource("17_dock")]
 fact_subjects = PackedStringArray("player", "neighbor_rosa")

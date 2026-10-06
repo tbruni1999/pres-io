@@ -1,0 +1,322 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/camp_piece.gd" id="1_camp_piece"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="3_wood_new"]
+[ext_resource type="Material" path="res://assets/materials/tape_white.tres" id="4_tape_white"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="5_interactable"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="6_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/plastic_blue.tres" id="7_plastic_blue"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2, 0.4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(4.9, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(0.12, 2.4, 8.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4"]
+size = Vector3(1.4, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(0.12, 2.4, 8.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6"]
+size = Vector3(1.4, 2.4, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
+size = Vector3(2.2, 2.4, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
+size = Vector3(1.6, 0.9, 0.3)
+
+[node name="DockPlot" type="Node3D"]
+script = ExtResource("1_camp_piece")
+mode = 0
+target_id = "dock"
+
+[node name="Before" type="Node3D" parent="."]
+
+[node name="Stake0" type="MeshInstance3D" parent="Before"]
+position = Vector3(-1, 0.25, -0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake1" type="MeshInstance3D" parent="Before"]
+position = Vector3(1, 0.25, -0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake2" type="MeshInstance3D" parent="Before"]
+position = Vector3(-1, 0.25, 0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake3" type="MeshInstance3D" parent="Before"]
+position = Vector3(1, 0.25, 0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="StringA" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, -0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(2, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringB" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, 0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(2, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringC" type="MeshInstance3D" parent="Before"]
+position = Vector3(-1, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringD" type="MeshInstance3D" parent="Before"]
+position = Vector3(1, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="Build" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 0.2, 0.2)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_interactable")
+kind = 5
+
+[node name="Shape" type="CollisionShape3D" parent="Before/Build"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="GapBlocker" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 1.2, -1.2)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Before/GapBlocker"]
+shape = SubResource("BoxShape3D_2")
+
+[node name="After" type="Node3D" parent="."]
+visible = false
+
+[node name="Deck" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.05, -4.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(2, 0.06, 9.6)
+material = ExtResource("3_wood_new")
+
+[node name="Plank0" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, 0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank1" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -0.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank2" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -1.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank3" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -3)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank4" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -4.1)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank5" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -5.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank6" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -6.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank7" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -7.4)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="Plank8" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.085, -8.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.05, 0.01, 0.03)
+material = ExtResource("6_wood_old")
+casts_shadow = false
+
+[node name="RailL" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.95, -4.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 0.06, 8.6)
+material = ExtResource("6_wood_old")
+
+[node name="PostL0" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.5, -0.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostL1" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.5, -2.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostL2" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.5, -5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostL3" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.5, -7.1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostL4" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.05, 0.5, -9.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="RailBodyL" type="StaticBody3D" parent="After"]
+position = Vector3(-1.05, 1.2, -4.9)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="After/RailBodyL"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="CloserL" type="StaticBody3D" parent="After"]
+position = Vector3(-1.8, 1.2, -1.2)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="After/CloserL"]
+shape = SubResource("BoxShape3D_4")
+
+[node name="RailR" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.95, -4.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 0.06, 8.6)
+material = ExtResource("6_wood_old")
+
+[node name="PostR0" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.5, -0.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostR1" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.5, -2.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostR2" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.5, -5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostR3" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.5, -7.1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="PostR4" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.5, -9.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1, 0.1)
+material = ExtResource("6_wood_old")
+
+[node name="RailBodyR" type="StaticBody3D" parent="After"]
+position = Vector3(1.05, 1.2, -4.9)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="After/RailBodyR"]
+shape = SubResource("BoxShape3D_5")
+
+[node name="CloserR" type="StaticBody3D" parent="After"]
+position = Vector3(1.8, 1.2, -1.2)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="After/CloserR"]
+shape = SubResource("BoxShape3D_6")
+
+[node name="RailEnd" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.95, -9.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.16, 0.06, 0.06)
+material = ExtResource("6_wood_old")
+
+[node name="RailEndBody" type="StaticBody3D" parent="After"]
+position = Vector3(0, 1.2, -9.25)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="After/RailEndBody"]
+shape = SubResource("BoxShape3D_7")
+
+[node name="Bucket" type="MeshInstance3D" parent="After"]
+position = Vector3(0.55, 0.15, -8.7)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.3, 0.3)
+material = ExtResource("7_plastic_blue")
+
+[node name="FishDock" type="StaticBody3D" parent="After"]
+position = Vector3(0, 0.45, -8.95)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_interactable")
+kind = 1
+target_id = "dock"
+
+[node name="Shape" type="CollisionShape3D" parent="After/FishDock"]
+shape = SubResource("BoxShape3D_8")

@@ -1,0 +1,162 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/merchant_vehicle.gd" id="1_merchant_veh"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/plaster_blue.tres" id="3_plaster_blue"]
+[ext_resource type="Material" path="res://assets/materials/window_dark.tres" id="4_window_dark"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="5_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/plaster_white.tres" id="6_plaster_whit"]
+[ext_resource type="Material" path="res://assets/materials/cloth_orange.tres" id="7_cloth_orange"]
+[ext_resource type="Material" path="res://assets/materials/tire.tres" id="8_tire"]
+[ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="9_cloth_navy"]
+[ext_resource type="Material" path="res://assets/materials/skin_dark.tres" id="10_skin_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="11_hair_dark"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="12_sign_label"]
+
+[node name="MerchantTruck" type="Node3D"]
+script = ExtResource("1_merchant_veh")
+bob_height = 0.02
+bob_speed = 10.0
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Cab" type="MeshInstance3D" parent="Body"]
+position = Vector3(2, 1.4, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.6, 1.6, 2.1)
+material = ExtResource("3_plaster_blue")
+
+[node name="CabWin" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.81, 1.75, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.7, 1.8)
+material = ExtResource("4_window_dark")
+
+[node name="CabWinL" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 1.75, -1.06)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.9, 0.6, 0.04)
+material = ExtResource("4_window_dark")
+
+[node name="CabWinR" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 1.75, 1.06)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.9, 0.6, 0.04)
+material = ExtResource("4_window_dark")
+
+[node name="Grill" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.82, 0.95, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 1.6)
+material = ExtResource("5_metal_dark")
+
+[node name="Cargo" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.8, 1.75, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(3.8, 2.1, 2.2)
+material = ExtResource("6_plaster_whit")
+
+[node name="Stripe" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.8, 1.4, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(3.82, 0.25, 2.22)
+material = ExtResource("7_cloth_orange")
+
+[node name="Frame" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.1, 0.65, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(5.6, 0.25, 1.9)
+material = ExtResource("5_metal_dark")
+
+[node name="Wheel0" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 0.45, -1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Wheel1" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 0.45, 1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Wheel2" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.3, 0.45, -1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Wheel3" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.3, 0.45, 1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Wheel4" type="MeshInstance3D" parent="Body"]
+position = Vector3(-1.6, 0.45, -1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Wheel5" type="MeshInstance3D" parent="Body"]
+position = Vector3(-1.6, 0.45, 1)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.9, 0.2, 0.9)
+material = ExtResource("8_tire")
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 1.28, 0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.42, 0.55, 0.3)
+material = ExtResource("9_cloth_navy")
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.1, 1.72, 0.3)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.24, 0.27, 0.24)
+material = ExtResource("10_skin_dark")
+
+[node name="Hair" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.08, 1.8, 0.3)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.25, 0.14, 0.25)
+material = ExtResource("11_hair_dark")
+
+[node name="EyeL" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.215, 1.75, 0.25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.02, 0.03, 0.03)
+material = ExtResource("11_hair_dark")
+casts_shadow = false
+
+[node name="EyeR" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.215, 1.75, 0.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.02, 0.03, 0.03)
+material = ExtResource("11_hair_dark")
+casts_shadow = false
+
+[node name="Name" type="Label3D" parent="."]
+position = Vector3(0.5, 3.4, 0)
+billboard = 1
+pixel_size = 0.004
+font_size = 30
+outline_size = 8
+modulate = Color(1, 0.95, 0.85, 1)
+outline_modulate = Color(0, 0, 0, 0.85)
+script = ExtResource("12_sign_label")
+text_key = "MERCHANT_COCO_TAG"

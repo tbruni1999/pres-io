@@ -73,9 +73,10 @@ static func from_dict(d: Dictionary, r: DictReader, def: ProjectDefinition) -> P
 			if p.paid_cents != 0 or p.approved_day != 0:
 				r.fail(w, "obra disponible con pagos o aprobación registrados")
 		UNDER_CONSTRUCTION, COMPLETED:
-			if p.paid_cents != def.cost_cents() or p.approved_day < 1 or p.operation_key.is_empty():
+			# El costo pagado se compara con el libro (no con el balance actual, que puede cambiar).
+			if p.paid_cents <= 0 or p.approved_day < 1 or p.operation_key.is_empty():
 				r.fail(w, "obra aprobada sin pago o clave de operación coherente")
-			if p.completion_day != p.approved_day + def.duration_days - 1:
+			if p.completion_day < p.approved_day:
 				r.fail(w, "plazo de obra inconsistente")
 	if p.status == COMPLETED and (p.completed_day != p.completion_day or p.operational_from_day != p.completed_day + 1):
 		r.fail(w, "fechas de finalización inconsistentes")

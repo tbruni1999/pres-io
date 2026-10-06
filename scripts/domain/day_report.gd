@@ -18,6 +18,17 @@ var next_water_capacity: int = 0
 ## Obras completadas en este cierre: [{project_id, operational_from_day}]
 var completed_projects: Array[Dictionary] = []
 var reaction_key: String = ""
+## Jornada del personaje.
+var earned_cents: int = 0
+var spent_cents: int = 0
+var fish_caught: int = 0
+var fainted: bool = false
+var faint_penalty_cents: int = 0
+var wallet_end_cents: int = 0
+## Fondo comunitario al cerrar.
+var fund_cents: int = 0
+## Pescado que se pudrió al cerrar.
+var rotten: int = 0
 
 
 func to_dict() -> Dictionary:
@@ -41,6 +52,14 @@ func to_dict() -> Dictionary:
 		"next_water_capacity": next_water_capacity,
 		"completed_projects": done,
 		"reaction_key": reaction_key,
+		"earned_cents": str(earned_cents),
+		"spent_cents": str(spent_cents),
+		"fish_caught": fish_caught,
+		"fainted": fainted,
+		"faint_penalty_cents": str(faint_penalty_cents),
+		"wallet_end_cents": str(wallet_end_cents),
+		"fund_cents": str(fund_cents),
+		"rotten": rotten,
 	}
 
 
@@ -75,6 +94,14 @@ static func from_dict(d: Dictionary, r: DictReader) -> DayReport:
 		else:
 			r.fail(w, "obra completada inválida")
 	rep.reaction_key = r.get_string(d, "reaction_key", w)
+	rep.earned_cents = r.get_big_int(d, "earned_cents", w, 0, big)
+	rep.spent_cents = r.get_big_int(d, "spent_cents", w, 0, big)
+	rep.fish_caught = r.get_small_int(d, "fish_caught", w, 0, 1_000_000)
+	rep.fainted = r.get_bool(d, "fainted", w)
+	rep.faint_penalty_cents = r.get_big_int(d, "faint_penalty_cents", w, 0, big)
+	rep.wallet_end_cents = r.get_big_int(d, "wallet_end_cents", w, 0, big)
+	rep.fund_cents = r.get_big_int(d, "fund_cents", w, 0, big)
+	rep.rotten = r.get_small_int(d, "rotten", w, 0, 1_000_000)
 	if r.ok() and rep.cash_end_cents != rep.cash_start_cents + rep.income_cents - rep.payments_cents:
 		r.fail(w, "el informe no cuadra: caja final != inicial + ingresos - pagos")
 	return rep

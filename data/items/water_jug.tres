@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/item_definition.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "water_jug"
+name_key = "ITEM_WATER_JUG"
+kind = 1
+drink_bp = 5000

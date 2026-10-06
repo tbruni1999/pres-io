@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/item_definition.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "rod_basic"
+name_key = "ITEM_ROD_BASIC"
+kind = 2
+bite_min_s = 7.0
+bite_max_s = 15.0
+big_chance_bp = 1200
+needle_mult = 1.0
+tier = 1

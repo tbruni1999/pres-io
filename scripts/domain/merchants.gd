@@ -1,0 +1,179 @@
+class_name Merchants
+extends RefCounted
+## Comerciantes que cruzan el camino frente a la choza.
+## La agenda del día sale del generador de la partida; la posición se deriva del tick,
+## así la escena se puede reconstruir en cualquier momento (también al cargar).
+
+const SCHEDULED := "scheduled"
+const PASSING := "passing"
+const STOPPED := "stopped"
+const LEAVING := "leaving"
+const GONE := "gone"
+const STATUSES := [SCHEDULED, PASSING, STOPPED, LEAVING, GONE]
+
+## El camino va de -ROAD_HALF a +ROAD_HALF en X; la choza está en X = 0.
+const ROAD_HALF := 90.0
+## Hasta dónde se le puede hacer señas (ya pasó la choza por poco).
+const HAIL_MAX_X := 8.0
+const HAIL_MIN_X := -50.0
+const SIGN_BUILDING := "sign"
+
+
+# --- Agenda ---------------------------------------------------------------------
+
+## Arma las pasadas de una jornada. La primera del día 1 es siempre la de Don Ramiro.
+static func plan_day(state: GameState, content: GameContent, day: int) -> void:
+	var camp := state.camp
+	camp.passes.clear()
+	var b := content.balance
+	var tpd := state.ticks_per_day
+	var day_start := (day - 1) * tpd
+	var slots := maxi(1, b.merchant_passes_per_day)
+	var spacing := tpd / slots
+	if content.merchants.is_empty():
+		return
+	for i in slots:
+		var offset := 30 + i * spacing + state.rng.randi_range(0, maxi(0, spacing / 3))
+		offset = mini(offset, tpd - 20)
+		var merchant := _pick_merchant(state, content)
+		if day == 1 and i == 0 and content.find_merchant(content.balance.first_merchant) != null:
+			merchant = content.balance.first_merchant
+		if merchant.is_empty():
+			continue
+		camp.passes.append({
+			"id": camp.next_pass_id, "merchant": merchant, "start": day_start + offset,
+			"status": SCHEDULED, "stop_tick": -1, "leave_tick": -1, "bought": 0,
+		})
+		camp.next_pass_id += 1
+
+
+static func _pick_merchant(state: GameState, content: GameContent) -> String:
+	var pool: Array[MerchantDefinition] = []
+	var total := 0
+	for m in content.merchants:
+		var def := m as MerchantDefinition
+		if def != null and (def.requires_building.is_empty() or state.camp.has_building(def.requires_building)):
+			pool.append(def)
+			total += maxi(1, def.weight)
+	var roll := state.rng.randi_range(0, maxi(0, total - 1))
+	for def in pool:
+		roll -= maxi(1, def.weight)
+		if roll < 0:
+			return def.id
+	return "" if pool.is_empty() else pool[0].id
+
+
+# --- Movimiento -----------------------------------------------------------------
+
+static func speed(def: MerchantDefinition) -> float:
+	return 2.0 * ROAD_HALF / maxf(1.0, float(def.crossing_ticks))
+
+
+## Posición X sobre el camino en un tick (con fracción, para animar suave).
+static func position_x(p: Dictionary, def: MerchantDefinition, t: float) -> float:
+	var v := speed(def)
+	var start := float(p["start"])
+	match String(p["status"]):
+		SCHEDULED:
+			return -ROAD_HALF - 1.0
+		STOPPED:
+			return -ROAD_HALF + v * (float(p["stop_tick"]) - start)
+		LEAVING, GONE:
+			if int(p["stop_tick"]) >= 0:
+				return -ROAD_HALF + v * (float(p["stop_tick"]) - start) + v * (t - float(p["leave_tick"]))
+	return -ROAD_HALF + v * (t - start)
+
+
+## Avanza el estado de las pasadas en un paso administrativo.
+static func update(state: GameState, content: GameContent) -> void:
+	var t := state.tick
+	var has_sign := state.camp.has_building(SIGN_BUILDING)
+	for p in state.camp.passes:
+		var def := content.find_merchant(p["merchant"])
+		match String(p["status"]):
+			SCHEDULED:
+				if t >= int(p["start"]):
+					p["status"] = PASSING
+			PASSING:
+				var x := position_x(p, def, t)
+				if has_sign and x >= 0.0:
+					_stop(p, t, content)
+				elif x >= ROAD_HALF:
+					p["status"] = GONE
+			STOPPED:
+				if t >= int(p["leave_tick"]):
+					p["status"] = LEAVING
+			LEAVING:
+				if position_x(p, def, t) >= ROAD_HALF:
+					p["status"] = GONE
+
+
+static func _stop(p: Dictionary, t: int, content: GameContent) -> void:
+	p["status"] = STOPPED
+	p["stop_tick"] = t
+	p["leave_tick"] = t + content.balance.merchant_stop_ticks
+
+
+static func active_pass(state: GameState) -> Dictionary:
+	for p in state.camp.passes:
+		if p["status"] == STOPPED:
+			return p
+	return {}
+
+
+# --- Comandos -------------------------------------------------------------------
+
+## Hacerle señas a un comerciante que viene por el camino.
+static func hail(state: GameState, content: GameContent, pass_id: int) -> CommandResult:
+	var p := state.camp.find_pass(pass_id)
+	if p.is_empty():
+		return CommandResult.failure("unknown_pass", Texts.t("ERR_NO_MERCHANT"))
+	if p["status"] == STOPPED:
+		return CommandResult.already_applied(Texts.t("MSG_ALREADY_STOPPED"))
+	var def := content.find_merchant(p["merchant"])
+	var x := position_x(p, def, state.tick)
+	if p["status"] != PASSING or x > HAIL_MAX_X or x < HAIL_MIN_X:
+		return CommandResult.failure("too_far", Texts.t("ERR_MERCHANT_TOO_FAR"))
+	_stop(p, state.tick, content)
+	return CommandResult.success("", {"merchant": def.id})
+
+
+## El jugador terminó de comerciar: el comerciante sigue viaje.
+static func dismiss(state: GameState, pass_id: int) -> void:
+	var p := state.camp.find_pass(pass_id)
+	if not p.is_empty() and p["status"] == STOPPED:
+		p["status"] = LEAVING
+		p["leave_tick"] = state.tick
+
+
+static func sell_to(state: GameState, content: GameContent, pass_id: int, item_id: String, qty: int) -> CommandResult:
+	var p := state.camp.find_pass(pass_id)
+	if p.is_empty() or p["status"] != STOPPED:
+		return CommandResult.failure("no_merchant", Texts.t("ERR_NO_MERCHANT"))
+	var def := content.find_merchant(p["merchant"])
+	var price := def.buy_price_cents(item_id)
+	if price <= 0:
+		return CommandResult.failure("not_buyable", Texts.t("ERR_MERCHANT_DOESNT_BUY"))
+	var room := def.max_buy - int(p["bought"])
+	if room <= 0:
+		return CommandResult.failure("merchant_full", Texts.t("ERR_MERCHANT_FULL"))
+	qty = mini(qty, room)
+	if qty <= 0 or state.player.count(item_id) < qty:
+		return CommandResult.failure("not_enough_items", Texts.t("ERR_NOT_ENOUGH_ITEMS"))
+	var total := price * qty
+	state.player.remove_item(item_id, qty)
+	state.player.earn(total)
+	p["bought"] = int(p["bought"]) + qty
+	return CommandResult.success(Texts.t("MSG_SOLD", {"n": qty, "name": Texts.t(content.find_item(item_id).name_key), "total": Money.format(total)}), {"total_cents": total, "qty": qty})
+
+
+static func buy_from(state: GameState, content: GameContent, pass_id: int, item_id: String) -> CommandResult:
+	var p := state.camp.find_pass(pass_id)
+	if p.is_empty() or p["status"] != STOPPED:
+		return CommandResult.failure("no_merchant", Texts.t("ERR_NO_MERCHANT"))
+	var def := content.find_merchant(p["merchant"])
+	var price := def.sell_price_cents(item_id)
+	var item := content.find_item(item_id)
+	if price <= 0 or item == null:
+		return CommandResult.failure("not_for_sale", Texts.t("ERR_NOT_FOR_SALE"))
+	return PlayerActions.purchase(state, content, item, price)

@@ -1,114 +1,219 @@
 keys,es
-ACTION_TALK,Hablar con {name}
-ACTION_INSPECT,Inspeccionar {name}
-ACTION_USE,Usar {name}
-OBJ_NAME_WELL,el pozo
-OBJ_NAME_DESK,el escritorio
-RESIDENT_ROSA_NAME,Rosa Benítez
-RESIDENT_ROSA_ROLE,vecina referente
 HUD_DAY,Día {day}
-HUD_DAY_PROGRESS,jornada al {pct} %
 HUD_PAUSED,· en pausa
-MSG_WELCOME,Rosa espera junto al pozo. Tab: libreta · Esc: pausa
-MSG_SAVE_AVAILABLE,Hay una partida guardada: Esc → Cargar partida
-MSG_DAY_CLOSED,Terminó el Día {day}. El informe está en la libreta (Tab).
-MSG_NEW_GAME,Nueva partida: Día 1.
-PROJECT_WELL_REPAIR_NAME,Reparación del pozo
-PROJECT_WELL_REPAIR_DESC,"Cambiar la bomba gastada, reponer el techo y conectar un tanque con canilla. Incluye materiales y mano de obra del contrato con Don Aurelio."
-PROJECT_WELL_REPAIR_BENEFIT,Se paga una sola vez al aprobar. La nueva capacidad rige desde la jornada siguiente a terminar la obra.
-DESK_TITLE,Escritorio · Fondo comunitario
-DESK_TREASURY,Caja del fondo
-DESK_TREASURY_NOTE,"Fondo aportado por los vecinos. Cada obra se paga completa, una sola vez, desde esta caja."
-DESK_LEDGER,Movimientos recientes
-DESK_LEDGER_EMPTY,Sin movimientos todavía.
-LEDGER_LINE,Día {day} · {reason}
-DESK_PROJECTS,Obra disponible
-DESK_APPROVE,Aprobar reparación
-DESK_CONFIRM_APPROVE,Confirmar: pagar {cost}
-DESK_CONFIRM_HINT,Revisá el costo y volvé a pulsar para confirmar. Esc cancela.
-DESK_CONFIRM_CANCELLED,Aprobación cancelada. No se movió dinero.
-DESK_WORKS_NOTE,La obra termina al cierre del Día {day}. El pozo abastece la nueva capacidad desde el Día {next_day}.
-DESK_CLOSE_DAY,Cerrar jornada
-DESK_CLOSE_DAY_TOOLTIP,Ejecuta los pasos que faltan de la jornada con las mismas reglas del reloj.
-DESK_CLOSE_DAY_HINT,Adelanta lo que falta del día: vencen las obras y se emite el informe.
-DESK_LEAVE,Salir
-ROW_CASH,Caja
-ROW_AVAILABLE,Disponible para invertir
-ROW_OPENING,Fondo inicial
-ROW_COST,Costo inicial
-ROW_DURATION,Plazo
-ROW_BENEFIT,Beneficio esperado
-ROW_CASH_AFTER,Caja después de aprobar
-ROW_STATUS,Estado
-ROW_WATER_TODAY,Agua hoy
-VAL_DURATION,{days} jornada(s)
-VAL_NOT_ENOUGH,fondos insuficientes
-VAL_WATER_BENEFIT,agua para {before} → {after} personas ({cov_before} → {cov_after})
-VAL_WATER_TODAY,{capacity} de {population} personas ({coverage})
-STATUS_AVAILABLE,sin aprobar
-STATUS_UNDER_CONSTRUCTION,en obra · termina al cierre del Día {day}
-STATUS_COMPLETED,terminada el Día {day}
-MSG_PROJECT_APPROVED,Aprobada: {name}. Se pagaron {cost}. La obra termina al cierre del Día {day}.
-MSG_OPERATION_ALREADY_APPLIED,Esa operación ya se había procesado: no se volvió a cobrar.
-ERR_INVALID_AMOUNT,El monto del pago no es válido.
-ERR_INSUFFICIENT_FUNDS,Faltan {missing} disponibles: la obra cuesta {cost} y hay {available} disponibles.
-ERR_MISSING_OPERATION_KEY,Falta la clave de operación del comando.
+HUD_WOOD,Madera {n}
+HUD_BAG,Mochila {n}/{cap}
+HUD_HUNGER,Hambre
+HUD_THIRST,Sed
+OBJ_FIRST_FISH,Pescá en la orilla del lago
+OBJ_HAIL,"Cuando pase alguien por el camino, salí y hacele señas (E)"
+OBJ_FIRE,Juntá 3 ramas y armá el fogón
+OBJ_SIGN,Cartel: 4 madera + 40 UC (los comerciantes paran solos)
+OBJ_DOCK,Muelle: 20 madera + 150 UC (más tarariras)
+OBJ_DONE,"Por ahora, esto es todo. Pronto llegan vecinos."
+OBJ_EAT,"¡Comé algo, que te caés!"
+OBJ_DRINK,¡Tomá agua!
+MSG_WELCOME,"Una choza, un lago y vos. Arrancamos bien."
+MSG_SAVE_AVAILABLE,Hay partida guardada: Esc → Cargar
+MSG_DAY_CLOSED,Se terminó el día {day}.
+MSG_NEW_GAME,Partida nueva. La choza sigue igual de fea.
+MSG_MERCHANT_COMING,Se acerca {name} por el camino
+MSG_MERCHANT_PASSED,{name} pasó de largo.
+ACTION_FISH,Pescar
+ACTION_FISH_DOCK,Pescar desde el muelle
+ACTION_DRINK_LAKE,Tomar agua del lago
+ACTION_SLEEP,Dormir
+ACTION_BRANCHES,Juntar ramas
+ACTION_BRANCHES_GONE,No quedan ramas (mañana hay)
+ACTION_CHOP,Talar
+ACTION_CHOP_NEED_AXE,Para talar hace falta un hacha
+ACTION_TREE_GROWING,Este árbol está creciendo
+ACTION_BUILD,Construir {name} · {cost}
+ACTION_FIRE,Usar el fogón
+ACTION_HAIL,Hacerle señas a {name}
+ACTION_TRADE,Comerciar con {name}
+COST_WOOD,{n} madera
+COST_WOOD_MONEY,{n} madera + {money}
+FISH_WAITING,Esperando que pique…
+FISH_BITE,¡Pica! E en la zona
+FISH_CHECK_N,{i} de {n}
+FISH_ESCAPED,Se escapó. Te saludó con la aleta.
+FISH_STOP_HINT,Esc: dejar de pescar
+ACTIVITY_CANCEL_HINT,Esc: cancelar
+PAUSE_SAVE_LOCATION,Partidas en {path}
+SKILL_PERFECT,¡Perfecto!
+BUILD_HAMMER,Martillando {i}/{n}
+BUILD_MISSED,Te machucaste un dedo. Otra vez.
+CHOP_SWING,Hachazo {i}/{n}
+ITEM_FISH_SMALL,Mojarra
+ITEM_FISH_BIG,Tararira
+ITEM_BREAD,Pan
+ITEM_WATER_JUG,Bidón de agua
+ITEM_ROD_BASIC,Caña de bambú
+ITEM_ROD_GOOD,Caña de fibra
+ITEM_COOLER,Conservadora
+ITEM_AXE,Hacha
+BUILD_FIRE,Fogón
+BUILD_SIGN,Cartel «Vendo pescado»
+BUILD_DOCK,Muelle
+MSG_CATCH,+1 {name}
+MSG_CATCH_PERFECT,¡Perfecto! +2 {name}
+MSG_SOLD,Vendiste {n} {name}: +{total}
+MSG_BOUGHT,Compraste: {name}
+MSG_ATE,"Comiste {name}. Rico no, pero llena."
+MSG_DRANK,Tomaste {name}.
+MSG_LAKE_OK,Agua del lago. Tiene gusto a lago.
+MSG_LAKE_SICK,Uy. El lago no te cayó bien. Se te fue el hambre… y el orgullo.
+MSG_BOILED,Agua hervida. Casi agua mineral.
+MSG_COOKED,Asaste {name}. Huele a gloria.
+MSG_GOT_WOOD,+{n} madera
+MSG_CHOP_MISSED,Le pegaste al aire. El árbol se ríe.
+MSG_BUILT,¡{name} terminado!
+MSG_ALREADY_STOPPED,Ya está parado.
+MSG_OPERATION_ALREADY_APPLIED,Eso ya estaba hecho.
+ERR_NO_ROD,Sin caña no hay pesca.
+ERR_BAG_FULL,La mochila está llena.
+ERR_UNKNOWN_ITEM,Eso no existe.
+ERR_NOT_EDIBLE,Eso no se come. Ni con hambre.
+ERR_NOT_ENOUGH_ITEMS,No tenés eso.
+ERR_NO_FISH,No tenés pescado.
+ERR_ALREADY_OWNED,Ya la tenés.
+ERR_MISSING_MONEY,Te faltan {missing}.
+ERR_NO_DOCK,Primero hay que hacer el muelle.
+ERR_BRANCHES_GONE,Acá ya no quedan ramas. Mañana.
+ERR_NO_AXE,Necesitás un hacha (la vende la Chola).
+ERR_TREE_CUT,Ese árbol todavía está creciendo.
+ERR_ALREADY_BUILT,Ya está hecho.
+ERR_MISSING_WOOD,Te faltan {missing} de madera.
+ERR_NO_FIRE,Primero armá el fogón.
+ERR_NO_MERCHANT,No hay nadie para comerciar.
+ERR_MERCHANT_TOO_FAR,No te ve: está muy lejos.
+ERR_MERCHANT_DOESNT_BUY,Eso no lo compra.
+ERR_MERCHANT_FULL,Por hoy no compra más.
+ERR_NOT_FOR_SALE,Eso no lo vende.
+ERR_INVALID_AMOUNT,Monto inválido.
+ERR_INSUFFICIENT_FUNDS,Faltan {missing} disponibles: cuesta {cost} y hay {available}.
+ERR_MISSING_OPERATION_KEY,Falta la clave de operación.
 ERR_UNKNOWN_PROJECT,No existe el proyecto «{id}».
-ERR_NO_AUTHORITY,Tu cargo actual no tiene autoridad para aprobar esta obra.
-ERR_PROJECT_UNDER_CONSTRUCTION,{name} ya está en obra: no se puede aprobar otra vez.
+ERR_NO_AUTHORITY,No te corresponde aprobar eso.
+ERR_PROJECT_UNDER_CONSTRUCTION,{name} ya está en obra.
 ERR_PROJECT_COMPLETED,{name} ya está terminada.
-ERR_SITE_BUSY,Ese lugar ya tiene otra obra en curso.
-INSPECT_NOTHING,No hay nada que inspeccionar.
-INSPECT_WELL_TITLE,Pozo comunitario
-INSPECT_WELL_STATUS_BROKEN,"La bomba está gastada, el techo se cayó y el tanque viejo pierde. Sale poca agua y hay que hacer turnos."
-INSPECT_WELL_STATUS_WORKS,Don Aurelio y su ayudante cambian la bomba. Hay materiales y una cinta de obra alrededor.
-INSPECT_WELL_STATUS_DONE,"Bomba nueva, techo repuesto y tanque con canilla. Reparado el Día {day}."
-INSPECT_WELL_SERVICE_TODAY,Servicio de agua · Día {day}
-ROW_WATER_CAPACITY,Capacidad
-ROW_WATER_DEMAND,Demanda
-ROW_WATER_COVERAGE,Cobertura
-VAL_PEOPLE_PER_DAY,{n} personas por jornada
-VAL_PEOPLE,{n} personas
-INSPECT_WELL_HINT,"Reparación posible desde el escritorio de la oficina: {cost}, plazo {days} jornada(s), capacidad {capacity_after} personas."
-INSPECT_WELL_WORKS_HINT,Termina al cierre del Día {day}. Desde el Día {next_day}: {capacity_after} personas.
-REPORT_TITLE,Informe · cierre del Día {day}
-REPORT_NONE,Todavía no hay informes.
-REPORT_MONEY,Dinero de la jornada
-REPORT_WATER,Agua
-REPORT_COMMUNITY,Reacción de la comunidad
-ROW_CASH_START,Caja al empezar
-ROW_INCOME,Ingresos
-ROW_PAYMENTS,Pagos
-ROW_PAYMENT_LINE,Pago · {reason}
-ROW_CASH_END,Caja al cerrar
-ROW_WATER_SERVED,Personas abastecidas
-VAL_WATER_SERVED,{served} de {demand} ({coverage})
-ROW_WATER_TOMORROW,Capacidad desde mañana
-REPORT_PROJECT_DONE,Obra terminada: {name}. Opera desde el Día {day} con capacidad para {capacity} personas.
-REACTION_WATER_CRITICAL,Las filas en el pozo duran horas. Muchas familias cargan bidones desde la cañada y Rosa organiza turnos.
-REACTION_WATER_PARTIAL,"El agua alcanza para la mayoría, pero algunas familias siguen esperando turno."
-REACTION_WATER_OK,El agua alcanza para todas las familias. Ya no hacen falta turnos en el pozo.
-REACTION_WELL_IN_PROGRESS,"Los vecinos se acercan a mirar la obra del pozo. Hay expectativa, aunque hoy el agua siguió sin alcanzar."
-REACTION_WELL_DONE,Se corre la voz: el pozo arreglado abastecerá a todo el asentamiento desde mañana.
-MSG_AUTOSAVED,Autoguardado al cerrar la jornada.
-NOTEBOOK_TITLE,Libreta · Día {day}
-NOTEBOOK_OBJECTIVES,Pendientes
-OBJ_TALK_ROSA,"Hablar con Rosa, la vecina que espera junto al pozo"
-OBJ_INSPECT_WELL,Inspeccionar el pozo para conocer su capacidad
-OBJ_APPROVE_REPAIR,Aprobar la reparación en el escritorio de la oficina
-OBJ_CLOSE_DAY,Cerrar la jornada desde el escritorio (o esperar a que termine) para completar la obra
-OBJ_SEE_RESULT,Volver al pozo e inspeccionar el resultado
-NOTEBOOK_NO_REPORT,Todavía no cerró ninguna jornada. El informe aparecerá acá.
-NOTEBOOK_CONTROLS,"WASD caminar · Shift correr · E interactuar · Tab libreta · Esc pausa, guardar y cargar"
+ERR_SITE_BUSY,Ese lugar ya tiene otra obra.
+MSG_PROJECT_APPROVED,Arrancó la obra: {name}.
+ERR_COLLECTION_CLOSED,No hay ninguna colecta abierta.
+MSG_DONATED,Pusiste {amount} en el tarro.
+MSG_DONATED_GOAL,Pusiste {amount}. ¡Se llegó a la meta!
+LEDGER_PLAYER_DONATION,Tu aporte
+LEDGER_NEIGHBORS_DONATION,Aporte de los vecinos
+MSG_DRANK_WELL_BROKEN,Hiciste la fila. Te tocó medio vaso.
+MSG_DRANK_WELL_FIXED,Agua fresquita del pozo.
+PROJECT_WELL_REPAIR_NAME,Reparación del pozo
+PROJECT_WELL_REPAIR_DESC,"Bomba nueva, techo y tanque."
+PROJECT_WELL_REPAIR_BENEFIT,Agua para todo el barrio.
+RESIDENT_ROSA_NAME,Rosa
+RESIDENT_ROSA_ROLE,vecina
+DLG_ROSA_INTRO,"¡Hola! El pozo da agua para 20 y somos 60. Abrí una colecta. Poné algo, que Dios te ve. Y yo también."
+DLG_ROSA_COLLECTING,"La colecta va. Lenta, como la bomba."
+DLG_ROSA_IN_PROGRESS,¡Juntamos! Don Aurelio está con la bomba. Dice que hoy termina. Dijo lo mismo en 2019.
+DLG_ROSA_DONE,¡Sale agua! Ya no tengo excusa para no lavar los platos.
+DLG_OPT_BYE,"Chau, Rosa."
+MERCHANT_RAMIRO,Don Ramiro
+MERCHANT_CHOLA,la Chola
+MERCHANT_COCO,Coco
+MERCHANT_RAMIRO_TAG,Don Ramiro y Turbo
+MERCHANT_CHOLA_TAG,La Chola
+MERCHANT_COCO_TAG,Coco
+TRADE_SELL,Vender
+TRADE_BUY,Comprar
+TRADE_SELL_ROW,{name} ×{n} · {price} c/u
+TRADE_SELL_BUTTON,Vender ({total})
+TRADE_NOTHING,No tenés nada que le interese.
+TRADE_ROOM,Compra {n} más
+TRADE_FULL,Ya no compra más
+TRADE_BUY_ROW,{name} · {price}
+TRADE_OWNED,Ya la tenés
+TRADE_DONE,"Listo, chau"
+RAMIRO_GREET_1,"¡Sooo, Turbo! Buenas. ¿Qué pescaste, campeón?"
+RAMIRO_GREET_2,"Turbo quería parar. Yo no, pero manda él."
+RAMIRO_GREET_3,"Buenas. No me mire así, el caballo es el que huele."
+RAMIRO_GREET_4,"¿Pescado de hoy? ¿Seguro? Turbo, olfateá."
+RAMIRO_SOLD_1,"Lindo pescado. Turbo dice que está flaco, pero Turbo es vegetariano."
+RAMIRO_SOLD_2,Le pago poco porque el caballo come mucho.
+RAMIRO_SOLD_3,Esto en la ciudad lo venden como salmón.
+RAMIRO_BUY_1,"Pan de ayer. De anteayer, si somos honestos."
+RAMIRO_BUY_2,Buena compra. Turbo aprueba con la cola.
+RAMIRO_NOTHING_1,¿Me paró para nada? Turbo no te va a perdonar.
+RAMIRO_NOTHING_2,Sin pescado no hay negocio. Ni amistad.
+RAMIRO_BYE_1,"¡Arre, Turbo! …Turbo. …Turbo, dale."
+RAMIRO_BYE_2,Nos vemos. Turbo te manda saludos.
+RAMIRO_PASS_1,Turbo ni te miró.
+RAMIRO_PASS_2,Se escuchó un relincho burlón.
+CHOLA_GREET_1,"¡Frené de milagro! El Fitito no tiene frenos, tiene fe."
+CHOLA_GREET_2,Rápido que tengo el motor prendido desde 1987.
+CHOLA_GREET_3,"¿Qué tenés? Y no me digas «pescado», ya sé que es pescado."
+CHOLA_GREET_4,"Hola, corazón. Te compro todo, pero barato."
+CHOLA_SOLD_1,Esta tararira me mira raro. Me la llevo igual.
+CHOLA_SOLD_2,Te pago bien porque me caés bien. Hoy.
+CHOLA_SOLD_3,Mi sobrino pesca mejor. Mi sobrino tiene cuatro años.
+CHOLA_BUY_1,"¡Vendido! Sin garantía, sin devolución, sin factura."
+CHOLA_BUY_2,Esto lo traje de Brasil. O de la feria. Algún lado.
+CHOLA_NOTHING_1,¿Me hiciste frenar para charlar? Te cobro el embrague.
+CHOLA_NOTHING_2,"Volvé cuando tengas algo, divino."
+CHOLA_BYE_1,"¡Chau! Si no arranca, empujame."
+CHOLA_BYE_2,"Me voy antes de que se recaliente. El motor, digo."
+CHOLA_PASS_1,La Chola pasó a fondo. Ni te vio. O te vio y aceleró.
+CHOLA_PASS_2,Solo quedó el humo del Fitito.
+COCO_GREET_1,Leí el cartel. Me encantó la letra. ¿Quién te enseñó a escribir?
+COCO_GREET_2,"¡Buenas! Camión vacío, corazón lleno. ¿Qué tenés?"
+COCO_GREET_3,Freno acá porque el cartel me lo ordenó. Soy muy obediente.
+COCO_SOLD_1,Lo llevo al mercado. Les digo que lo pescó un profesional.
+COCO_SOLD_2,Pago bien porque el camión es de mi cuñado.
+COCO_SOLD_3,Con esto mi suegra me va a querer. Un poco.
+COCO_BUY_1,"Llevá, llevá. Lo que no vendo, se pone triste."
+COCO_BUY_2,"Buena elección. Mala para mí, pero buena."
+COCO_NOTHING_1,"¿Nada? Bueno, por lo menos el cartel está lindo."
+COCO_NOTHING_2,Freno igual por el cartel. Soy así.
+COCO_BYE_1,¡Nos vemos! Saludá al lago de mi parte.
+COCO_BYE_2,"Me voy, que el camión hace un ruido nuevo."
+COCO_PASS_1,Coco tocó bocina y siguió.
+COCO_PASS_2,Coco pasó cantando. Desafinado.
+BAG_TITLE,Mochila
+BAG_EMPTY,Vacía. Como la heladera.
+BAG_EAT,Comer
+BAG_DRINK,Tomar
+BAG_TOOLS,Herramientas
+BAG_ROW,{name} ×{n}
+BAG_FAINTS,Desmayos: {n} · el próximo te cuesta {pct} de la plata
+BAG_ROTS,El pescado se pudre al terminar el día.
+FIRE_TITLE,Fogón
+FIRE_BOIL,Hervir agua (1 madera)
+FIRE_COOK,Asar y comer {name} (1 madera)
+FIRE_WOOD,Madera: {n}
+REPORT_DAY_END,Terminó el día {day}
+REPORT_FAINT_TITLE,Te desmayaste
+REPORT_EARNED,Ganaste
+REPORT_SPENT,Gastaste
+REPORT_FISH,Pescaste
+REPORT_ROTTEN,Se pudrieron
+REPORT_FAINT_LOSS,Perdiste en el desmayo
+REPORT_WALLET,Tenés
+VAL_FISH,{n} pescados
+VAL_FISH_ONE,1 pescado
+REPORT_QUIP_1,Mañana más. O igual. Vemos.
+REPORT_QUIP_2,"El lago no se va a pescar solo. Bueno, sí, pero no para vos."
+REPORT_QUIP_3,Día terminado. La espalda también.
+REPORT_QUIP_ROTTEN,Algo huele raro en la choza. Sos vos y el pescado.
+FAINT_QUIP_1,Te despertó Turbo lamiéndote la cara. Turbo no dice nada de la plata que falta.
+FAINT_QUIP_2,Despertaste en tu choza. Alguien te trajo. Alguien se cobró el viaje.
+FAINT_QUIP_3,Te desmayaste con estilo. La billetera no tanto.
 PAUSE_TITLE,Pausa
 PAUSE_RESUME,Continuar
 PAUSE_SAVE,Guardar partida
 PAUSE_LOAD,Cargar partida
 PAUSE_SETTINGS,Ajustes
 PAUSE_NEW_GAME,Nueva partida
-PAUSE_NEW_GAME_CONFIRM,Confirmar: empezar de cero (no borra el guardado)
+PAUSE_NEW_GAME_CONFIRM,Confirmar: empezar de cero
 PAUSE_QUIT,Salir del juego
-PAUSE_SAVE_LOCATION,Las partidas se guardan en {path}
 SETTINGS_TITLE,Ajustes
 SETTINGS_SENSITIVITY,Sensibilidad del mouse
 SETTINGS_FOV,Campo de visión
@@ -116,49 +221,27 @@ SETTINGS_INVERT_Y,Invertir eje vertical
 SETTINGS_VOLUME_MASTER,Volumen general
 SETTINGS_VOLUME_AMBIENT,Volumen de ambiente
 SETTINGS_VOLUME_EFFECTS,Volumen de efectos
-SETTINGS_FOV_NOTE,"El campo de visión es horizontal, medido sobre una pantalla 16:9."
+SETTINGS_FOV_NOTE,"Campo de visión horizontal, medido en 16:9."
 UI_CLOSE,Cerrar
 UI_BACK,Volver
-UI_CONTINUE,Continuar
-MSG_SAVED,Partida guardada (Día {day}).
-MSG_LOADED,Partida cargada (Día {day}).
-MSG_LOADED_FROM_BACKUP,El guardado principal no se pudo leer ({error}). Se cargó la copia anterior.
-ERR_NO_SAVE,No hay ninguna partida guardada todavía.
+UI_CONTINUE,Seguir
+MSG_SAVED,Guardado (día {day}).
+MSG_LOADED,Cargado (día {day}).
+MSG_LOADED_FROM_BACKUP,El guardado principal falló ({error}). Se cargó la copia anterior.
 MSG_CURRENT_GAME_KEPT,La partida actual sigue intacta.
+MSG_AUTOSAVED,Autoguardado.
+ERR_NO_SAVE,Todavía no hay partida guardada.
 ERR_SAVE_DIR,No se pudo crear la carpeta de guardado: {error}.
-ERR_SAVE_WRITE,No se pudo escribir el guardado: {error}. La partida anterior se conserva.
+ERR_SAVE_WRITE,No se pudo guardar: {error}. El guardado anterior se conserva.
 ERR_SAVE_VERIFY,El guardado no pasó la verificación ({error}). No se reemplazó el anterior.
 ERR_LOAD_OPEN,No se pudo abrir el guardado: {error}.
 ERR_LOAD_CORRUPT,El guardado está dañado ({error}).
-ERR_LOAD_FUTURE,El guardado es de una versión más nueva del juego ({error}). No se abrió.
+ERR_LOAD_FUTURE,El guardado es de una versión más nueva ({error}).
 ERR_LOAD_INVALID,El guardado tiene {count} problema(s): {error}
-SIGN_OFFICE,OFICINA COMUNITARIA
-SIGN_OFFICE_BOARD,ASAMBLEA DOMINGO 10 H
-SIGN_STORE,ALMACÉN LA ESPERANZA
-SIGN_STORE_CLOSED,Cerrado · vuelvo enseguida
-SIGN_PLAZA_NOTICE,"FONDO COMUNITARIO
-Cuentas claras en la oficina.
-Prioridad: el agua."
-SIGN_ACCESS_CUT,"CAMINO EN MAL ESTADO
-No pasan vehículos"
-SIGN_WELL_BROKEN,"POZO
-Bomba averiada · agua para {capacity} personas"
-SIGN_WELL_WORKS,"OBRA: REPARACIÓN DEL POZO
-Fondo comunitario · termina el Día {day}"
-SIGN_WELL_DONE,"POZO COMUNITARIO
-Reparado el Día {day} · agua para {capacity} personas"
-DLG_ROSA_INTRO,"Buenas. Usted es quien se ocupa ahora de la oficina, ¿no? El pozo no da abasto: con suerte alcanza para {capacity} personas y acá somos {population}. Hay familias que cargan bidones desde la cañada."
-DLG_ROSA_PUMP_DETAIL,"La bomba está gastada y el techito se cayó con el último viento. Don Aurelio dice que con {well_cost} entre repuestos y mano de obra queda andando para {capacity_after} personas. Vaya a mirarlo, está acá nomás."
-DLG_ROSA_PROMISE,Se lo agradezco. En la oficina está el escritorio con la caja del fondo. Ojalá alcance; la gente está cansada de esperar.
-DLG_ROSA_WAITING_PROMISED,¿Y? ¿Pudo ver lo del pozo? La gente me sigue preguntando y yo les dije que usted se iba a ocupar.
-DLG_ROSA_WAITING,"El pozo sigue igual. Si se decide, en la oficina están las cuentas del fondo."
-DLG_ROSA_IN_PROGRESS,"¡Vi llegar los materiales! Don Aurelio dice que hoy termina. Si es así, mañana cargamos agua sin hacer fila."
-DLG_ROSA_DONE_PROMISED,¡Mire el agua que sale! Dijo que lo iba a arreglar y cumplió. Ahora puedo dejar de anotar turnos para el balde.
-DLG_ROSA_DONE,El pozo anda otra vez. Agua para todos... no me lo esperaba tan rápido.
-DLG_ROSA_NEXT_NEEDS,"Ahora que hay agua, lo que más se escucha es el camino de entrada, que se vuelve barro cuando llueve. Y los chicos no tienen dónde estudiar. Pero de a una cosa por vez."
-DLG_OPT_WHATS_WRONG,¿Qué le pasa al pozo?
-DLG_OPT_PROMISE,Voy a ver qué se puede hacer.
-DLG_OPT_NOT_NOW,"Ahora no puedo, disculpe."
-DLG_OPT_THINK,Lo voy a pensar.
-DLG_OPT_BYE,"Hasta luego, Rosa."
-DLG_OPT_WHAT_NEXT,Me alegra. ¿Qué más hace falta en el barrio?
+REACTION_WATER_CRITICAL,Falta agua.
+REACTION_WATER_PARTIAL,El agua casi alcanza.
+REACTION_WATER_OK,El agua alcanza.
+REACTION_WELL_IN_PROGRESS,El pozo está en obra.
+REACTION_WELL_DONE,El pozo quedó arreglado.
+SIGN_FISH,"VENDO
+PESCADO"

@@ -2,6 +2,24 @@
 
 Cada decisión indica qué se eligió y por qué. Se revisan cuando una prueba lo justifique.
 
+## Cambio de dirección "Choza y lago" (6 de octubre)
+- El juego arranca sin pueblo ni presupuesto (ver `DESIGN.md`). La caja comunitaria, el pozo y
+  Rosa quedan en el dominio para cuando lleguen vecinos; la UI del escritorio se quitó.
+- **Billetera del personaje separada del fondo comunitario** (`PlayerState` vs `TreasuryState`).
+  Invariante: billetera = inicial + ganado − gastado (se valida al cargar).
+- **Comerciantes**: la agenda del día sale del generador de la partida al cerrar cada jornada.
+  La posición del vehículo se calcula con el tick (`Merchants.position_x`), así se reconstruye al cargar.
+  Las señas se validan en el dominio por posición sobre el camino; la cercanía del jugador la mira la presentación.
+- **Skillcheck**: la presentación decide acierto/error (es habilidad del jugador); el dominio decide
+  qué pescado pica y cuánto tarda con el generador de la partida. Dónde cae la zona es cosmético.
+- **Actividades vs paneles**: pescar, martillar, talar y mantener E frenan al jugador pero el tiempo corre.
+  Los paneles (comerciar, fogón, mochila, informe, pausa) pausan el reloj.
+- **Dormir y desmayo** usan la misma función de pasos que el reloj, con "descanso": hambre y sed no bajan.
+- **Jornada de 8 minutos** (480 pasos). Las partidas viejas conservan su duración guardada.
+- Guardado: esquema 2 con migración real desde el 1 (se agregan personaje y campamento).
+  El pago de una obra se valida contra el libro de movimientos, no contra el costo actual del balance,
+  para que ajustar precios no invalide partidas.
+
 ## Motor y entorno
 - **Godot 4.7.2 estable**, verificado con `--version` (`4.7.2.stable.official.ed1daf0bf`).
   Ejecutable oficial de Linux usado en el entorno de desarrollo; checksum SHA-512 contrastado con

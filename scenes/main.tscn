@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/presentation/main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/world/settlement.tscn" id="2_settlement"]
+[ext_resource type="PackedScene" path="res://scenes/world/lakeside.tscn" id="2_lakeside"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ui_root.tscn" id="4_ui_root"]
 
@@ -26,7 +26,7 @@ tonemap_exposure = 0.85
 tonemap_white = 1.6
 fog_enabled = true
 fog_light_color = Color(0.78, 0.76, 0.7, 1)
-fog_density = 0.0035
+fog_density = 0.003
 fog_sky_affect = 0.3
 
 [node name="Main" type="Node3D"]
@@ -45,10 +45,10 @@ shadow_normal_bias = 1.5
 directional_shadow_max_distance = 50.0
 directional_shadow_mode = 1
 
-[node name="Settlement" parent="." instance=ExtResource("2_settlement")]
+[node name="World" parent="." instance=ExtResource("2_lakeside")]
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
-position = Vector3(-8.5, 0.05, -12.2)
-rotation_degrees = Vector3(0, -90, 0)
+position = Vector3(0.5, 0.05, -0.2)
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="UI" parent="." instance=ExtResource("4_ui_root")]
