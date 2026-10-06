@@ -1,0 +1,102 @@
+{
+	"applied_operations": [
+		{
+			"key": "approve_project:well_repair",
+			"tick": "120"
+		}
+	],
+	"facts": [
+		{
+			"facts": [
+				"promised_well",
+				"water_complaint_heard"
+			],
+			"subject": "neighbor_rosa"
+		},
+		{
+			"facts": [
+				"inspected_well"
+			],
+			"subject": "player"
+		}
+	],
+	"game_version": "0.1.0-h1",
+	"office": "community_organizer",
+	"player": {
+		"pitch": -5.0,
+		"position": [
+			-2.5,
+			0.0500000007450581,
+			-10.0
+		],
+		"yaw": 1.2
+	},
+	"projects": [
+		{
+			"approved_day": 1,
+			"approved_tick": "120",
+			"completed_day": 1,
+			"completion_day": 1,
+			"id": "well_repair",
+			"operation_key": "approve_project:well_repair",
+			"operational_from_day": 2,
+			"paid_cents": "320000",
+			"site_id": "well_main",
+			"status": "completed"
+		}
+	],
+	"reports": [
+		{
+			"cash_end_cents": "680000",
+			"cash_start_cents": "1000000",
+			"completed_projects": [
+				{
+					"operational_from_day": 2,
+					"project_id": "well_repair"
+				}
+			],
+			"day": 1,
+			"income_cents": "0",
+			"next_water_capacity": 60,
+			"payment_lines": [
+				{
+					"amount_cents": "320000",
+					"reason_key": "PROJECT_WELL_REPAIR_NAME"
+				}
+			],
+			"payments_cents": "320000",
+			"reaction_key": "REACTION_WELL_DONE",
+			"water_capacity": 20,
+			"water_coverage_bp": 3333,
+			"water_demand": 60,
+			"water_served": 20
+		}
+	],
+	"rng_seed": "20261005",
+	"rng_state": "-5018186817177817765",
+	"schema_version": 1,
+	"seed": "20261005",
+	"settlement": {
+		"base_water_capacity": 20,
+		"population": 60
+	},
+	"tick": "400",
+	"ticks_per_day": 360,
+	"treasury": {
+		"cash_cents": "680000",
+		"ledger": [
+			{
+				"amount_cents": "320000",
+				"day": 1,
+				"id": 1,
+				"kind": "payment",
+				"operation_key": "approve_project:well_repair",
+				"origin": "project:well_repair",
+				"reason_key": "PROJECT_WELL_REPAIR_NAME",
+				"tick": "120"
+			}
+		],
+		"next_entry_id": 2,
+		"opening_cents": "1000000"
+	}
+}

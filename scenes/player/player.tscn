@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/player/player_controller.gd" id="1_player_contr"]
+[ext_resource type="AudioStream" path="res://assets/audio/footstep_dirt.wav" id="2_footstep_dir"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.35
+height = 1.8
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player_contr")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.65, 0)
+
+[node name="Camera" type="Camera3D" parent="Head"]
+current = true
+near = 0.05
+far = 400.0
+
+[node name="Footsteps" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_footstep_dir")
+volume_db = -8.0
+bus = &"Efectos"

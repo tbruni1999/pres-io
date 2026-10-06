@@ -1,0 +1,11 @@
+# Godot: caché de importación y datos generados por el editor
+.godot/
+# Compilaciones exportadas
+build/
+# Temporales
+*.tmp
+*.bak
+# Registros de herramientas de prueba
+tests/output/
+# Generado al importar data/text/strings.csv
+*.translation

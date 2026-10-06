@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="1_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/car_teal.tres" id="2_car_teal"]
+[ext_resource type="Material" path="res://assets/materials/window_dark.tres" id="3_window_dark"]
+[ext_resource type="Material" path="res://assets/materials/car_rust.tres" id="4_car_rust"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="5_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/tire.tres" id="6_tire"]
+
+[node name="CarOld" type="Node3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.65, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.7, 0.7, 4.1)
+material = ExtResource("2_car_teal")
+collide = true
+
+[node name="Cabin" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.3, -0.2)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.5, 0.6, 2)
+material = ExtResource("2_car_teal")
+
+[node name="Windshield" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.3, 0.81)
+rotation_degrees = Vector3(-20, 0, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.4, 0.5, 0.05)
+material = ExtResource("3_window_dark")
+
+[node name="SideWindowL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.76, 1.32, -0.2)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.05, 0.45, 1.8)
+material = ExtResource("3_window_dark")
+
+[node name="SideWindowR" type="MeshInstance3D" parent="."]
+position = Vector3(0.76, 1.32, -0.2)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.05, 0.45, 1.8)
+material = ExtResource("3_window_dark")
+
+[node name="RustHood" type="MeshInstance3D" parent="."]
+position = Vector3(0.1, 1.01, 1.4)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.2, 0.02, 0.9)
+material = ExtResource("4_car_rust")
+
+[node name="BumperF" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.4, 2.08)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.75, 0.18, 0.12)
+material = ExtResource("5_metal_dark")
+
+[node name="BumperB" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.4, -2.08)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.75, 0.18, 0.12)
+material = ExtResource("5_metal_dark")
+
+[node name="Wheel0" type="MeshInstance3D" parent="."]
+position = Vector3(-0.8, 0.31, 1.3)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.62, 0.22, 0.62)
+material = ExtResource("6_tire")
+
+[node name="Wheel1" type="MeshInstance3D" parent="."]
+position = Vector3(0.8, 0.31, 1.3)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.62, 0.22, 0.62)
+material = ExtResource("6_tire")
+
+[node name="Wheel2" type="MeshInstance3D" parent="."]
+position = Vector3(-0.8, 0.31, -1.3)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.62, 0.22, 0.62)
+material = ExtResource("6_tire")
+
+[node name="Wheel3" type="MeshInstance3D" parent="."]
+position = Vector3(0.8, 0.31, -1.3)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.62, 0.22, 0.62)
+material = ExtResource("6_tire")

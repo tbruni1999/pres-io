@@ -1,0 +1,608 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/well_site.gd" id="1_well_site"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/concrete.tres" id="3_concrete"]
+[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="4_concrete_dar"]
+[ext_resource type="Material" path="res://assets/materials/dark_hole.tres" id="5_dark_hole"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="6_interactable"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="7_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/sign_board.tres" id="8_sign_board"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="9_sign_label"]
+[ext_resource type="Material" path="res://assets/materials/zinc_rust.tres" id="10_zinc_rust"]
+[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="11_metal_rust"]
+[ext_resource type="Material" path="res://assets/materials/plastic_blue.tres" id="12_plastic_blue"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="13_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="14_wood_new"]
+[ext_resource type="Material" path="res://assets/materials/sand.tres" id="15_sand"]
+[ext_resource type="Material" path="res://assets/materials/brick.tres" id="16_brick"]
+[ext_resource type="Material" path="res://assets/materials/cement_bag.tres" id="17_cement_bag"]
+[ext_resource type="Material" path="res://assets/materials/wood.tres" id="18_wood"]
+[ext_resource type="Material" path="res://assets/materials/tape_red.tres" id="19_tape_red"]
+[ext_resource type="Material" path="res://assets/materials/tape_white.tres" id="20_tape_white"]
+[ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="21_cloth_navy"]
+[ext_resource type="Material" path="res://assets/materials/cloth_orange.tres" id="22_cloth_orange"]
+[ext_resource type="Material" path="res://assets/materials/skin_dark.tres" id="23_skin_dark"]
+[ext_resource type="Material" path="res://assets/materials/plaster_white.tres" id="24_plaster_whit"]
+[ext_resource type="Material" path="res://assets/materials/zinc.tres" id="25_zinc"]
+[ext_resource type="Material" path="res://assets/materials/plastic_tank.tres" id="26_plastic_tank"]
+[ext_resource type="Material" path="res://assets/materials/water.tres" id="27_water"]
+[ext_resource type="Material" path="res://assets/materials/wet_ground.tres" id="28_wet_ground"]
+[ext_resource type="Material" path="res://assets/materials/foliage.tres" id="29_foliage"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+radius = 1.1
+height = 1.6
+
+[node name="WellSite" type="Node3D"]
+script = ExtResource("1_well_site")
+
+[node name="Pad" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(4.2, 0.08, 4.2)
+material = ExtResource("3_concrete")
+casts_shadow = false
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.45, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(2, 0.9, 2)
+material = ExtResource("3_concrete")
+
+[node name="RingLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.92, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(2.1, 0.08, 2.1)
+material = ExtResource("4_concrete_dar")
+
+[node name="Hole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.97, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(1.7, 0.02, 1.7)
+material = ExtResource("5_dark_hole")
+casts_shadow = false
+
+[node name="Inspect" type="StaticBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_interactable")
+kind = 1
+target_id = "well_main"
+action_key = "ACTION_INSPECT"
+name_key = "OBJ_NAME_WELL"
+
+[node name="Shape" type="CollisionShape3D" parent="Inspect"]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("CylinderShape3D_1")
+
+[node name="SignBoard" type="Node3D" parent="."]
+position = Vector3(-1.8, 0, 2.6)
+rotation_degrees = Vector3(0, -50, 0)
+
+[node name="PostL" type="MeshInstance3D" parent="SignBoard"]
+position = Vector3(-0.6, 0.7, -0.07)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.4, 0.08)
+material = ExtResource("7_wood_old")
+
+[node name="PostR" type="MeshInstance3D" parent="SignBoard"]
+position = Vector3(0.6, 0.7, -0.07)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.4, 0.08)
+material = ExtResource("7_wood_old")
+
+[node name="Board" type="MeshInstance3D" parent="SignBoard"]
+position = Vector3(0, 1.25, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.5, 0.7, 0.04)
+material = ExtResource("8_sign_board")
+
+[node name="Text" type="Label3D" parent="SignBoard"]
+position = Vector3(0, 1.25, 0.03)
+rotation_degrees = Vector3(0, 0, 0)
+pixel_size = 0.0025
+modulate = Color(0.12, 0.1, 0.08, 1)
+font_size = 34
+outline_size = 0
+double_sided = false
+script = ExtResource("9_sign_label")
+text_key = "SIGN_WELL_BROKEN"
+autowrap_mode = 3
+width = 540
+
+[node name="Deteriorated" type="Node3D" parent="."]
+
+[node name="PostA" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-0.95, 1.1, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.15, 2.2, 0.15)
+material = ExtResource("7_wood_old")
+
+[node name="PostB" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(1.05, 1, 0.1)
+rotation_degrees = Vector3(0, 0, 18)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.15, 2.2, 0.15)
+material = ExtResource("7_wood_old")
+
+[node name="FallenBar" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(1.8, 0.07, 1)
+rotation_degrees = Vector3(0, 30, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.12, 0.12, 2.2)
+material = ExtResource("7_wood_old")
+
+[node name="FallenRoof" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-1.9, 0.12, 1.3)
+rotation_degrees = Vector3(8, 25, 5)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.6, 0.03, 1.2)
+material = ExtResource("10_zinc_rust")
+
+[node name="Crank" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-1.05, 1.5, 0.2)
+rotation_degrees = Vector3(70, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 0.5, 0.08)
+material = ExtResource("11_metal_rust")
+
+[node name="TankStandA" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(2.3, 0.9, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.8, 0.08)
+material = ExtResource("11_metal_rust")
+
+[node name="TankStandB" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(2.9, 0.9, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.8, 0.08)
+material = ExtResource("11_metal_rust")
+
+[node name="TankStandC" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(2.3, 0.9, -1.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.8, 0.08)
+material = ExtResource("11_metal_rust")
+
+[node name="TankStandD" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(2.9, 0.8, -1.6)
+rotation_degrees = Vector3(0, 0, -4)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 1.6, 0.08)
+material = ExtResource("11_metal_rust")
+
+[node name="OldTank" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(2.6, 2.2, -1.3)
+rotation_degrees = Vector3(0, 0, 6)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(1, 0.9, 1)
+material = ExtResource("11_metal_rust")
+
+[node name="EmptyDrum0" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-2.6, 0.25, -1.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="EmptyDrum1" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-3.05, 0.25, -1.35)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="EmptyDrum2" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-3.5, 0.25, -1.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="EmptyDrum3" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-3.95, 0.25, -1.35)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="EmptyDrum4" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(-4.4, 0.25, -1.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="DryCrack" type="MeshInstance3D" parent="Deteriorated"]
+position = Vector3(1.6, 0.085, -0.4)
+rotation_degrees = Vector3(0, 40, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.2, 0.01, 0.6)
+material = ExtResource("4_concrete_dar")
+casts_shadow = false
+
+[node name="Construction" type="Node3D" parent="."]
+visible = false
+
+[node name="PostA" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-0.95, 1.1, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.15, 2.2, 0.15)
+material = ExtResource("7_wood_old")
+
+[node name="Scaffold0" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-1.35, 1.3, -1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 2.6, 0.06)
+material = ExtResource("13_metal_dark")
+
+[node name="Scaffold1" type="MeshInstance3D" parent="Construction"]
+position = Vector3(1.35, 1.3, -1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 2.6, 0.06)
+material = ExtResource("13_metal_dark")
+
+[node name="Scaffold2" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-1.35, 1.3, 1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 2.6, 0.06)
+material = ExtResource("13_metal_dark")
+
+[node name="Scaffold3" type="MeshInstance3D" parent="Construction"]
+position = Vector3(1.35, 1.3, 1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 2.6, 0.06)
+material = ExtResource("13_metal_dark")
+
+[node name="PlankN" type="MeshInstance3D" parent="Construction"]
+position = Vector3(0, 1.6, -1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.9, 0.05, 0.32)
+material = ExtResource("14_wood_new")
+
+[node name="PlankS" type="MeshInstance3D" parent="Construction"]
+position = Vector3(0, 1.6, 1.35)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.9, 0.05, 0.32)
+material = ExtResource("14_wood_new")
+
+[node name="Sand" type="MeshInstance3D" parent="Construction"]
+position = Vector3(2.6, 0.35, 1.6)
+script = ExtResource("2_kit_shape")
+shape = 2
+size = Vector3(1.5, 0.7, 1.5)
+material = ExtResource("15_sand")
+
+[node name="BricksA" type="MeshInstance3D" parent="Construction"]
+position = Vector3(2.7, 0.25, -0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.9, 0.5, 0.6)
+material = ExtResource("16_brick")
+
+[node name="BricksB" type="MeshInstance3D" parent="Construction"]
+position = Vector3(2.7, 0.62, -0.45)
+rotation_degrees = Vector3(0, 6, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.9, 0.25, 0.6)
+material = ExtResource("16_brick")
+
+[node name="Bag1" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-2.4, 0.08, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.15, 0.35)
+material = ExtResource("17_cement_bag")
+
+[node name="Bag2" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-2.4, 0.23, -1)
+rotation_degrees = Vector3(0, 8, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.15, 0.35)
+material = ExtResource("17_cement_bag")
+
+[node name="Bag3" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-2.35, 0.38, -0.98)
+rotation_degrees = Vector3(0, -5, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.15, 0.35)
+material = ExtResource("17_cement_bag")
+
+[node name="NewPipe" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-1.6, 0.05, 2.4)
+rotation_degrees = Vector3(0, 75, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.08, 0.08, 2.4)
+material = ExtResource("12_plastic_blue")
+
+[node name="Stake0" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-3.2, 0.5, -3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 1, 0.06)
+material = ExtResource("18_wood")
+
+[node name="Stake1" type="MeshInstance3D" parent="Construction"]
+position = Vector3(3.2, 0.5, -3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 1, 0.06)
+material = ExtResource("18_wood")
+
+[node name="Stake2" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-3.2, 0.5, 3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 1, 0.06)
+material = ExtResource("18_wood")
+
+[node name="Stake3" type="MeshInstance3D" parent="Construction"]
+position = Vector3(3.2, 0.5, 3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 1, 0.06)
+material = ExtResource("18_wood")
+
+[node name="TapeN" type="MeshInstance3D" parent="Construction"]
+position = Vector3(0, 0.9, -3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(6.4, 0.06, 0.01)
+material = ExtResource("19_tape_red")
+casts_shadow = false
+
+[node name="TapeS" type="MeshInstance3D" parent="Construction"]
+position = Vector3(0, 0.9, 3.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(6.4, 0.06, 0.01)
+material = ExtResource("19_tape_red")
+casts_shadow = false
+
+[node name="TapeW" type="MeshInstance3D" parent="Construction"]
+position = Vector3(-3.2, 0.9, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.06, 6.4)
+material = ExtResource("20_tape_white")
+casts_shadow = false
+
+[node name="TapeE" type="MeshInstance3D" parent="Construction"]
+position = Vector3(3.2, 0.9, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.06, 6.4)
+material = ExtResource("20_tape_white")
+casts_shadow = false
+
+[node name="Worker" type="Node3D" parent="Construction"]
+position = Vector3(1.5, 0, 0.9)
+rotation_degrees = Vector3(0, -120, 0)
+
+[node name="Legs" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0, 0.4, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.36, 0.8, 0.24)
+material = ExtResource("21_cloth_navy")
+
+[node name="Torso" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0, 1.1, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.44, 0.6, 0.26)
+material = ExtResource("22_cloth_orange")
+
+[node name="Head" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0, 1.55, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.23, 0.26, 0.23)
+material = ExtResource("23_skin_dark")
+
+[node name="Helmet" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0, 1.65, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.28, 0.14, 0.28)
+material = ExtResource("24_plaster_whit")
+
+[node name="ArmL" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(-0.28, 1.1, 0.15)
+rotation_degrees = Vector3(-50, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 0.55, 0.1)
+material = ExtResource("22_cloth_orange")
+
+[node name="ArmR" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0.28, 1.1, 0.15)
+rotation_degrees = Vector3(-50, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 0.55, 0.1)
+material = ExtResource("22_cloth_orange")
+
+[node name="Wrench" type="MeshInstance3D" parent="Construction/Worker"]
+position = Vector3(0.28, 0.95, 0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.05, 0.35)
+material = ExtResource("13_metal_dark")
+
+[node name="Completed" type="Node3D" parent="."]
+visible = false
+
+[node name="PostA" type="MeshInstance3D" parent="Completed"]
+position = Vector3(-0.95, 1.2, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.16, 2.4, 0.16)
+material = ExtResource("14_wood_new")
+
+[node name="PostB" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0.95, 1.2, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.16, 2.4, 0.16)
+material = ExtResource("14_wood_new")
+
+[node name="Crossbar" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0, 2.35, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.1, 0.14, 0.14)
+material = ExtResource("14_wood_new")
+
+[node name="Roof" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0, 2.6, 0)
+rotation_degrees = Vector3(8, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.6, 0.04, 2.2)
+material = ExtResource("25_zinc")
+
+[node name="Crank" type="MeshInstance3D" parent="Completed"]
+position = Vector3(-1.08, 1.6, 0.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 0.06, 0.45)
+material = ExtResource("13_metal_dark")
+
+[node name="Pulley" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0, 2.2, 0)
+rotation_degrees = Vector3(90, 0, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.08, 0.3)
+material = ExtResource("13_metal_dark")
+
+[node name="Rope" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0, 1.6, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.02, 1.2, 0.02)
+material = ExtResource("7_wood_old")
+casts_shadow = false
+
+[node name="WellBucket" type="MeshInstance3D" parent="Completed"]
+position = Vector3(0, 1, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.26, 0.26, 0.26)
+material = ExtResource("12_plastic_blue")
+
+[node name="Stand0" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.3, 0.9, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.8, 0.1)
+material = ExtResource("13_metal_dark")
+
+[node name="Stand1" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.9, 0.9, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.8, 0.1)
+material = ExtResource("13_metal_dark")
+
+[node name="Stand2" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.3, 0.9, -1.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.8, 0.1)
+material = ExtResource("13_metal_dark")
+
+[node name="Stand3" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.9, 0.9, -1.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.1, 1.8, 0.1)
+material = ExtResource("13_metal_dark")
+
+[node name="StandTop" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.6, 1.82, -1.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.8, 0.06, 0.8)
+material = ExtResource("13_metal_dark")
+
+[node name="Tank" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.6, 2.4, -1.3)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(1.1, 1.1, 1.1)
+material = ExtResource("26_plastic_tank")
+
+[node name="TankLid" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.6, 3, -1.3)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.4, 0.1, 0.4)
+material = ExtResource("26_plastic_tank")
+
+[node name="DownPipe" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.1, 1.25, -0.9)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 1.2, 0.06)
+material = ExtResource("12_plastic_blue")
+
+[node name="TapArm" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.1, 0.68, -0.72)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 0.06, 0.4)
+material = ExtResource("13_metal_dark")
+
+[node name="Stream" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.1, 0.38, -0.55)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.04, 0.55, 0.04)
+material = ExtResource("27_water")
+casts_shadow = false
+
+[node name="Puddle" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.1, 0.09, -0.55)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(1, 0.01, 1)
+material = ExtResource("28_wet_ground")
+casts_shadow = false
+
+[node name="FullDrum0" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.9, 0.25, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="DrumWater0" type="MeshInstance3D" parent="Completed"]
+position = Vector3(2.9, 0.51, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.02, 0.3)
+material = ExtResource("27_water")
+casts_shadow = false
+
+[node name="FullDrum1" type="MeshInstance3D" parent="Completed"]
+position = Vector3(3.35, 0.25, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="DrumWater1" type="MeshInstance3D" parent="Completed"]
+position = Vector3(3.35, 0.51, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.02, 0.3)
+material = ExtResource("27_water")
+casts_shadow = false
+
+[node name="FullDrum2" type="MeshInstance3D" parent="Completed"]
+position = Vector3(3.8, 0.25, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.34, 0.5, 0.34)
+material = ExtResource("12_plastic_blue")
+
+[node name="DrumWater2" type="MeshInstance3D" parent="Completed"]
+position = Vector3(3.8, 0.51, 0.2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.02, 0.3)
+material = ExtResource("27_water")
+casts_shadow = false
+
+[node name="Flowers" type="MeshInstance3D" parent="Completed"]
+position = Vector3(-1.7, 0.25, 1.6)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.5, 0.35, 0.5)
+material = ExtResource("29_foliage")
+
+[node name="FlowerPot" type="MeshInstance3D" parent="Completed"]
+position = Vector3(-1.7, 0.15, 1.6)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.45, 0.3, 0.45)
+material = ExtResource("16_brick")

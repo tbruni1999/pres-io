@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GameContent" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/game_content.gd" id="1_gc"]
+[ext_resource type="Resource" path="res://data/balance.tres" id="2_bal"]
+[ext_resource type="Resource" path="res://data/projects/well_repair.tres" id="3_well"]
+
+[resource]
+script = ExtResource("1_gc")
+balance = ExtResource("2_bal")
+projects = [ExtResource("3_well")]
+fact_subjects = PackedStringArray("player", "neighbor_rosa")

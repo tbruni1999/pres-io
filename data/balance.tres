@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BalanceConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/balance_config.gd" id="1_bal"]
+
+[resource]
+script = ExtResource("1_bal")
+ticks_per_day = 360
+step_seconds = 1.0
+max_steps_per_frame = 4
+starting_cash_uc = 10000
+population = 60
+base_water_capacity = 20
+starting_office = "community_organizer"
+report_history_limit = 30

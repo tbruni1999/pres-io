@@ -1,0 +1,4 @@
+# Normalizar fin de línea (los archivos de Godot son texto)
+* text=auto eol=lf
+*.png binary
+*.wav binary

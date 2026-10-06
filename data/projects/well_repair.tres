@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ProjectDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/domain/project_definition.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = "well_repair"
+site_id = "well_main"
+name_key = "PROJECT_WELL_REPAIR_NAME"
+description_key = "PROJECT_WELL_REPAIR_DESC"
+benefit_key = "PROJECT_WELL_REPAIR_BENEFIT"
+cost_uc = 3200
+duration_days = 1
+service_id = "water"
+capacity_after = 60
+required_office = "community_organizer"

@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="1_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="2_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/concrete.tres" id="3_concrete"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="4_metal_dark"]
+
+[node name="UtilityPole" type="Node3D"]
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.6, 0)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.22, 7.2, 0.22)
+material = ExtResource("2_wood_old")
+collide = true
+
+[node name="Crossbar" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.8, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.6, 0.12, 0.12)
+material = ExtResource("2_wood_old")
+
+[node name="InsulatorL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 6.93, 0)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.08, 0.14, 0.08)
+material = ExtResource("3_concrete")
+hide_beyond = 60
+
+[node name="InsulatorR" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 6.93, 0)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.08, 0.14, 0.08)
+material = ExtResource("3_concrete")
+hide_beyond = 60
+
+[node name="Transformer" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5.8, 0.3)
+script = ExtResource("1_kit_shape")
+shape = 1
+size = Vector3(0.45, 0.6, 0.45)
+material = ExtResource("4_metal_dark")
+hide_beyond = 80

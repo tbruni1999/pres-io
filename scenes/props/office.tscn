@@ -1,0 +1,344 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="1_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/plaster_white.tres" id="2_plaster_whit"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="3_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/door_green.tres" id="4_door_green"]
+[ext_resource type="Material" path="res://assets/materials/concrete.tres" id="5_concrete"]
+[ext_resource type="Material" path="res://assets/materials/zinc.tres" id="6_zinc"]
+[ext_resource type="Material" path="res://assets/materials/zinc_rust.tres" id="7_zinc_rust"]
+[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="8_concrete_dar"]
+[ext_resource type="Material" path="res://assets/materials/sign_board.tres" id="9_sign_board"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="10_sign_label"]
+[ext_resource type="Material" path="res://assets/materials/wood.tres" id="11_wood"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="12_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/paper.tres" id="13_paper"]
+[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="14_metal_rust"]
+[ext_resource type="Material" path="res://assets/materials/cork.tres" id="15_cork"]
+[ext_resource type="Material" path="res://assets/materials/bulb.tres" id="16_bulb"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="17_interactable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(0.95, 0.85, 1.75)
+
+[node name="Office" type="Node3D"]
+
+[node name="Shell" type="Node3D" parent="."]
+
+[node name="WallWest" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-3.9, 1.5, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.2, 3, 6)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallNorth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 1.5, -2.9)
+script = ExtResource("1_kit_shape")
+size = Vector3(8, 3, 0.2)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallSouthA" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-2.5, 1.5, 2.9)
+script = ExtResource("1_kit_shape")
+size = Vector3(3, 3, 0.2)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallSouthB" type="MeshInstance3D" parent="Shell"]
+position = Vector3(2.5, 1.5, 2.9)
+script = ExtResource("1_kit_shape")
+size = Vector3(3, 3, 0.2)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallSouthLow" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 0.5, 2.9)
+script = ExtResource("1_kit_shape")
+size = Vector3(2, 1, 0.2)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallSouthHigh" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 2.5, 2.9)
+script = ExtResource("1_kit_shape")
+size = Vector3(2, 1, 0.2)
+material = ExtResource("2_plaster_whit")
+
+[node name="WindowBar0" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-0.8, 1.5, 2.95)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("3_metal_dark")
+
+[node name="WindowBar1" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-0.4, 1.5, 2.95)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("3_metal_dark")
+
+[node name="WindowBar2" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 1.5, 2.95)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("3_metal_dark")
+
+[node name="WindowBar3" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0.4, 1.5, 2.95)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("3_metal_dark")
+
+[node name="WindowBar4" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0.8, 1.5, 2.95)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 1, 0.03)
+material = ExtResource("3_metal_dark")
+
+[node name="WindowGuard" type="StaticBody3D" parent="Shell"]
+position = Vector3(0, 1.5, 2.9)
+
+[node name="Shape" type="CollisionShape3D" parent="Shell/WindowGuard"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="WallEastA" type="MeshInstance3D" parent="Shell"]
+position = Vector3(3.9, 1.5, -1.85)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.2, 3, 2.3)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallEastB" type="MeshInstance3D" parent="Shell"]
+position = Vector3(3.9, 1.5, 1.85)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.2, 3, 2.3)
+material = ExtResource("2_plaster_whit")
+collide = true
+
+[node name="WallEastTop" type="MeshInstance3D" parent="Shell"]
+position = Vector3(3.9, 2.6, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.2, 0.8, 1.4)
+material = ExtResource("2_plaster_whit")
+
+[node name="DoorLeaf" type="MeshInstance3D" parent="Shell"]
+position = Vector3(4.6, 1.08, 0.72)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.35, 2.15, 0.05)
+material = ExtResource("4_door_green")
+collide = true
+
+[node name="Floor" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 0.02, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(7.6, 0.04, 5.6)
+material = ExtResource("5_concrete")
+
+[node name="Roof" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 3.04, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(8.8, 0.08, 6.8)
+material = ExtResource("6_zinc")
+
+[node name="RoofEdge" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 3.02, 3.4)
+script = ExtResource("1_kit_shape")
+size = Vector3(8.8, 0.12, 0.08)
+material = ExtResource("7_zinc_rust")
+
+[node name="Awning" type="MeshInstance3D" parent="Shell"]
+position = Vector3(4.55, 2.3, 0)
+rotation_degrees = Vector3(0, 0, -12)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.2, 0.05, 2)
+material = ExtResource("7_zinc_rust")
+
+[node name="Plinth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 0.15, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(8.2, 0.3, 6.2)
+material = ExtResource("8_concrete_dar")
+casts_shadow = false
+
+[node name="SignBoard" type="MeshInstance3D" parent="Shell"]
+position = Vector3(4.03, 2.72, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.06, 0.45, 2.6)
+material = ExtResource("9_sign_board")
+
+[node name="SignText" type="Label3D" parent="Shell"]
+position = Vector3(4.07, 2.72, 0)
+rotation_degrees = Vector3(0, 90, 0)
+pixel_size = 0.005
+modulate = Color(0.15, 0.25, 0.4, 1)
+font_size = 56
+outline_size = 0
+double_sided = false
+script = ExtResource("10_sign_label")
+text_key = "SIGN_OFFICE"
+
+[node name="Cable" type="MeshInstance3D" parent="Shell"]
+position = Vector3(3.95, 2.98, -1.5)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.03, 0.03, 3)
+material = ExtResource("3_metal_dark")
+casts_shadow = false
+
+[node name="Interior" type="Node3D" parent="."]
+
+[node name="DeskTop" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.4, 0.76, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.9, 0.05, 1.7)
+material = ExtResource("11_wood")
+
+[node name="DeskLeg0" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.8, 0.37, -0.78)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.06, 0.74, 0.06)
+material = ExtResource("12_wood_old")
+
+[node name="DeskLeg1" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.8, 0.37, 0.78)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.06, 0.74, 0.06)
+material = ExtResource("12_wood_old")
+
+[node name="DeskLeg2" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2, 0.37, -0.78)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.06, 0.74, 0.06)
+material = ExtResource("12_wood_old")
+
+[node name="DeskLeg3" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2, 0.37, 0.78)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.06, 0.74, 0.06)
+material = ExtResource("12_wood_old")
+
+[node name="Ledger" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.3, 0.81, -0.2)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.3, 0.05, 0.42)
+material = ExtResource("4_door_green")
+
+[node name="Papers" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.2, 0.795, 0.35)
+rotation_degrees = Vector3(0, 12, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.25, 0.02, 0.32)
+material = ExtResource("13_paper")
+
+[node name="Phone" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.55, 0.82, 0.62)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.18, 0.08, 0.22)
+material = ExtResource("3_metal_dark")
+
+[node name="CashBox" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-2.6, 0.855, -0.6)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.32, 0.14, 0.24)
+material = ExtResource("14_metal_rust")
+
+[node name="ChairSeat" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-3.25, 0.46, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.45, 0.05, 0.45)
+material = ExtResource("12_wood_old")
+
+[node name="ChairBack" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-3.47, 0.72, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.05, 0.5, 0.45)
+material = ExtResource("12_wood_old")
+
+[node name="Cabinet" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-3.5, 0.65, -2.4)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.5, 1.3, 0.6)
+material = ExtResource("3_metal_dark")
+collide = true
+
+[node name="CorkBoard" type="MeshInstance3D" parent="Interior"]
+position = Vector3(0.2, 1.7, -2.78)
+script = ExtResource("1_kit_shape")
+size = Vector3(1.6, 0.9, 0.04)
+material = ExtResource("15_cork")
+
+[node name="Note1" type="MeshInstance3D" parent="Interior"]
+position = Vector3(-0.2, 1.8, -2.75)
+rotation_degrees = Vector3(0, 0, 4)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.25, 0.3, 0.01)
+material = ExtResource("13_paper")
+
+[node name="Note2" type="MeshInstance3D" parent="Interior"]
+position = Vector3(0.35, 1.55, -2.75)
+rotation_degrees = Vector3(0, 0, -6)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.3, 0.22, 0.01)
+material = ExtResource("13_paper")
+
+[node name="Note3" type="MeshInstance3D" parent="Interior"]
+position = Vector3(0.7, 1.9, -2.75)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.2, 0.25, 0.01)
+material = ExtResource("13_paper")
+
+[node name="BoardText" type="Label3D" parent="Interior"]
+position = Vector3(0.2, 2.07, -2.74)
+rotation_degrees = Vector3(0, 0, 0)
+pixel_size = 0.005
+modulate = Color(0.1, 0.1, 0.1, 1)
+font_size = 28
+outline_size = 0
+double_sided = false
+script = ExtResource("10_sign_label")
+text_key = "SIGN_OFFICE_BOARD"
+
+[node name="Bench" type="MeshInstance3D" parent="Interior"]
+position = Vector3(1.5, 0.23, 2.5)
+script = ExtResource("1_kit_shape")
+size = Vector3(2.4, 0.45, 0.45)
+material = ExtResource("11_wood")
+collide = true
+
+[node name="Bulb" type="MeshInstance3D" parent="Interior"]
+position = Vector3(0, 2.75, 0)
+script = ExtResource("1_kit_shape")
+shape = 3
+size = Vector3(0.12, 0.16, 0.12)
+material = ExtResource("16_bulb")
+casts_shadow = false
+
+[node name="BulbCord" type="MeshInstance3D" parent="Interior"]
+position = Vector3(0, 2.9, 0)
+script = ExtResource("1_kit_shape")
+size = Vector3(0.01, 0.25, 0.01)
+material = ExtResource("3_metal_dark")
+casts_shadow = false
+
+[node name="Light" type="OmniLight3D" parent="Interior"]
+position = Vector3(0, 2.6, 0)
+light_color = Color(1, 0.88, 0.68, 1)
+light_energy = 1.4
+omni_range = 6.5
+shadow_enabled = false
+
+[node name="Desk" type="StaticBody3D" parent="Interior"]
+position = Vector3(-2.4, 0.4, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("17_interactable")
+kind = 2
+target_id = "office_desk"
+action_key = "ACTION_USE"
+name_key = "OBJ_NAME_DESK"
+
+[node name="Shape" type="CollisionShape3D" parent="Interior/Desk"]
+shape = SubResource("BoxShape3D_2")
