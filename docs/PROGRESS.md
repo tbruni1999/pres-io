@@ -14,7 +14,7 @@ La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
 | Comprobación | Resultado |
 |---|---|
-| Pruebas de dominio | **69 pruebas, 1.022 comprobaciones OK** |
+| Pruebas de dominio | **70 pruebas, 1.024 comprobaciones OK** |
 | Prueba de humo | **84 comprobaciones OK** (llegan Salim y Raúl, comprar en la manta, pizarrón) |
 | Capturas | recorrido completo sin errores; máximo 341 llamadas de dibujo |
 

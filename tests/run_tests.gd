@@ -89,6 +89,7 @@ func _initialize() -> void:
 		"test_salim_arrives_from_busy_road_and_sells",
 		"test_salim_megaphone_and_salt",
 		"test_raul_board_and_scan",
+		"test_raul_board_only_shows_whats_coming",
 	]
 	for t in tests:
 		_current = t
@@ -1502,4 +1503,23 @@ func test_raul_board_and_scan() -> bool:
 	check(s.notices.has(Texts.t("MSG_RAUL_SCAN", {"name": Texts.t("MERCHANT_RAMIRO")})), "avisa que lo escaneó")
 	for n in range(1, Neighbors.EPISODES + 1):
 		check(Texts.t("RAUL_EP_%d" % n) != "RAUL_EP_%d" % n, "existe RAUL_EP_%d" % n)
+	return true
+
+
+func test_raul_board_only_shows_whats_coming() -> bool:
+	var s := fed(new_state(8))
+	living(s, "raul", "back")
+	var first: Dictionary = s.camp.passes[0]
+	var def := CONTENT.find_merchant(first["merchant"])
+	var arrive := int(first["start"]) + int(ceil(Merchants.ROAD_HALF / Merchants.speed(def)))
+	var board := Neighbors.raul_board(s, CONTENT)
+	var want := Neighbors._clock(s, CONTENT, arrive)
+	check(board.any(func(l: Dictionary) -> bool: return l["key"] == "RAUL_BOARD_PASS" and l["params"]["time"] == want), "la hora es cuando pasa frente a la carpa (%s)" % want)
+	s.camp.rain_start = s.tick
+	s.camp.rain_end = s.tick + 5
+	s.camp.weather = Weather.RAIN
+	for i in s.ticks_per_day - 60:
+		Simulation.step(fed(s), CONTENT)
+	board = Neighbors.raul_board(s, CONTENT)
+	check(board.all(func(l: Dictionary) -> bool: return l["key"] == "RAUL_BOARD_WEATHER"), "a la noche ya no anota lluvia pasada, ni comerciantes ni antojo que se fueron (%s)" % str(board))
 	return true

@@ -66,7 +66,7 @@ func _board() -> void:
 	var lines := Neighbors.raul_board(Game.state, Game.content)
 	for line in lines:
 		_content.add_child(UIKit.label("· " + Texts.t(line["key"], line["params"]), 17, UIKit.COLOR_TEXT, true))
-	if lines.size() <= 1:
+	if lines.all(func(l: Dictionary) -> bool: return l["key"] == "RAUL_BOARD_WEATHER"):
 		_content.add_child(UIKit.label(Texts.t("RAUL_BOARD_EMPTY"), 15, UIKit.COLOR_MUTED, true))
 
 

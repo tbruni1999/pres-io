@@ -171,14 +171,21 @@ static func raul_board(state: GameState, content: GameContent) -> Array[Dictiona
 	var out: Array[Dictionary] = []
 	var c := state.camp
 	out.append({"key": "RAUL_BOARD_WEATHER", "params": {"weather": Texts.t("WEATHER_" + c.weather.to_upper())}})
-	if c.rain_start >= 0:
+	if c.rain_start >= 0 and state.tick < c.rain_end:
 		out.append({"key": "RAUL_BOARD_RAIN", "params": {
 			"from": _clock(state, content, c.rain_start), "to": _clock(state, content, c.rain_end)}})
+	var still_coming := {}
 	for p in c.passes:
-		if p["status"] == Merchants.SCHEDULED:
-			out.append({"key": "RAUL_BOARD_PASS", "params": {
-				"name": Texts.t(content.find_merchant(p["merchant"]).name_key), "time": _clock(state, content, int(p["start"]))}})
-	if not c.craving.is_empty():
+		# Lo que todavía no llegó frente a la carpa (x < 0): a qué hora pasa por acá.
+		var coming: bool = p["status"] == Merchants.SCHEDULED or (p["status"] in [Merchants.PASSING, Merchants.QUEUED] and float(p["x"]) < 0.0)
+		if p["status"] not in [Merchants.LEAVING, Merchants.GONE]:
+			still_coming[p["merchant"]] = true
+		if not coming:
+			continue
+		var def := content.find_merchant(p["merchant"])
+		var arrive := int(p["start"]) + int(ceil(Merchants.ROAD_HALF / Merchants.speed(def)))
+		out.append({"key": "RAUL_BOARD_PASS", "params": {"name": Texts.t(def.name_key), "time": _clock(state, content, arrive)}})
+	if not c.craving.is_empty() and still_coming.has(c.craving["merchant"]):
 		out.append({"key": "RAUL_BOARD_CRAVING", "params": {
 			"name": Texts.t(content.find_merchant(c.craving["merchant"]).name_key),
 			"item": Texts.t(content.find_item(c.craving["item"]).name_key)}})
