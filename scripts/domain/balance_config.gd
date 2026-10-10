@@ -13,7 +13,7 @@ extends Resource
 @export var night_minute: int = 1260
 ## Si la jornada termina y no estás en la cama, dormís a la intemperie:
 ## hambre y sed bajan esto (sin bajar de slept_outside_floor_bp).
-@export var slept_outside_loss_bp: int = 1500
+@export var slept_outside_loss_bp: int = 2500
 @export var slept_outside_floor_bp: int = 1000
 ## Segundos reales por paso administrativo a velocidad normal.
 @export var step_seconds: float = 1.0
@@ -44,8 +44,8 @@ extends Resource
 @export var tired_threshold_bp: int = 2000
 @export var bag_capacity: int = 6
 ## Desmayo: pierde (paso x desmayos previos+1) de su plata, con tope.
-@export var faint_penalty_step_bp: int = 1000
-@export var faint_penalty_max_bp: int = 5000
+@export var faint_penalty_step_bp: int = 1500
+@export var faint_penalty_max_bp: int = 6000
 @export var faint_wake_bp: int = 3500
 
 @export_group("Lago, fogón y madera")
@@ -61,6 +61,53 @@ extends Resource
 ## Muelle: más pescado grande y zona de skillcheck más ancha.
 @export var dock_big_bonus_bp: int = 2000
 @export var dock_zone_bonus_bp: int = 500
+## Fogón: cada madera lo mantiene prendido estos pasos (60 = 2 h 15 min de juego),
+## con un tope de leña apilada. Arranca prendido con una carga.
+@export var fire_wood_ticks: int = 60
+@export var fire_max_ticks: int = 240
+@export var fire_start_ticks: int = 90
+## Caña improvisada en el fogón cuando no tenés ninguna (para no quedar trabado).
+@export var make_rod_wood: int = 3
+## Hallazgos raros al pescar: probabilidad y monedas.
+@export var find_chance_bp: int = 500
+@export var find_min_uc: int = 1
+@export var find_max_uc: int = 6
+## Bicicleta: hambre y sed bajan a este ritmo (puntos básicos del normal).
+@export var bike_needs_bp: int = 7500
+
+@export_group("Clima")
+## La lluvia empieza a partir de este día y dura entre estos pasos (nunca dos días seguidos).
+@export var first_rain_day: int = 3
+@export var rain_min_ticks: int = 50
+@export var rain_max_ticks: int = 110
+## Multiplicadores en puntos básicos (10000 = igual que siempre).
+@export var sun_thirst_bp: int = 13000
+@export var rain_thirst_bp: int = 3000
+@export var cloudy_bite_bp: int = 8000
+@export var rain_bite_bp: int = 6500
+## Con viento la leña se consume así de rápido.
+@export var wind_fire_bp: int = 15000
+
+@export_group("Noche")
+@export var fox_from_day: int = 3
+@export var fox_steals: int = 2
+@export var stranger_from_day: int = 5
+@export var stranger_wood_max: int = 5
+@export var bottle_min_uc: int = 2
+@export var bottle_max_uc: int = 6
+@export var lights_reward_uc: int = 40
+
+@export_group("Espinel")
+## Pescado que amanece enganchado en el espinel.
+@export var longline_min: int = 2
+@export var longline_max: int = 4
+@export var longline_big_bp: int = 1500
+
+@export_group("Meta del pueblito")
+@export var goal_money_uc: int = 1500
+@export var goal_materials: Dictionary = {"sheet_metal": 10, "cement": 6}
+@export var goal_fact: String = "has_deed"
+@export var goal_neighbors: int = 3
 
 @export_group("Ahumadero")
 ## Pescados por tanda y pasos que tarda una tanda (90 pasos = 3 h y 22 min de juego).
@@ -75,6 +122,8 @@ extends Resource
 @export var merchant_queue_gap: float = 7.5
 ## El primero en pasar el día 1 (para conocer el juego).
 @export var first_merchant: String = "ramiro"
+## Antojo del día: un comerciante paga esto de más por un producto (puntos básicos).
+@export var craving_bonus_bp: int = 5000
 
 @export_group("Agua y colecta")
 ## Agua que da el pozo roto después de hacer la fila, y el pozo arreglado.

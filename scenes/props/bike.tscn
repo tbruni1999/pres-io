@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/owned_prop.gd" id="1_owned_prop"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/tire.tres" id="3_tire"]
+[ext_resource type="Material" path="res://assets/materials/car_teal.tres" id="4_car_teal"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="5_hair_dark"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="6_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/straw.tres" id="7_straw"]
+
+[node name="Bike" type="Node3D"]
+script = ExtResource("1_owned_prop")
+item_id = "bike"
+
+[node name="Body" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 0, -12)
+
+[node name="WheelF" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.33, 0.55)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.66, 0.05, 0.66)
+material = ExtResource("3_tire")
+
+[node name="WheelB" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.33, -0.55)
+rotation_degrees = Vector3(0, 0, 90)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.66, 0.05, 0.66)
+material = ExtResource("3_tire")
+
+[node name="Frame" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.55, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.04, 0.9)
+material = ExtResource("4_car_teal")
+
+[node name="Down" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.45, 0.25)
+rotation_degrees = Vector3(40, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.04, 0.55)
+material = ExtResource("4_car_teal")
+
+[node name="SeatPost" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.6, -0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.4, 0.04)
+material = ExtResource("4_car_teal")
+
+[node name="Seat" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.82, -0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.14, 0.05, 0.24)
+material = ExtResource("5_hair_dark")
+
+[node name="Fork" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.55, 0.52)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.5, 0.04)
+material = ExtResource("6_metal_dark")
+
+[node name="Bar" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.82, 0.48)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.04, 0.04)
+material = ExtResource("6_metal_dark")
+
+[node name="Basket" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.78, 0.68)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.3, 0.2, 0.25)
+material = ExtResource("7_straw")

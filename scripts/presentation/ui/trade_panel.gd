@@ -71,6 +71,10 @@ func refresh() -> void:
 	_sell.add_child(UIKit.section(Texts.t("TRADE_SELL")))
 	var room := _merchant.max_buy - int(p.get("bought", 0))
 	_sell.add_child(UIKit.label(Texts.t("TRADE_ROOM", {"n": room}) if room > 0 else Texts.t("TRADE_FULL"), 15, UIKit.COLOR_MUTED))
+	var c := s.camp.craving
+	if not c.is_empty() and c["merchant"] == _merchant.id:
+		var cdef := Game.content.find_item(String(c["item"]))
+		_sell.add_child(UIKit.label(Texts.t("MSG_CRAVING", {"name": _cap(Texts.t(_merchant.name_key)), "item": Texts.t(cdef.name_key)}), 15, UIKit.COLOR_ACCENT, true))
 	var any := false
 	for item_id in _sorted(_merchant.buys.keys()):
 		var n := s.player.count(item_id)
@@ -78,8 +82,12 @@ func refresh() -> void:
 			continue
 		any = true
 		var def := Game.content.find_item(item_id)
-		var price := _merchant.buy_price_cents(item_id)
-		_sell.add_child(UIKit.label(Texts.t("TRADE_SELL_ROW", {"name": Texts.t(def.name_key), "n": n, "price": Money.format(price)}), 18))
+		var price := Merchants.buy_price_today(s, Game.content, _merchant.id, item_id)
+		var craving := Merchants.is_craving(s, _merchant.id, item_id)
+		var row_text := Texts.t("TRADE_SELL_ROW", {"name": Texts.t(def.name_key), "n": n, "price": Money.format(price)})
+		if craving:
+			row_text += " · " + Texts.t("TRADE_CRAVING")
+		_sell.add_child(UIKit.label(row_text, 18, UIKit.COLOR_ACCENT if craving else UIKit.COLOR_TEXT))
 		var qty := mini(n, maxi(room, 0))
 		var b := UIKit.button(Texts.t("TRADE_SELL_BUTTON", {"total": Money.format(price * qty)}), _on_sell.bind(item_id, qty))
 		b.disabled = qty <= 0

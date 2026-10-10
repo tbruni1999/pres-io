@@ -15,6 +15,8 @@ var thirst_bp: int = FULL
 ## item_id -> cantidad (solo objetos que se cargan en la mochila).
 var bag: Dictionary = {}
 var tools: PackedStringArray = PackedStringArray()
+## Usos que le quedan a cada herramienta que se gasta (tool_id -> usos).
+var tool_wear: Dictionary = {}
 var faint_count: int = 0
 var donated_total_cents: int = 0
 var fish_caught_total: int = 0
@@ -36,6 +38,27 @@ static func create(balance: BalanceConfig) -> PlayerState:
 	p.thirst_bp = balance.start_thirst_bp
 	p.tools = PackedStringArray(balance.start_tools)
 	return p
+
+
+## Agrega una herramienta nueva con todos sus usos.
+func add_tool(def: ItemDefinition) -> void:
+	if not tools.has(def.id):
+		tools.append(def.id)
+	if def.durability > 0:
+		tool_wear[def.id] = def.durability
+
+
+## Gasta un uso. Devuelve true si con ese uso se rompió (y la saca).
+func wear_tool(tool_id: String) -> bool:
+	if not tool_wear.has(tool_id):
+		return false
+	var left := int(tool_wear[tool_id]) - 1
+	if left > 0:
+		tool_wear[tool_id] = left
+		return false
+	tool_wear.erase(tool_id)
+	tools.remove_at(tools.find(tool_id))
+	return true
 
 
 func bag_count() -> int:
@@ -111,6 +134,7 @@ func to_dict() -> Dictionary:
 		"thirst_bp": thirst_bp,
 		"bag": items,
 		"tools": Array(tools),
+		"tool_wear": _wear_to_list(),
 		"faint_count": faint_count,
 		"donated_total_cents": str(donated_total_cents),
 		"fish_caught_total": fish_caught_total,
@@ -120,6 +144,15 @@ func to_dict() -> Dictionary:
 		"day_faint_penalty_cents": str(day_faint_penalty_cents),
 		"day_fainted": day_fainted,
 	}
+
+
+func _wear_to_list() -> Array:
+	var out: Array = []
+	var keys := tool_wear.keys()
+	keys.sort()
+	for k in keys:
+		out.append({"id": k, "uses": tool_wear[k]})
+	return out
 
 
 static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> PlayerState:
@@ -145,6 +178,18 @@ static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> Pla
 			p.tools.append(t)
 		else:
 			r.fail(w + ".tools", "herramienta desconocida")
+	for t in r.get_array(d, "tool_wear", w):
+		if not (t is Dictionary):
+			r.fail(w + ".tool_wear", "entrada inválida")
+			continue
+		var tid := r.get_string(t, "id", w + ".tool_wear")
+		if not p.tools.has(tid):
+			r.fail(w + ".tool_wear", "desgaste de una herramienta que no tiene '%s'" % tid)
+		p.tool_wear[tid] = r.get_small_int(t, "uses", w + ".tool_wear", 1, 1_000_000)
+	for t in p.tools:
+		var def := content.find_item(t)
+		if def != null and def.durability > 0 and not p.tool_wear.has(t):
+			r.fail(w + ".tool_wear", "falta el desgaste de '%s'" % t)
 	p.faint_count = r.get_small_int(d, "faint_count", w, 0, 100000)
 	p.donated_total_cents = r.get_big_int(d, "donated_total_cents", w, 0, big)
 	p.fish_caught_total = r.get_small_int(d, "fish_caught_total", w, 0, 100_000_000)

@@ -3,7 +3,7 @@ extends RefCounted
 ## Fuente de verdad de la partida. Los objetos 3D y la UI solo la representan.
 ## No depende del SceneTree: se puede crear, simular y validar en pruebas headless.
 
-const SCHEMA_VERSION := 4
+const SCHEMA_VERSION := 5
 const PLAYER_BOUNDS := 75.0
 
 var world_seed: int = 0
@@ -25,6 +25,8 @@ var facts: Dictionary = {}
 var reports: Array[DayReport] = []
 ## Pose del jugador: {"position": Vector3, "yaw": float, "pitch": float} o vacío.
 var player_pose: Dictionary = {}
+## Avisos que produjo el paso (lluvia, fuego apagado). No se guardan: la sesión los muestra y vacía.
+var notices: PackedStringArray = PackedStringArray()
 
 
 static func create_new(content: GameContent, seed_value: int) -> GameState:
@@ -39,10 +41,16 @@ static func create_new(content: GameContent, seed_value: int) -> GameState:
 	s.player = PlayerState.create(b)
 	s.camp = CampState.new()
 	s.camp.buildings = PackedStringArray(b.start_buildings)
+	s.camp.fire_until = b.fire_start_ticks if s.camp.has_building("fire") else -1
+	for t in b.start_tools:
+		var def := content.find_item(t)
+		if def != null:
+			s.player.add_tool(def)
 	for id in content.project_ids():
 		s.projects[id] = ProjectState.create(content.find_project(id))
 	for subject in content.fact_subjects:
 		s.facts[subject] = {}
+	Weather.plan_day(s, content, 1)
 	Merchants.plan_day(s, content, 1)
 	return s
 
@@ -137,6 +145,9 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 		version = 3
 	if version == 3:
 		d = migrate_v3_to_v4(d, content)
+		version = 4
+	if version == 4:
+		d = migrate_v4_to_v5(d, content)
 
 	var s := GameState.new()
 	var max_tick := 1 << 62
@@ -272,6 +283,40 @@ static func migrate_v3_to_v4(d: Dictionary, content: GameContent) -> Dictionary:
 	var b: Variant = camp.get("buildings", [])
 	if b is Array and not b.has("shack"):
 		b.append("shack")
+	return out
+
+
+## v4 -> v5: clima, fogón con leña, desgaste de herramientas, acopio, espinel,
+## antojos, misterios de noche y vecinos. Se arranca con sol, fogón apagado y
+## herramientas con todos sus usos.
+static func migrate_v4_to_v5(d: Dictionary, content: GameContent) -> Dictionary:
+	var out := d.duplicate(true)
+	out["schema_version"] = 5
+	var camp: Variant = out.get("camp")
+	if camp is Dictionary:
+		camp["weather"] = Weather.SUN
+		camp["rain_start"] = "-1"
+		camp["rain_end"] = "-1"
+		camp["last_rain_day"] = 0
+		camp["fire_until"] = "-1"
+		camp["storage"] = []
+		camp["longline_items"] = []
+		camp["craving"] = {}
+		camp["night_thread"] = 0
+		camp["neighbors"] = []
+	var pl: Variant = out.get("player_state")
+	if pl is Dictionary:
+		var wear: Array = []
+		var tools: Variant = pl.get("tools", [])
+		for t in (tools if tools is Array else []):
+			var def := content.find_item(String(t)) if t is String else null
+			if def != null and def.durability > 0:
+				wear.append({"id": t, "uses": def.durability})
+		pl["tool_wear"] = wear
+	var reps: Variant = out.get("reports", [])
+	for rep in (reps if reps is Array else []):
+		if rep is Dictionary and not rep.has("events"):
+			rep["events"] = []
 	return out
 
 

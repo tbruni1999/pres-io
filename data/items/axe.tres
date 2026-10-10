@@ -7,3 +7,4 @@ script = ExtResource("1_s")
 id = "axe"
 name_key = "ITEM_AXE"
 kind = 2
+durability = 25

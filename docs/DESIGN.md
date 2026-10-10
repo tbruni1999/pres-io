@@ -1,4 +1,4 @@
-# Diseño (dirección acordada con Tomás, 6 de octubre de 2026)
+# Diseño (dirección acordada con Tomás, 6 y 10 de octubre de 2026)
 
 Reemplaza la idea inicial del brief (empezar como organizador de un asentamiento con
 escritorio y presupuesto). El brief sigue valiendo para lo técnico (Godot, capas, guardado,
@@ -22,12 +22,12 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Tema | Decisión |
 |---|---|
 | Necesidades | El personaje tiene hambre y sed. Bajo cierto nivel camina lento y no corre. |
-| Desmayo | En cero te desmayás: perdés 10 % de la plata, después 20 %, 30 %… (tope 50 %). Despertás en la choza al día siguiente. |
+| Desmayo | En cero te desmayás: perdés 15 % de la plata, después 30 %, 45 %… (tope 60 %). Despertás en la carpa al día siguiente. Un mal día te tira bastante para atrás. |
 | Pescado | Se pudre al terminar el día si no lo vendiste ni comiste. Más adelante: ahumadero. |
 | Agua del lago | Cruda calma la sed pero a veces cae mal (baja el hambre). Hervida en el fogón es segura. |
 | Comerciantes | Pasan por el camino (carreta, auto, camión). Al principio les hacés señas a tiempo; con el cartel paran solos. |
 | Obras propias | Se pagan con madera (+ plata) y llevan tiempo: juntar ramas (1 por montón por día) o talar con hacha (3 por árbol, vuelve a crecer). |
-| Ayudantes | Sueldo por día. Si no te alcanza para pagarle, se va. |
+| Ayudantes (mina, más adelante) | Sueldo por día. Si no te alcanza para pagarle, se va. Los **locos en carpa no cobran** (ver abajo). |
 | Mina | Se abre comprando el pico. |
 | Ascenso social | De vecino a referente **ayudando** (colectas, favores). |
 | Pozo y obras del barrio | No las hacés vos: son **beneficio comunitario** con colecta (vos aportás, los vecinos suman). |
@@ -38,8 +38,38 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Historias por entregas | Cada comerciante cuenta un capítulo por visita (10 en total): Ramiro y la multa de Turbo, la Chola y la caja del remate (termina con la escritura del campo: hay que fundar pueblo), Coco y el ladrón de sánguches (termina con **Polizón, el perro**, que se queda con vos). |
 | Mina | Va **después** del ahumadero. El pico lo trae un **comerciante nuevo** que empieza a pasar más adelante (progresión posterior). |
 
+## Decisiones del 10 de octubre (respuestas a las 24 preguntas)
+| Tema | Decisión |
+|---|---|
+| Salto de etapa (carpa → pueblito) | Juntar **plata + materiales comprados** (chapas a Coco, cemento a la Chola), la **escritura** (final de la historia de la Chola) y **tres vecinos con carpa**. Se ve en la mochila (Tab). Más adelante, en el pueblito, llega **la computadora**. |
+| Antes de dormir | **Siempre pasa algo**: un misterio por entregas (las luces del lago, 6 capítulos que terminan en un plano de LOTEO del de traje), rarezas graciosas (12), una botella con plata, un regalo anónimo o un susto. |
+| Celebración de etapa | **Fogón con los vecinos** al fundar el pueblito. |
+| Mal día | Pega fuerte: desmayo más caro, dormir afuera más duro, el zorro y el desconocido se llevan cosas. |
+| Carpa | Mejora por partes: **lona sobre el fogón** (la lluvia no lo apaga) → choza → (pueblito: casas nuevas). |
+| Fogón | Arde con leña (1 madera ≈ 2 h 15 min, hasta 4 apiladas). Sin leña se apaga; **la lluvia lo apaga** si no tiene lona. Hervir y asar necesitan el fuego prendido. |
+| Herramientas | **Se gastan**: caña de bambú 40 tiradas, caña de fibra 120, hacha 25 talas. Sin caña, en el fogón se arma una de rama con 3 maderas (nunca quedás trabado); Ramiro vende la de bambú. |
+| Cada día distinto | Clima (sol, nublado, viento, lluvia), **antojo del día** (un comerciante que pasa paga 50 % más por un producto), hallazgos raros al pescar (monedas en la panza), y lo que pase de noche. |
+| Clima | Cambia cosas: sol = más sed; nublado = pican más; viento = la leña dura menos; lluvia = pican mucho, casi no da sed y apaga el fuego. **Sin tormentas**: la lluvia dura unas horas, nunca dos días seguidos ni los primeros dos días. |
+| Los tres locos | Llegan **de a uno, atraídos por algo** (Beto, por el olor del ahumado). Unos te sacan tareas, otros venden, otros dan beneficios; **todos traen algún problema, siempre con vos** (entre ellos no se pelean). |
+| Plata con los vecinos | **No cobran**: están porque quieren. Lo que te vendan, se paga. **Sin fiado.** |
+| Carpas de vecinos | **Vos elegís dónde** (cerca del lago, atrás de tu carpa o al lado del camino). Da igual a futuro: al fundar el pueblito se rearman las casas. |
+| Pesca automática | **Espinel** (6 madera + 60 UC): pesca solo de noche y amanece con 2 a 4 pescados que sacás manteniendo E (se pudren al cerrar si no los sacás). Seguís pudiendo pescar a mano. |
+| Precios | **No bajan** por vender mucho. Solo pueden subir (antojo). |
+| Polizón | Más que nada compañía. Además **corre al zorro** de noche. |
+| Bicicleta | La vende la Chola (220 UC). Andás 1,5× más rápido y gastás 25 % menos hambre y sed. |
+| Primeros peligros | **El zorro** (de noche, si tenés pescado y el fogón apagado, se lleva dos; primero lo ahumado) y **un desconocido de traje** que se lleva leña (si Beto vive acá, a veces lo corre). |
+| Duración del día | 8 minutos reales. |
+
+### Beto, el primer loco
+- **Lo trae**: el olor del primer ahumado (al día siguiente de sacar la primera tanda).
+- **Ayuda**: mantiene el fogón prendido todo el día.
+- **Problema**: lo hace con **tu** leña, lo necesites o no, y cobra el "impuesto Beto": se come un ahumado tuyo por día.
+- **Historia**: 10 capítulos, uno por día de charla (la parrilla que se le prendió fuego, el de traje que compra campos, el country con cancha de golf en el lago…).
+- Los otros dos locos (uno que vende y uno que da beneficios) quedan para la próxima tanda.
+
 ## Progresión prevista
 1. **Carpa y lago** (hecho): pesca, comerciantes en fila con historias por entregas, madera, fogatita, cartel, ahumadero, choza, muelle, noche y el perro.
+   Además (hecho): clima, fogón con leña, lona, herramientas que se gastan, misterios de noche, zorro y desconocido, espinel, antojos, bici, Beto y la meta del pueblito.
    Meta de ritmo: un salto grande cada ~10 días de juego (1-2 horas reales).
 2. **Tres locos en carpa**: primeros vecinos en carpas rudimentarias; la pesca empieza a automatizarse.
 3. **Pueblito**: otros empleos; recién acá el comerciante nuevo trae el pico y empieza la minería (que después también se automatiza).
@@ -60,8 +90,8 @@ Los lugares donde vendés también mejoran (de un comerciante que paga poco a un
 ## Comerciantes actuales
 | Quién | Vehículo | Compra (mojarra / tararira) | Máx. por parada | Vende |
 |---|---|---|---|---|
-| Don Ramiro y Turbo | carreta a caballo, lento | 4 / 10 UC | 6 | pan 8, bidón de agua 6 |
-| La Chola | Fiat 600, rápido | 6 / 15 UC | 10 | hacha 120, conservadora 250, caña de fibra 300, pan 12 |
-| Coco | camión (solo con cartel) | 7 / 18 UC | 25 | pan 7, bidón 5 |
+| Don Ramiro y Turbo | carreta a caballo, lento | 4 / 10 UC | 6 | pan 8, bidón de agua 6, caña de bambú 25 |
+| La Chola | Fiat 600, rápido | 6 / 15 UC | 10 | hacha 120, bici 220, cemento 40, conservadora 250, caña de fibra 300, pan 12 |
+| Coco | camión (solo con cartel) | 7 / 18 UC | 25 | pan 7, bidón 5, chapa 25 |
 
 Ahumado (mojarra / tararira): Ramiro 8 / 20, Chola 11 / 28, Coco 13 / 34.

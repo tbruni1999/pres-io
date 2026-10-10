@@ -1,11 +1,13 @@
 # Proyecto Presidente (nombre provisional)
 
-Simulador en primera persona, para un jugador y sin conexión. Empezás sin nada: una choza,
-un lago y un camino de tierra. Pescás, les vendés a los comerciantes que pasan, juntás madera,
+Simulador en primera persona, para un jugador y sin conexión. Empezás sin nada: una carpa,
+una fogatita, un lago y un camino de tierra. Pescás, les vendés a los comerciantes que pasan, juntás madera,
 construís, y de a poco el lugar crece. Diseño en [`docs/DESIGN.md`](docs/DESIGN.md).
 
-**Estado: "Choza y lago" jugable** — pesca con skillcheck, hambre y sed, desmayo, comerciantes
-con señas, madera, fogón, cartel, ahumadero, muelle y noche. Detalle en [`docs/PROGRESS.md`](docs/PROGRESS.md).
+**Estado: "Carpa y lago" jugable** — pesca con skillcheck, hambre y sed, desmayo, comerciantes
+con señas y en fila, madera, fogón con leña, clima y lluvia, herramientas que se gastan,
+misterios antes de dormir, zorro y desconocido, espinel, bici, Beto (el primer vecino) y la meta
+para fundar el pueblito. Detalle en [`docs/PROGRESS.md`](docs/PROGRESS.md).
 
 ![Don Ramiro y Turbo](docs/img/08_ramiro_parado.png)
 
@@ -46,8 +48,8 @@ Ambas pruebas terminan solas y devuelven código distinto de cero si algo falla.
 | W A S D | caminar |
 | Shift | correr (4 → 6 m/s) |
 | Mouse | mirar |
-| E | interactuar: pescar, hacer señas, comerciar, juntar, construir, dormir. En el skillcheck: apretar en la zona. En ramas y agua: mantener |
-| Tab | mochila (comer, tomar, herramientas) |
+| E | interactuar: pescar, hacer señas, comerciar, juntar, construir, usar el fogón, charlar, dormir. En el skillcheck: apretar en la zona. En ramas, agua y espinel: mantener |
+| Tab | mochila (comer, tomar, herramientas con sus usos, acopio y meta del pueblito) |
 | Esc | pausa (guardar, cargar, ajustes) / cerrar panel / dejar de pescar o cancelar |
 | F3 | diagnóstico (solo compilaciones de desarrollo) |
 
@@ -103,7 +105,7 @@ Todos los textos visibles están en `data/text/strings.csv` (columna `es`), list
 
 ## Limitaciones conocidas
 
-- Todavía no hay vecinos, minería ni ayudantes (ver `docs/DESIGN.md`).
+- De los tres locos en carpa solo llegó Beto; la etapa del pueblito, la minería y los ayudantes vienen después (ver `docs/DESIGN.md`).
 - Los vehículos de los comerciantes no tienen colisión.
 - Balance sin ajustar con pruebas de juego: los números están en `data/`.
 - Rendimiento **no verificado** en el hardware objetivo (ver `docs/PROGRESS.md`).

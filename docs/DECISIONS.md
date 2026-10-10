@@ -2,6 +2,23 @@
 
 Cada decisión indica qué se eligió y por qué. Se revisan cuando una prueba lo justifique.
 
+## Clima, noches y vecinos (10 de octubre, esquema 5)
+- **Todo lo nuevo que sortea usa el generador de la partida**: clima, ventana de lluvia, antojo,
+  espinel, hallazgos al pescar y el evento antes de dormir. Por eso una partida cargada repite
+  exactamente lo mismo (prueba `test_v5_roundtrip_new_fields`, 600 pasos después de cargar).
+- Orden del cierre: … pudrir mochila y espinel → impuesto Beto → llegadas → clima del día nuevo →
+  agenda de comerciantes y antojo → pesca del espinel. Cambiar el orden cambia las partidas: no tocar sin migrar.
+- **Avisos del paso** (`GameState.notices`: empezó a llover, se apagó el fuego, Beto le echó leña)
+  no se guardan: la sesión los muestra y los vacía. Lo importante queda en el informe (`DayReport.events`).
+- **El fuego es un tick de fin** (`camp.fire_until`), no un contador por paso: la llama se deriva del estado.
+- **Herramientas que se gastan**: los usos viven en `player_state.tool_wear`. Para no trabarse nunca,
+  sin caña se arma una de rama en el fogón con 3 maderas.
+- **Materiales** (`ItemDefinition.Kind.MATERIAL`) van al acopio del campamento, no a la mochila.
+- **Vecinos sin sueldo**: `Neighbors` guarda lugar de la carpa, día de llegada y capítulo de su historia.
+  La carpa visible se elige por lugar; la escena tiene las tres carpas y muestra la que corresponde.
+- **Lluvia visual** con `CPUParticles3D` (funciona en Compatibility), 900 gotas sin sombra alrededor
+  del jugador; el cielo nublado se mezcla de a poco en `DayNight`.
+
 ## Cambio de dirección "Choza y lago" (6 de octubre)
 - El juego arranca sin pueblo ni presupuesto (ver `DESIGN.md`). La caja comunitaria, el pozo y
   Rosa quedan en el dominio para cuando lleguen vecinos; la UI del escritorio se quitó.

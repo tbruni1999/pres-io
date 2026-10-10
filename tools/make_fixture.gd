@@ -1,10 +1,10 @@
 extends SceneTree
 ## Genera el fixture del esquema de guardado actual con el código real.
 ## Uso (solo cuando cambia el esquema): godot --headless --path . --script tools/make_fixture.gd
-## Los fixtures de esquemas anteriores (v1, v2) no se regeneran: son históricos.
+## Los fixtures de esquemas anteriores (v1 a v4) no se regeneran: son históricos.
 
 const CONTENT := preload("res://data/game_content.tres")
-const OUT := "res://tests/fixtures/save_v4_day2.json"
+const OUT := "res://tests/fixtures/save_v5_day3.json"
 
 
 func _initialize() -> void:
@@ -38,8 +38,23 @@ func _initialize() -> void:
 		pl.hunger_bp = PlayerState.FULL
 		pl.thirst_bp = PlayerState.FULL
 		Simulation.step(s, CONTENT)
+	# Esquema 5: sacar el primer ahumado trae a Beto; dormir (con misterio) y elegirle lugar.
+	for i in 90:
+		pl.hunger_bp = PlayerState.FULL
+		pl.thirst_bp = PlayerState.FULL
+		Simulation.step(s, CONTENT)
+	PlayerActions.collect_smoker(s, CONTENT)
+	s.camp.buildings.append("longline")
+	Simulation.go_to_bed(s, CONTENT)
+	Neighbors.place(s, "beto", "back")
+	Neighbors.talk(s, "beto")
+	s.camp.storage = {"cement": 1}
+	for i in 40:
+		pl.hunger_bp = PlayerState.FULL
+		pl.thirst_bp = PlayerState.FULL
+		Simulation.step(s, CONTENT)
 	s.player_pose = {"position": Vector3(-3.0, 0.05, 1.0), "yaw": 0.4, "pitch": -5.0}
-	var text := JSON.stringify(s.to_dict("0.4.0-fila"), "\t")
+	var text := JSON.stringify(s.to_dict("0.5.0-beto"), "\t", true, true)
 	var f := FileAccess.open(OUT, FileAccess.WRITE)
 	f.store_string(text + "\n")
 	f.close()

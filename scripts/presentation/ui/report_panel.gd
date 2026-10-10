@@ -25,6 +25,11 @@ func on_open(args: Dictionary) -> void:
 	elif rep.slept_outside:
 		title = Texts.t("REPORT_SLEPT_OUT_TITLE")
 	_content.add_child(UIKit.title(title))
+	# Lo que pasó antes de dormir y al cerrar (misterio, zorro, vecinos, espinel).
+	for e in rep.events:
+		_content.add_child(UIKit.label(Texts.t(String(e["key"]), {"n": e["n"]}), 17, UIKit.COLOR_TEXT, true))
+	if not rep.events.is_empty():
+		_content.add_child(HSeparator.new())
 	_content.add_child(UIKit.row(Texts.t("REPORT_EARNED"), "+" + Money.format(rep.earned_cents), UIKit.COLOR_GOOD))
 	_content.add_child(UIKit.row(Texts.t("REPORT_SPENT"), "-" + Money.format(rep.spent_cents - rep.faint_penalty_cents), UIKit.COLOR_BAD))
 	if faint:
@@ -43,6 +48,18 @@ func on_open(args: Dictionary) -> void:
 	elif rep.rotten > 0:
 		quip = Texts.t("REPORT_QUIP_ROTTEN")
 	_content.add_child(UIKit.label(quip, 18, UIKit.COLOR_TEXT, true))
+	_content.add_child(HSeparator.new())
+	_content.add_child(UIKit.label(tomorrow(Game.state, Game.content), 16, UIKit.COLOR_ACCENT, true))
+
+
+## Qué trae el día nuevo: el clima y el antojo de algún comerciante.
+static func tomorrow(s: GameState, c: GameContent) -> String:
+	var text := Texts.t("MSG_WEATHER_" + s.camp.weather.to_upper())
+	var cr := s.camp.craving
+	if not cr.is_empty():
+		var m := c.find_merchant(String(cr["merchant"]))
+		text += " " + Texts.t("MSG_CRAVING", {"name": TradePanel._cap(Texts.t(m.name_key)), "item": Texts.t(c.find_item(String(cr["item"])).name_key)})
+	return text
 
 
 static func _fish(n: int) -> String:

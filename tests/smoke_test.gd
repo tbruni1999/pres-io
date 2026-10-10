@@ -196,8 +196,15 @@ func _run() -> void:
 		guard += 1
 	check(s.camp.has_building("sign") and s.camp.wood == 0, "cartel construido con la madera")
 	check(piece("SignPlot").get_node("After").visible, "se ve el cartel")
-	s.camp.wood = 1
+	s.camp.wood = 2
 	s.player.thirst_bp = 1000
+	var flame: Node3D = piece("FirePlot").get_node("After/Flame")
+	s.camp.fire_until = -1
+	await get_tree().create_timer(0.3).timeout
+	check(not flame.visible, "fogón apagado: no hay llama")
+	check(game.add_wood().ok, "echa leña")
+	await get_tree().create_timer(0.3).timeout
+	check(flame.visible, "con leña vuelve la llama")
 	await look(Vector3(3.3, 0.05, 1.9), 180, -45)
 	check(ctx_kind() == "fire", "se puede usar la fogata (%s)" % ctx_kind())
 	press("interact")
@@ -240,6 +247,56 @@ func _run() -> void:
 	s.player.thirst_bp = PlayerState.FULL
 	check(game.collect_smoker().ok and s.player.count("fish_big_smoked") == 2, "saca dos tarariras ahumadas")
 
+	# 6d) Lluvia: se ve y apaga el fogón (sin lona).
+	var rain: RainFx = main.get_node("Rain")
+	s.camp.weather = Weather.RAIN
+	s.camp.rain_start = s.tick
+	s.camp.rain_end = s.tick + 40
+	s.camp.wood = 3
+	game.add_wood()
+	Simulation.step(s, game.content)
+	await get_tree().create_timer(0.35).timeout
+	check(rain.is_raining_visible(), "llueve en pantalla")
+	check(not Simulation.fire_lit(s), "la lluvia apagó el fogón")
+	s.camp.weather = Weather.SUN
+	s.camp.rain_start = -1
+	s.camp.rain_end = -1
+	await get_tree().create_timer(0.35).timeout
+	check(not rain.is_raining_visible(), "paró de llover")
+
+	# 6e) El olor del ahumado trae a Beto: elegir dónde va su carpa y charlar.
+	s.player.hunger_bp = PlayerState.FULL
+	s.player.thirst_bp = PlayerState.FULL
+	var rep_beto: DayReport = game.sleep()
+	check(rep_beto.events.any(func(e: Dictionary) -> bool: return e["key"] == "EV_BETO_ARRIVES"), "el informe avisa que llega Beto")
+	await wait_physics()
+	var beto: Node3D = main.get_node("World/Neighbors/Beto")
+	check(beto.visible, "Beto está en el campamento")
+	await look(beto.global_position + Vector3(0, 0.05, 2.0), 0, -12)
+	check(ctx_kind() == "place", "a Beto se le dice dónde va la carpa (%s)" % ctx_kind())
+	press("interact")
+	await wait_physics()
+	check(ui.active_panel() == ui.place, "panel para elegir el lugar")
+	ui.place._choose("lake")
+	await wait_physics()
+	check(ui.active_panel() == null, "eligió y se cerró")
+	check(main.get_node("World/Neighbors/Tent_lake").visible and not main.get_node("World/Neighbors/Tent_road").visible, "aparece su carpa en el lago")
+	await look(beto.global_position + Vector3(0, 0.05, 2.0), 0, -12)
+	check(ctx_kind() == "talk", "se puede charlar con Beto (%s)" % ctx_kind())
+	press("interact")
+	await wait_physics()
+	check(int(s.camp.neighbors["beto"]["ep"]) == 1, "primer capítulo de Beto")
+
+	# 6f) Espinel: amanece con pescado y se saca manteniendo E.
+	s.camp.buildings.append("longline")
+	s.camp.longline_items = {"fish_small": 2}
+	game.camp_changed.emit()
+	s.player.bag.clear()
+	await look(Vector3(-15.27, 0.05, -20.73), -45, -30)
+	check(ctx_kind() == "longline", "se puede sacar el espinel (%s)" % ctx_kind())
+	await hold_interact(1.8)
+	check(s.player.count("fish_small") == 2 and s.camp.longline_items.is_empty(), "sacó el pescado del espinel")
+
 	# 6c) La noche: oscurece, no pica y hay faroles.
 	var day_night: DayNight = main.get_node("DayNight")
 	var porch: OmniLight3D = main.get_node("World/Home/Before/TentLight")
@@ -269,7 +326,7 @@ func _run() -> void:
 	s = game.state
 	check(piece("SignPlot").get_node("After").visible, "tras cargar, el cartel vuelve")
 	check(s.player.wallet_cents == wallet_saved, "tras cargar, la misma plata")
-	check(not piece("Woods/Branches1").get_node("Before").visible, "tras cargar, las ramas siguen juntadas")
+	check(main.get_node("World/Neighbors/Tent_lake").visible and main.get_node("World/Neighbors/Beto").visible, "tras cargar, Beto sigue en su carpa")
 
 	# 8) Desmayo por sed: despierta en la choza al otro día.
 	var day: int = s.current_day()
@@ -306,6 +363,7 @@ func _run() -> void:
 	press("interact")
 	await wait_physics()
 	check(ui.active_panel() == ui.report and game.state.current_day() == day + 1, "dormir termina el día")
+	check(not game.state.reports[-1].events.is_empty(), "antes de dormir pasó algo")
 	ui.report.request_close()
 	await wait_physics()
 
@@ -313,6 +371,7 @@ func _run() -> void:
 	press("notebook")
 	await wait_physics()
 	check(ui.active_panel() == ui.bag, "Tab abre la mochila")
+	check(ui.bag._goal.get_child_count() > 3, "la mochila muestra la meta del pueblito")
 	press("notebook")
 	await wait_physics()
 	press("pause")

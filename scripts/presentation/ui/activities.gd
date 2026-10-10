@@ -22,6 +22,8 @@ class Fishing extends Activity:
 			ui.post_notice(_cast["message"])
 			end()
 			return
+		if _cast.get("broke", false):
+			ui.post_notice(_cast["message"])
 		_phase = "wait"
 		_timer = float(_cast["delay_s"])
 		title = Texts.t("FISH_WAITING")

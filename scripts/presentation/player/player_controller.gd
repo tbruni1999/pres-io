@@ -15,6 +15,8 @@ const REFERENCE_ASPECT := 16.0 / 9.0
 @export var run_speed: float = 6.0
 ## Con hambre o sed baja: camina lento y no corre.
 @export var tired_speed: float = 2.5
+## Con bicicleta (herramienta "bike") se anda más rápido.
+@export var bike_multiplier: float = 1.5
 @export var acceleration: float = 30.0
 @export var interact_range: float = 2.5
 @export var step_distance: float = 0.75
@@ -72,6 +74,8 @@ func _physics_process(delta: float) -> void:
 			speed = tired_speed
 		elif Input.is_action_pressed("sprint"):
 			speed = run_speed
+		if Game.state.player.has_tool("bike"):
+			speed *= bike_multiplier
 		target = dir * speed
 	velocity.x = move_toward(velocity.x, target.x, acceleration * delta)
 	velocity.z = move_toward(velocity.z, target.z, acceleration * delta)

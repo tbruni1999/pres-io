@@ -17,6 +17,23 @@ var merchant_visits: Dictionary = {}
 ## Ahumadero: item crudo -> cantidad cargada, y tick en que la tanda está lista (-1 = vacío).
 var smoker_items: Dictionary = {}
 var smoker_ready_tick: int = -1
+## Clima del día (Weather.KINDS); si llueve, ventana [rain_start, rain_end) en ticks.
+var weather: String = "sun"
+var rain_start: int = -1
+var rain_end: int = -1
+var last_rain_day: int = 0
+## El fogón arde hasta este tick (-1 = apagado).
+var fire_until: int = -1
+## Acopio: materiales comprados que no van en la mochila (chapas, cemento).
+var storage: Dictionary = {}
+## Espinel: pescado que quedó enganchado a la mañana (se pudre al cerrar).
+var longline_items: Dictionary = {}
+## Antojo del día: {merchant, item}; ese comerciante paga más por eso. Vacío = ninguno.
+var craving: Dictionary = {}
+## Capítulo del misterio de las luces del lago.
+var night_thread: int = 0
+## Vecinos: id -> {spot, since, talked_day, ep}.
+var neighbors: Dictionary = {}
 
 
 func has_building(id: String) -> bool:
@@ -61,7 +78,27 @@ func to_dict() -> Dictionary:
 		"smoker_items": _items_to_list(smoker_items),
 		"merchant_visits": _items_to_list(merchant_visits),
 		"smoker_ready_tick": str(smoker_ready_tick),
+		"weather": weather,
+		"rain_start": str(rain_start),
+		"rain_end": str(rain_end),
+		"last_rain_day": last_rain_day,
+		"fire_until": str(fire_until),
+		"storage": _items_to_list(storage),
+		"longline_items": _items_to_list(longline_items),
+		"craving": craving.duplicate(),
+		"night_thread": night_thread,
+		"neighbors": _neighbors_to_list(),
 	}
+
+
+func _neighbors_to_list() -> Array:
+	var out: Array = []
+	var keys := neighbors.keys()
+	keys.sort()
+	for k in keys:
+		var n: Dictionary = neighbors[k]
+		out.append({"id": k, "spot": n["spot"], "since": n["since"], "talked_day": n["talked_day"], "ep": n["ep"]})
+	return out
 
 
 static func _items_to_list(d: Dictionary) -> Array:
@@ -70,6 +107,20 @@ static func _items_to_list(d: Dictionary) -> Array:
 	keys.sort()
 	for k in keys:
 		out.append({"id": k, "count": d[k]})
+	return out
+
+
+static func _read_items(d: Dictionary, key: String, r: DictReader, content: GameContent, kind: ItemDefinition.Kind) -> Dictionary:
+	var out := {}
+	for it in r.get_array(d, key, "camp"):
+		if not (it is Dictionary):
+			r.fail("camp." + key, "entrada inválida")
+			continue
+		var id := r.get_string(it, "id", "camp." + key)
+		var def := content.find_item(id)
+		if def == null or def.kind != kind:
+			r.fail("camp." + key, "objeto inválido '%s'" % id)
+		out[id] = r.get_small_int(it, "count", "camp." + key, 1, 100000)
 	return out
 
 
@@ -122,6 +173,35 @@ static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> Cam
 			if content.find_merchant(mid) == null:
 				r.fail(w + ".merchant_visits", "comerciante desconocido '%s'" % mid)
 			c.merchant_visits[mid] = r.get_small_int(it, "count", w + ".merchant_visits", 0, 1_000_000)
+	c.weather = r.get_string(d, "weather", w, Weather.KINDS)
+	c.rain_start = r.get_big_int(d, "rain_start", w, -1, 1 << 62)
+	c.rain_end = r.get_big_int(d, "rain_end", w, -1, 1 << 62)
+	c.last_rain_day = r.get_small_int(d, "last_rain_day", w, 0, 1_000_000)
+	c.fire_until = r.get_big_int(d, "fire_until", w, -1, 1 << 62)
+	c.storage = _read_items(d, "storage", r, content, ItemDefinition.Kind.MATERIAL)
+	c.longline_items = _read_items(d, "longline_items", r, content, ItemDefinition.Kind.CATCH)
+	var cr := r.get_dict(d, "craving", w)
+	if not cr.is_empty():
+		var cm := r.get_string(cr, "merchant", w + ".craving")
+		var ci := r.get_string(cr, "item", w + ".craving")
+		if content.find_merchant(cm) == null or content.find_item(ci) == null:
+			r.fail(w + ".craving", "antojo desconocido")
+		c.craving = {"merchant": cm, "item": ci}
+	c.night_thread = r.get_small_int(d, "night_thread", w, 0, Nights.LIGHTS_EPISODES)
+	for it in r.get_array(d, "neighbors", w):
+		if not (it is Dictionary):
+			r.fail(w + ".neighbors", "vecino inválido")
+			continue
+		var nid := r.get_string(it, "id", w + ".neighbors", Neighbors.ATTRACTED_BY.keys())
+		var spot := r.get_string(it, "spot", w + ".neighbors", [""] + Neighbors.SPOTS)
+		c.neighbors[nid] = {
+			"spot": spot,
+			"since": r.get_small_int(it, "since", w + ".neighbors", 1, 1_000_000),
+			"talked_day": r.get_small_int(it, "talked_day", w + ".neighbors", 0, 1_000_000),
+			"ep": r.get_small_int(it, "ep", w + ".neighbors", 0, Neighbors.EPISODES),
+		}
+	if (c.rain_start < 0) != (c.rain_end < 0) or c.rain_end < c.rain_start:
+		r.fail(w, "ventana de lluvia inconsistente")
 	if c.smoker_items.is_empty() != (c.smoker_ready_tick < 0):
 		r.fail(w, "ahumadero inconsistente (carga y hora de listo)")
 	return c

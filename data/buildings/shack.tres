@@ -9,4 +9,4 @@ name_key = "BUILD_SHACK"
 wood = 15
 money_uc = 100
 checks = 8
-order = 4
+order = 6

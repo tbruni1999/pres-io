@@ -50,6 +50,39 @@ static func plan_day(state: GameState, content: GameContent, day: int) -> void:
 			"x": -ROAD_HALF - 1.0, "v": 0.0, "visited": false,
 		})
 		camp.next_pass_id += 1
+	_plan_craving(state, content)
+
+
+## Antojo del día: alguien que pasa hoy paga más por un producto. Los precios nunca bajan.
+static func _plan_craving(state: GameState, content: GameContent) -> void:
+	var camp := state.camp
+	camp.craving = {}
+	var ids: Array = []
+	for p in camp.passes:
+		if not ids.has(p["merchant"]):
+			ids.append(p["merchant"])
+	if ids.is_empty():
+		return
+	ids.sort()
+	var m := String(ids[state.rng.randi_range(0, ids.size() - 1)])
+	var items := content.find_merchant(m).buys.keys()
+	if items.is_empty():
+		return
+	items.sort()
+	camp.craving = {"merchant": m, "item": String(items[state.rng.randi_range(0, items.size() - 1)])}
+
+
+## Lo que paga este comerciante hoy por un producto (con el antojo del día, si es eso).
+static func buy_price_today(state: GameState, content: GameContent, merchant_id: String, item_id: String) -> int:
+	var price := content.find_merchant(merchant_id).buy_price_cents(item_id)
+	if is_craving(state, merchant_id, item_id):
+		price += price * content.balance.craving_bonus_bp / 10000
+	return price
+
+
+static func is_craving(state: GameState, merchant_id: String, item_id: String) -> bool:
+	var c := state.camp.craving
+	return not c.is_empty() and c["merchant"] == merchant_id and c["item"] == item_id
 
 
 static func _slowest_crossing(content: GameContent) -> int:
@@ -247,7 +280,7 @@ static func sell_to(state: GameState, content: GameContent, pass_id: int, item_i
 	if p.is_empty() or not is_waiting(p):
 		return CommandResult.failure("no_merchant", Texts.t("ERR_NO_MERCHANT"))
 	var def := content.find_merchant(p["merchant"])
-	var price := def.buy_price_cents(item_id)
+	var price := buy_price_today(state, content, def.id, item_id)
 	if price <= 0:
 		return CommandResult.failure("not_buyable", Texts.t("ERR_MERCHANT_DOESNT_BUY"))
 	var room := def.max_buy - int(p["bought"])

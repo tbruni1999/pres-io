@@ -133,6 +133,46 @@ func _run() -> void:
 	await _frames(4)
 	await _capture("21_informe")
 	ui.close_panel()
+
+	# Esquema 5: lona, bici, Beto con su carpa, espinel, fogón, lluvia y nublado.
+	s.player.hunger_bp = PlayerState.FULL
+	s.player.thirst_bp = PlayerState.FULL
+	s.camp.wood += 20
+	s.player.earn(Money.from_units(300))
+	game.build("tarp")
+	game.build("longline")
+	s.player.add_tool(game.content.find_item("bike"))
+	game.player_changed.emit()
+	s.facts["player"]["smoked_once"] = true
+	rep = game.sleep()
+	ui.open_panel(ui.report, {"report": rep})
+	await _frames(4)
+	await _capture("22_informe_noche_beto")
+	ui.close_panel()
+	game.place_neighbor("beto", "lake")
+	s.camp.weather = Weather.SUN
+	s.camp.rain_start = -1
+	s.camp.rain_end = -1
+	(main.get_node("DayNight") as DayNight).overcast = 0.0
+	game.add_wood()
+	await _frames(4)
+	await _shot_at("23_lona_bici", Vector3(0.5, 0.05, 7.5), Vector3(1.5, 0.9, 2.5))
+	await _shot_at("24_beto_carpa", Vector3(3.5, 0.05, -4.0), Vector3(5.6, 0.9, -9.8))
+	await _shot_at("25_espinel", Vector3(-17.0, 0.05, -18.0), Vector3(-11.0, 0.2, -26.0))
+	_pose_at(Vector3(3.3, 0.05, 1.6), Vector3(3.3, 0.2, 3.6))
+	ui.open_panel(ui.fire, {})
+	await _frames(4)
+	await _capture("26_panel_fogon")
+	ui.close_panel()
+	s.camp.weather = Weather.CLOUDY
+	(main.get_node("DayNight") as DayNight).overcast = 0.45
+	await _shot_at("27_nublado", Vector3(-3.0, 0.05, -12.0), Vector3(2.0, 0.0, -36.0))
+	s.camp.weather = Weather.RAIN
+	s.camp.rain_start = s.tick
+	s.camp.rain_end = s.tick + 200
+	(main.get_node("DayNight") as DayNight).overcast = 0.8
+	await _frames(30)
+	await _shot_at("28_lluvia", Vector3(-1.0, 0.05, 7.0), Vector3(2.0, 0.9, 2.0))
 	print("capturas en ", ProjectSettings.globalize_path(out_dir))
 	get_tree().quit(0)
 

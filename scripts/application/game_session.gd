@@ -21,7 +21,7 @@ signal woke_at_home(report: DayReport)
 signal camp_changed
 
 const CONTENT_PATH := "res://data/game_content.tres"
-const GAME_VERSION := "0.2.0-vecino"
+const GAME_VERSION := "0.5.0-beto"
 const DEFAULT_SEED := 20261005
 const MANUAL_SLOT := "manual_1"
 const AUTOSAVE_SLOT := "autosave"
@@ -76,6 +76,7 @@ func _run_step() -> void:
 	var t0 := Time.get_ticks_usec()
 	var report := Simulation.step(state, content)
 	last_step_usec = Time.get_ticks_usec() - t0
+	_flush_notices()
 	if state.player.faint_pending:
 		_handle_faint(report)
 	elif report != null:
@@ -91,6 +92,7 @@ func _handle_faint(report_if_closed: DayReport) -> void:
 	var report := report_if_closed
 	if report == null:
 		report = Simulation.advance_to_end_of_day(state, content, true)
+	state.notices.clear()
 	clock.reset()
 	_log("faint day %d" % report.day)
 	_wake_at_home(report)
@@ -117,10 +119,13 @@ func is_paused() -> bool:
 
 # --- Comandos -------------------------------------------------------------
 
-## Dormir: la jornada termina con los mismos pasos del reloj, sin hambre ni sed mientras dormís.
+## Dormir: antes pasa algo raro (o un susto); después la jornada termina con los mismos
+## pasos del reloj, sin hambre ni sed mientras dormís.
 func sleep() -> DayReport:
 	var t0 := Time.get_ticks_usec()
-	var report := Simulation.advance_to_end_of_day(state, content, true)
+	var report := Simulation.go_to_bed(state, content)
+	# Mientras dormís no hay avisos sueltos: lo importante va en el informe.
+	state.notices.clear()
 	last_close_usec = Time.get_ticks_usec() - t0
 	clock.reset()
 	_log("sleep -> close_day %d" % report.day)
@@ -131,7 +136,10 @@ func sleep() -> DayReport:
 # --- Comandos del personaje ---------------------------------------------------
 
 func cast_line(spot: String = "shore") -> Dictionary:
-	return PlayerActions.cast_line(state, content, spot)
+	var r := PlayerActions.cast_line(state, content, spot)
+	if r["ok"]:
+		player_changed.emit()
+	return r
 
 
 func land_fish(fish_id: String, perfect: bool) -> CommandResult:
@@ -160,6 +168,39 @@ func collect_smoker() -> CommandResult:
 
 func cook_and_eat(fish_id: String) -> CommandResult:
 	return _player_command("cook_and_eat", PlayerActions.cook_and_eat(state, content, fish_id))
+
+
+func add_wood() -> CommandResult:
+	return _player_command("add_wood", PlayerActions.add_wood(state, content))
+
+
+func make_rod() -> CommandResult:
+	return _player_command("make_rod", PlayerActions.make_rod(state, content))
+
+
+func collect_longline() -> CommandResult:
+	return _player_command("collect_longline", PlayerActions.collect_longline(state, content))
+
+
+# --- Vecinos y meta -------------------------------------------------------------
+
+func place_neighbor(id: String, spot: String) -> CommandResult:
+	return _player_command("place_neighbor", Neighbors.place(state, id, spot))
+
+
+## Clave del capítulo de hoy ("" si ya charlaron hoy).
+func talk_neighbor(id: String) -> String:
+	var key := Neighbors.talk(state, id)
+	_log("talk %s -> %s" % [id, key])
+	return key
+
+
+func found_pueblo() -> CommandResult:
+	var result := StageGoal.found(state, content)
+	_player_command("found_pueblo", result)
+	if result.ok:
+		facts_changed.emit()
+	return result
 
 
 func gather_branches(spot_id: String) -> CommandResult:
@@ -206,6 +247,16 @@ func begin_merchant_visit(pass_id: int) -> int:
 func dismiss_merchant(pass_id: int) -> void:
 	Merchants.dismiss(state, pass_id)
 	_log("dismiss %d" % pass_id)
+
+
+func _flush_notices() -> void:
+	if state.notices.is_empty():
+		return
+	var pending := state.notices
+	state.notices = PackedStringArray()
+	for n in pending:
+		notice_posted.emit(n)
+	camp_changed.emit()
 
 
 func _player_command(command_name: String, result: CommandResult) -> CommandResult:

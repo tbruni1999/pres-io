@@ -1,8 +1,9 @@
 class_name ItemDefinition
 extends Resource
-## Plantilla de un objeto (pescado, comida, herramienta). Solo lectura por convención.
+## Plantilla de un objeto (pescado, comida, herramienta, material). Solo lectura por convención.
+## MATERIAL: no va en la mochila, va al acopio del campamento (chapas, cemento).
 
-enum Kind { CATCH, FOOD, TOOL }
+enum Kind { CATCH, FOOD, TOOL, MATERIAL }
 
 @export var id: String = ""
 @export var name_key: String = ""
@@ -38,6 +39,8 @@ enum Kind { CATCH, FOOD, TOOL }
 @export var needle_mult: float = 1.0
 ## Orden para elegir la mejor caña que tenés.
 @export var tier: int = 0
+## Usos hasta romperse (0 = no se gasta).
+@export var durability: int = 0
 
 
 func buy_cents() -> int:

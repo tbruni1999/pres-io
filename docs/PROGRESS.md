@@ -3,7 +3,50 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: carpa, fila de comerciantes, estética y diálogos (10 de octubre de 2026)
+## Estado actual: clima, noches, Beto y la meta del pueblito (10 de octubre de 2026, esquema 5)
+
+Respuestas de Tomás a las 24 preguntas, ya implementadas (detalle en [`DESIGN.md`](DESIGN.md)):
+- **Clima del día** (sol, nublado, viento, lluvia) con efectos reales y sin trabar: la lluvia dura unas horas,
+  nunca dos días seguidos ni los primeros dos días. Lluvia visible (partículas) y cielo gris de a poco.
+- **Fogón con leña**: se apaga solo, la lluvia lo apaga y la **lona** lo protege. Hervir y asar piden el fuego prendido.
+- **Herramientas que se gastan** (caña 40, caña de fibra 120, hacha 25) y caña de rama en el fogón para no trabarse.
+- **Antes de dormir siempre pasa algo**: misterio de las luces del lago (6 capítulos), 12 rarezas, botella con plata,
+  regalo anónimo, el **zorro** (fuego prendido o Polizón lo espantan) y el **desconocido de traje** que se lleva leña.
+- **Beto**, el primer loco: llega por el olor del primer ahumado, elegís dónde va su carpa, mantiene el fogón con tu leña,
+  se come un ahumado por día y cuenta su historia en 10 charlas.
+- **Espinel**: pesca solo de noche; a la mañana lo sacás manteniendo E.
+- **Antojo del día** (un comerciante paga 50 % más por algo), **hallazgos** al pescar, **precios que nunca bajan**.
+- **Bici** (la Chola, 220 UC): 1,5× más rápido y 25 % menos hambre y sed.
+- **Meta de la etapa** en la mochila: 1.500 UC, 10 chapas (Coco), 6 bolsas de cemento (Chola), la escritura
+  (final de la historia de la Chola) y 3 vecinos con carpa. Al completarla: **fogón con los vecinos**.
+- **Malos días más duros**: desmayo 15 % → 30 % → … (tope 60 %), dormir afuera cuesta más.
+
+### Bugs corregidos en esta tanda
+- Ninguno abierto de la tanda anterior; la revisión de esta tanda se anota acá al cerrarla.
+
+### Verificado en este entorno
+| Comprobación | Comando | Resultado |
+|---|---|---|
+| Importación | `godot --headless --path . --import` | sin errores |
+| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **64 pruebas, 959 comprobaciones OK** |
+| Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **76 comprobaciones OK** |
+| Render real | `xvfb-run ... godot --path . res://tools/screenshot_tour.tscn` | 33 capturas sin errores de script (llvmpipe), incluidas lluvia, nublado, Beto y su carpa, espinel, lona y bici |
+
+Rendimiento medido en el recorrido (render por software): máximo **341 llamadas de dibujo** y ~23.700 primitivas
+por cuadro (con lona, bici, Beto, su carpa y la lluvia en pantalla). Sigue debajo del presupuesto (400 / 500.000),
+pero ya está más cerca: el próximo paso de estética debería fusionar mallas estáticas del campamento.
+
+### No verificado
+- Balance real de la nueva dureza (desgaste, leña que se va, Beto comiendo ahumados): falta que Tomás lo juegue.
+- La etapa del pueblito en sí: fundar el pueblito hoy muestra el fogón y queda marcado; el mundo nuevo viene después.
+- Los otros dos locos (uno que vende y uno que da beneficios) todavía no existen, así que la meta no se puede completar jugando.
+
+## Siguiente paso propuesto
+1. Los otros dos locos (atraídos por el cartel y por el muelle/el perro), con sus problemas.
+2. La etapa del pueblito: casas rearmadas, empleos, el comerciante del pico y la minería.
+3. Fusionar mallas estáticas del campamento para bajar llamadas de dibujo.
+
+## Estado anterior: carpa, fila de comerciantes, estética y diálogos (10 de octubre de 2026)
 
 Novedades de esta entrega:
 - **Arranque en carpa con fogatita** (la choza es una mejora construible).
@@ -72,7 +115,7 @@ toma agua manteniendo E, junta ramas, le hace señas a Ramiro y le vende, martil
 Escenas del pueblo (casas, pozo con tres estados, oficina, almacén, Rosa), la colecta comunitaria
 (dominio y pruebas) y el diálogo de Rosa. Vuelven cuando lleguen vecinos.
 
-## Siguiente paso propuesto
+### Siguiente paso que se había propuesto entonces
 1. Elegir cómo llega el primer vecino (opciones presentadas a Tomás).
 2. Ajustar balance con lo que Tomás sienta jugando (velocidades de skillcheck, precios, sed, duración de la noche).
 3. El comerciante nuevo que trae el pico → minería con skillcheck y comprador de mineral.

@@ -101,7 +101,10 @@ func refresh() -> void:
 	var s := Game.state
 	var pl := s.player
 	var clock := DayTime.format_clock(DayTime.minute_of_day(s, Game.content))
-	_day_label.text = Texts.t("HUD_DAY", {"day": s.current_day()}) + " · " + clock + ("  " + Texts.t("HUD_PAUSED") if Game.is_paused() else "")
+	var weather := Texts.t("WEATHER_" + s.camp.weather.to_upper())
+	if Weather.is_raining(s):
+		weather = Texts.t("HUD_RAINING")
+	_day_label.text = Texts.t("HUD_DAY", {"day": s.current_day()}) + " · " + clock + " · " + weather + ("  " + Texts.t("HUD_PAUSED") if Game.is_paused() else "")
 	_day_bar.value = s.day_progress_bp()
 	_money.text = Money.format(pl.wallet_cents)
 	_wood_bag.text = "%s   ·   %s" % [Texts.t("HUD_WOOD", {"n": s.camp.wood}), Texts.t("HUD_BAG", {"n": pl.bag_count(), "cap": PlayerActions.bag_capacity(s, Game.content)})]

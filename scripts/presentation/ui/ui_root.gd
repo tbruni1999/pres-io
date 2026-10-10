@@ -23,6 +23,8 @@ var fire := FirePanel.new()
 var smoker := SmokerPanel.new()
 var bag := BagPanel.new()
 var report := ReportPanel.new()
+var place := PlacePanel.new()
+var message := MessagePanel.new()
 var pause_menu := PauseMenu.new()
 var debug_overlay := DebugOverlay.new()
 
@@ -55,7 +57,7 @@ func _ready() -> void:
 	_center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_center)
-	for p: GamePanel in [trade, fire, smoker, bag, report, pause_menu]:
+	for p: GamePanel in [trade, fire, smoker, bag, report, place, message, pause_menu]:
 		p.ui = self
 		p.close_requested.connect(close_panel)
 		_center.add_child(p)
@@ -160,6 +162,12 @@ func _find_context() -> Dictionary:
 			return {"kind": "lake", "text": Texts.t("ACTION_DRINK_LAKE")}
 		Interactable.Kind.SLEEP:
 			return {"kind": "sleep", "text": Texts.t("ACTION_SLEEP")}
+		Interactable.Kind.DIALOGUE:
+			if not Neighbors.is_present(s, target.target_id):
+				return {}
+			if not Neighbors.is_living(s, target.target_id):
+				return {"kind": "place", "id": target.target_id, "text": Texts.t("ACTION_%s_PLACE" % target.target_id.to_upper())}
+			return {"kind": "talk", "id": target.target_id, "text": Texts.t("ACTION_%s_TALK" % target.target_id.to_upper())}
 		Interactable.Kind.BRANCHES:
 			if s.camp.branches_taken.has(target.target_id):
 				return {"kind": "none", "text": Texts.t("ACTION_BRANCHES_GONE")}
@@ -183,6 +191,11 @@ func _find_context() -> Dictionary:
 							PlayerActions.SMOKER_READY:
 								return {"kind": "smoker", "text": Texts.t("ACTION_SMOKER_READY")}
 						return {"kind": "smoker", "text": Texts.t("ACTION_SMOKER")}
+					"longline":
+						var n := PlayerActions.longline_count(s)
+						if n <= 0:
+							return {"kind": "none", "text": Texts.t("ACTION_LONGLINE_EMPTY")}
+						return {"kind": "longline", "text": Texts.t("ACTION_LONGLINE", {"n": n})}
 				return {}
 			var cost := Texts.t("COST_WOOD", {"n": b.wood}) if b.money_uc <= 0 else Texts.t("COST_WOOD_MONEY", {"n": b.wood, "money": Money.format(b.money_cents())})
 			return {"kind": "build", "id": b.id, "text": Texts.t("ACTION_BUILD", {"name": Texts.t(b.name_key), "cost": cost})}
@@ -239,6 +252,18 @@ func _use_context() -> void:
 			start_activity(hammer)
 		"fire":
 			open_panel(fire)
+		"longline":
+			_hold(1.5, func() -> void:
+				var r := Game.collect_longline()
+				post_notice(r.message)
+				play_feedback(r.ok))
+		"place":
+			open_panel(place, {"id": ctx["id"]})
+		"talk":
+			var nid := String(ctx["id"])
+			var key := Game.talk_neighbor(nid)
+			var line := Texts.t(key) if not key.is_empty() else quip(nid.to_upper(), "QUIP")
+			post_notice("%s: «%s»" % [Texts.t("NPC_" + nid.to_upper()), line])
 		"smoker":
 			open_panel(smoker)
 		"sleep":

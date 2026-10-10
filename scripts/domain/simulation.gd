@@ -64,10 +64,21 @@ static func step(state: GameState, content: GameContent, resting: bool = false) 
 	state.tick += 1
 	if not resting:
 		_update_needs(state, content)
+	_update_weather_and_fire(state, content)
 	Merchants.update(state, content)
 	if state.tick % state.ticks_per_day == 0:
 		return _close_day(state, content, state.tick / state.ticks_per_day, resting)
 	return null
+
+
+## Ir a la cama: antes de dormir siempre pasa algo (Nights); después la jornada
+## termina con los mismos pasos del reloj, sin hambre ni sed.
+static func go_to_bed(state: GameState, content: GameContent) -> DayReport:
+	var event := Nights.before_bed(state, content)
+	var report := advance_to_end_of_day(state, content, true)
+	if report != null:
+		report.events.push_front(event)
+	return report
 
 
 ## Ejecuta los pasos que faltan de la jornada actual con la misma función step().
@@ -137,7 +148,18 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 		if item != null and item.perishable:
 			rotten += pl.count(item_id)
 			pl.remove_item(item_id, pl.count(item_id))
+	# El espinel también: lo que no sacaste hoy se echa a perder.
+	for item_id in state.camp.longline_items:
+		rotten += int(state.camp.longline_items[item_id])
+	state.camp.longline_items.clear()
 	report.rotten = rotten
+
+	# 6b') Vecinos: el impuesto Beto y quién llega mañana (atraído por algo).
+	if Neighbors.beto_tax(state) > 0:
+		report.events.append({"key": "EV_BETO_TAX", "n": 1})
+	var arrived := Neighbors.check_arrivals(state, day)
+	if not arrived.is_empty():
+		report.events.append({"key": "EV_%s_ARRIVES" % arrived.to_upper(), "n": 0})
 
 	# 6c) Terminó la jornada y no estabas en la cama: dormiste a la intemperie.
 	# Si en este mismo paso se desmayó, cuenta como desmayo, no como dormir afuera.
@@ -163,10 +185,55 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 		state.reports.pop_front()
 
 	# 8) La fecha avanza porque state.tick ya pertenece a la jornada siguiente:
-	#    vuelven las ramas y se arma la agenda de comerciantes del día nuevo.
+	#    vuelven las ramas, sale el clima, se arma la agenda de comerciantes
+	#    y amanece pescado en el espinel.
 	state.camp.branches_taken.clear()
+	Weather.plan_day(state, content, day + 1)
 	Merchants.plan_day(state, content, day + 1)
+	var caught := _roll_longline(state, content)
+	if caught > 0:
+		report.events.append({"key": "EV_LONGLINE", "n": caught})
 	return report
+
+
+static func _roll_longline(state: GameState, content: GameContent) -> int:
+	if not state.camp.has_building("longline"):
+		return 0
+	var b := content.balance
+	var n := state.rng.randi_range(b.longline_min, b.longline_max)
+	for i in n:
+		var id := "fish_big" if state.rng.randi_range(0, 9999) < b.longline_big_bp else "fish_small"
+		state.camp.longline_items[id] = int(state.camp.longline_items.get(id, 0)) + 1
+	return n
+
+
+# --- Clima y fogón -----------------------------------------------------------
+
+static func fire_lit(state: GameState) -> bool:
+	return state.camp.has_building("fire") and state.tick < state.camp.fire_until
+
+
+## Bajo techo (lona) la lluvia no apaga el fuego.
+static func fire_sheltered_or_dry(state: GameState) -> bool:
+	return state.camp.has_building("tarp") or not Weather.is_raining(state)
+
+
+static func _update_weather_and_fire(state: GameState, content: GameContent) -> void:
+	var camp := state.camp
+	if camp.rain_start >= 0:
+		if state.tick == camp.rain_start:
+			state.notices.append(Texts.t("MSG_RAIN_START"))
+		elif state.tick == camp.rain_end:
+			state.notices.append(Texts.t("MSG_RAIN_END"))
+	if camp.fire_until >= 0 and not fire_lit(state):
+		camp.fire_until = -1
+		if camp.has_building("fire"):
+			state.notices.append(Texts.t("MSG_FIRE_OUT"))
+	if fire_lit(state) and not fire_sheltered_or_dry(state):
+		camp.fire_until = -1
+		state.notices.append(Texts.t("MSG_RAIN_FIRE_OUT"))
+	if Neighbors.tend_fire(state, content):
+		state.notices.append(Texts.t("MSG_BETO_FIRE"))
 
 
 # --- Personaje: hambre, sed y desmayo ------------------------------------
@@ -174,8 +241,9 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 static func _update_needs(state: GameState, content: GameContent) -> void:
 	var b := content.balance
 	var pl := state.player
-	pl.hunger_bp = maxi(0, pl.hunger_bp - b.hunger_decay_bp)
-	pl.thirst_bp = maxi(0, pl.thirst_bp - b.thirst_decay_bp)
+	var ride := b.bike_needs_bp if pl.has_tool("bike") else 10000
+	pl.hunger_bp = maxi(0, pl.hunger_bp - b.hunger_decay_bp * ride / 10000)
+	pl.thirst_bp = maxi(0, pl.thirst_bp - b.thirst_decay_bp * ride / 10000 * Weather.thirst_bp(state, content) / 10000)
 	if pl.hunger_bp == 0 or pl.thirst_bp == 0:
 		_faint(state, content)
 

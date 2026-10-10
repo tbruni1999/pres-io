@@ -9,4 +9,4 @@ name_key = "BUILD_DOCK"
 wood = 20
 money_uc = 150
 checks = 10
-order = 5
+order = 7

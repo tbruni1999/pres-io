@@ -12,10 +12,10 @@ OBJ_SIGN,Cartel: 4 madera + 40 UC (los comerciantes paran solos)
 OBJ_SHACK,Choza: 15 madera + 100 UC (adiós carpa)
 BUILD_SHACK,Choza
 OBJ_DOCK,Muelle: 20 madera + 150 UC (más tarariras)
-OBJ_DONE,"Por ahora, esto es todo. Pronto llegan vecinos."
+OBJ_DONE,"Pueblito fundado. Lo que sigue, próximamente."
 OBJ_EAT,"¡Comé algo, que te caés!"
 OBJ_DRINK,¡Tomá agua!
-MSG_WELCOME,"Una choza, un lago y vos. Arrancamos bien."
+MSG_WELCOME,"Una carpa, un fogón, un lago y vos. Arrancamos bien."
 MSG_SAVE_AVAILABLE,Hay partida guardada: Esc → Cargar
 MSG_DAY_CLOSED,Se terminó el día {day}.
 MSG_NEW_GAME,Partida nueva. La choza sigue igual de fea.
@@ -290,8 +290,8 @@ BAG_ROW,{name} ×{n}
 BAG_FAINTS,Desmayos: {n} · el próximo te cuesta {pct} de la plata
 BAG_ROTS,El pescado se pudre al terminar el día.
 FIRE_TITLE,Fogón
-FIRE_BOIL,Hervir agua (1 madera)
-FIRE_COOK,Asar y comer {name} (1 madera)
+FIRE_BOIL,Hervir agua
+FIRE_COOK,Asar y comer {name}
 FIRE_WOOD,Madera: {n}
 REPORT_DAY_END,Terminó el día {day}
 REPORT_FAINT_TITLE,Te desmayaste
@@ -349,3 +349,130 @@ REACTION_WELL_IN_PROGRESS,El pozo está en obra.
 REACTION_WELL_DONE,El pozo quedó arreglado.
 SIGN_FISH,"VENDO
 PESCADO"
+WEATHER_SUN,Sol
+WEATHER_CLOUDY,Nublado
+WEATHER_WIND,Viento
+WEATHER_RAIN,Lluvia
+HUD_RAINING,llueve
+MSG_WEATHER_SUN,Sol que raja. Hoy la sed pega más.
+MSG_WEATHER_CLOUDY,Nublado. Los peces no ven nada y pican más.
+MSG_WEATHER_WIND,"Viento. La leña se va volando, literal."
+MSG_WEATHER_RAIN,Huele a lluvia. Cuidá el fuego.
+MSG_RAIN_START,"Empezó a llover. Los peces, chochos."
+MSG_RAIN_END,Paró de llover. Todo huele a perro mojado.
+MSG_RAIN_FIRE_OUT,La lluvia apagó el fogón. Pfff.
+MSG_FIRE_OUT,Se apagó el fogón. Echale leña.
+MSG_BETO_FIRE,Beto le echó leña al fogón. De la tuya.
+FIRE_STATUS_LIT,Prendido hasta las {time}
+FIRE_STATUS_OUT,Apagado
+FIRE_ADD_WOOD,Echar leña (1 madera)
+FIRE_MAKE_ROD,Armar caña de rama ({n} madera)
+FIRE_RAIN_HINT,Con lluvia no prende. Una lona arriba lo arregla.
+ERR_FIRE_OUT,El fogón está apagado. Echale leña.
+ERR_RAIN_NO_FIRE,Llueve. La leña mojada no prende ni con fe.
+ERR_FIRE_FULL,"Ya tiene leña de sobra. Es un fogón, no un incendio."
+MSG_FIRE_LIT,Prendió. Sos un cavernícola exitoso.
+MSG_FIRE_FED,Una más al fuego. Crepita lindo.
+ERR_HAS_ROD,Ya tenés caña.
+MSG_ROD_MADE,"Caña de rama lista. Fea, pero pesca."
+MSG_TOOL_BROKE,Se rompió: {name}. Descansa en paz.
+BAG_USES,{name} · {n} usos
+BAG_STORAGE,Acopio
+BAG_STORAGE_EMPTY,Nada guardado todavía.
+MSG_BOUGHT_STORAGE,{name} al acopio. Ya tenés {n}.
+MSG_FIND_1,Y enganchado venía un monedero: {money}.
+MSG_FIND_2,Tenía {money} en la panza. No preguntes.
+MSG_FIND_3,Salió con una lata con {money} adentro. Generoso.
+MSG_FIND_4,"Traía una bota. Adentro, {money}. Y un pie no, por suerte."
+MSG_FIND_5,Se enganchó un sobre que decía «para vos»: {money}.
+MSG_FIND_6,Escupió {money}. Este pez tiene más ahorros que vos.
+ITEM_BIKE,Bicicleta
+ITEM_SHEET_METAL,Chapa
+ITEM_CEMENT,Bolsa de cemento
+BUILD_TARP,Lona sobre el fogón
+BUILD_LONGLINE,Espinel
+OBJ_TARP,Lona: 3 madera + 35 UC (la lluvia no apaga el fuego)
+OBJ_LONGLINE,Espinel: 6 madera + 60 UC (pesca solo de noche)
+OBJ_NO_ROD,Sin caña: armá una en el fogón con 3 maderas
+OBJ_PLACE_BETO,Llegó un tal Beto. Hablale y decidí dónde pone la carpa
+OBJ_GOAL,Meta: fundar el pueblito (Tab para ver qué falta)
+ACTION_LONGLINE,Sacar el espinel ({n})
+ACTION_LONGLINE_EMPTY,Espinel puesto (mañana hay pescado)
+ERR_NO_LONGLINE,No hay espinel.
+ERR_LONGLINE_EMPTY,Vacío. Los peces madrugan menos que vos.
+MSG_LONGLINE_COLLECTED,Sacaste {n} del espinel. Pescar dormido: el sueño.
+MSG_CRAVING,Dicen que hoy {name} anda con antojo de {item}. Paga más.
+TRADE_CRAVING,antojo
+REPORT_NIGHT,Antes de dormir
+EV_FOX_FIRE,"Un zorro miró el fuego, te miró a vos y se fue ofendido."
+EV_FOX_DOG,Vino un zorro. Polizón lo corrió hasta el pueblo de al lado.
+EV_FOX_STOLE,"Un zorro se llevó {n} pescado(s). Con el fuego apagado, pasa."
+EV_STRANGER,Un desconocido de traje se llevó {n} de madera. Dijo «perdón».
+EV_STRANGER_BETO,Un desconocido quiso llevarse leña. Beto lo corrió en calzones.
+EV_BOTTLE,La orilla trajo una botella con {n} UC y un mensaje: «Gastalo bien».
+EV_GIFT,Alguien dejó un ahumado en la entrada. No hay huellas. Rico igual.
+EV_LIGHTS_1,Hay una lucecita en el medio del lago. Se apagó cuando la miraste.
+EV_LIGHTS_2,"La luz volvió. Hace señas: corta, larga, corta. Vos no sabés morse."
+EV_LIGHTS_3,Se escucha un remo. Y alguien que putea bajito porque se le cayó algo.
+EV_LIGHTS_4,Encontraste una estaca con cinta roja en la orilla. Antes no estaba.
+EV_LIGHTS_5,La luz es un bote. El de adentro mide el lago con una cinta métrica.
+EV_LIGHTS_6,El del bote se fue a las apuradas. Dejó un bolso: {n} UC y un plano que dice LOTEO.
+EV_WEIRD_1,Una rana te miró fijo un buen rato. Ganó ella.
+EV_WEIRD_2,Sonó un tango a lo lejos. No hay radio en kilómetros.
+EV_WEIRD_3,Hay huellas que van para atrás. Hasta la carpa. Hasta vos.
+EV_WEIRD_4,Algo ronca adentro de la carpa. Entrás y no hay nadie. Sigue roncando.
+EV_WEIRD_5,La luna está más cerca que ayer. O vos más lejos.
+EV_WEIRD_6,Mugió una vaca. Acá no hay vacas.
+EV_WEIRD_7,"Un búho dijo tu nombre. Bueno, dijo «uh». Pero sonó a tu nombre."
+EV_WEIRD_8,Apareció una silla de plástico al lado del fogón. Nadie la trajo.
+EV_WEIRD_9,Las estrellas forman un pescado. Debe ser el hambre.
+EV_WEIRD_10,El lago hizo un ruido como de pava hirviendo. Y paró.
+EV_WEIRD_11,Una luciérnaga te siguió hasta la cama. Se quedó de guardia.
+EV_WEIRD_12,Alguien silbó del otro lado del lago. Silbaste. Te silbaron mejor.
+EV_BETO_TAX,"Beto se comió un ahumado tuyo. «Era para probar», dice."
+EV_BETO_ARRIVES,Mañana llega Beto. Lo trajo el olor del ahumadero.
+EV_LONGLINE,El espinel amaneció con {n} pescado(s).
+NPC_BETO,Beto
+ACTION_BETO_TALK,Charlar con Beto
+ACTION_BETO_PLACE,Beto: ¿dónde pongo la carpa?
+PLACE_TITLE,¿Dónde pone la carpa Beto?
+PLACE_BODY,"«Donde digas, jefe. Lejos del ronquido, si se puede. Del mío.»"
+PLACE_LAKE,Cerca del lago
+PLACE_BACK,Atrás de tu carpa
+PLACE_ROAD,Al lado del camino
+MSG_BETO_PLACED,Beto armó la carpa. Le quedó torcida. Dice que es a propósito.
+ERR_NO_NEIGHBOR,No hay nadie con ese nombre. Todavía.
+ERR_BAD_SPOT,Ahí no se puede.
+ERR_ALREADY_PLACED,Ya tiene lugar.
+ERR_SPOT_TAKEN,Ese lugar ya está ocupado.
+BETO_EP_1,"Seguí el olor del ahumado tres kilómetros. Me guía la nariz, no el GPS."
+BETO_EP_2,"Yo el fuego lo cuido. Me encanta el fuego. Demasiado, dice mi ex."
+BETO_EP_3,Tuve una parrilla en la ruta. «Lo de Beto». Se prendió fuego. Todo.
+BETO_EP_4,"No cobro nada, eh. Me pagás en ahumado. Uno por día. Es un decir. No es un decir."
+BETO_EP_5,Anoche soñé que era un chorizo. Me desperté con hambre y con miedo.
+BETO_EP_6,Ese de traje que anda por acá… lo vi en la ruta. Compraba campos baratos.
+BETO_EP_7,Me dijo que si le firmaba un papel me daba una parrilla nueva. Casi firmo.
+BETO_EP_8,El papel decía que acá van a hacer un country. Con cancha de golf. En el lago.
+BETO_EP_9,Yo de acá no me voy. Encontré el fuego perfecto. Y vos sos buena gente.
+BETO_EP_10,"Si hacemos pueblo, yo pongo la parrilla. Esta vez con matafuego. Promesa."
+BETO_QUIP_1,Hoy el fuego está precioso. Mirá cómo baila.
+BETO_QUIP_2,¿Leña? Tenés. Tenías. Bueno.
+BETO_QUIP_3,"No me mires así, el ahumado se cayó solo en mi boca."
+BETO_QUIP_4,Ronco porque sueño fuerte. Es otra cosa.
+BETO_QUIP_5,El zorro me tiene miedo. Yo a él también. Estamos parejos.
+GOAL_TITLE,Meta: fundar el pueblito
+GOAL_MONEY,Plata
+GOAL_ITEM,{name}
+GOAL_DEED,Escritura del campo
+GOAL_NEIGHBORS,Vecinos con carpa
+GOAL_FOUND,¡Fundar el pueblito!
+GOAL_HINT,"Chapas: Coco. Cemento: Chola. La escritura, al final de la historia de Chola."
+GOAL_ROW,{have}/{need}
+ERR_GOAL_INCOMPLETE,Todavía falta. Mirá la lista.
+MSG_ALREADY_FOUNDED,El pueblito ya está fundado.
+MSG_FOUNDED,¡Pueblito fundado!
+FOGON_TITLE,Fogón con los vecinos
+FOGON_BODY,"Beto asó de más, Polizón se robó un chorizo y alguien trajo guitarra sin saber tocar. Desde mañana, esto es un pueblo."
+FOGON_NEXT,(La etapa del pueblito llega en la próxima versión.)
+MSG_STORY_END_HAS_DEED,"Chola te dio una copia de la escritura. Ahora el campo tiene papeles. Y vos, un enemigo de traje."
+MERCHANT_BUYS_CRAVING,{price} ¡antojo!

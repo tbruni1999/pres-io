@@ -10,6 +10,6 @@ vehicle = "horse"
 crossing_ticks = 70
 buys = {"fish_big": 10, "fish_big_smoked": 20, "fish_small": 4, "fish_small_smoked": 8}
 max_buy = 6
-sells = {"bread": 8, "water_jug": 6}
+sells = {"bread": 8, "rod_basic": 25, "water_jug": 6}
 weight = 3
 lines_prefix = "RAMIRO"

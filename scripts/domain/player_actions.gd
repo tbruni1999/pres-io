@@ -47,12 +47,15 @@ static func cast_line(state: GameState, content: GameContent, spot: String = "sh
 	if on_dock and not state.camp.has_building("dock"):
 		return {"ok": false, "code": "no_dock", "message": Texts.t("ERR_NO_DOCK")}
 	var rng := state.rng
-	var delay := rng.randf_range(rod.bite_min_s, rod.bite_max_s)
+	var delay := rng.randf_range(rod.bite_min_s, rod.bite_max_s) * Weather.bite_bp(state, content) / 10000.0
 	var big_chance := rod.big_chance_bp + (b.dock_big_bonus_bp if on_dock else 0)
 	var big := rng.randi_range(0, 9999) < big_chance
 	var fish := content.find_item("fish_big" if big else "fish_small")
+	# Cada tirada gasta la caña; si se rompe, este es su último pique.
+	var broke := state.player.wear_tool(rod.id)
 	return {
-		"ok": true, "code": "ok", "message": "",
+		"ok": true, "code": "ok", "message": Texts.t("MSG_TOOL_BROKE", {"name": Texts.t(rod.name_key)}) if broke else "",
+		"broke": broke,
 		"delay_s": delay,
 		"fish_id": fish.id,
 		"checks": maxi(1, fish.checks),
@@ -75,7 +78,19 @@ static func land_fish(state: GameState, content: GameContent, fish_id: String, p
 	state.player.day_fish += n
 	state.player.fish_caught_total += n
 	var key := "MSG_CATCH_PERFECT" if n == 2 else "MSG_CATCH"
-	return CommandResult.success(Texts.t(key, {"name": Texts.t(def.name_key)}), {"count": n})
+	var msg := Texts.t(key, {"name": Texts.t(def.name_key)})
+	# A veces sale algo más enganchado.
+	var b := content.balance
+	var found := 0
+	if state.rng.randi_range(0, 9999) < b.find_chance_bp:
+		found = state.rng.randi_range(b.find_min_uc, b.find_max_uc)
+		state.player.earn(Money.from_units(found))
+		msg += " " + Texts.t("MSG_FIND_%d" % state.rng.randi_range(1, FIND_LINES), {"money": Money.format(Money.from_units(found))})
+	return CommandResult.success(msg, {"count": n, "found_uc": found})
+
+
+## Frases de hallazgos (MSG_FIND_1..N).
+const FIND_LINES := 6
 
 
 # --- Compras ------------------------------------------------------------------
@@ -85,13 +100,17 @@ static func purchase(state: GameState, content: GameContent, def: ItemDefinition
 	var pl := state.player
 	if def.kind == ItemDefinition.Kind.TOOL and pl.has_tool(def.id):
 		return CommandResult.failure("already_owned", Texts.t("ERR_ALREADY_OWNED"))
-	if def.kind != ItemDefinition.Kind.TOOL and bag_free(state, content) <= 0:
+	var in_bag := def.kind != ItemDefinition.Kind.TOOL and def.kind != ItemDefinition.Kind.MATERIAL
+	if in_bag and bag_free(state, content) <= 0:
 		return CommandResult.failure("bag_full", Texts.t("ERR_BAG_FULL"))
 	if price > pl.wallet_cents:
 		return CommandResult.failure("insufficient_funds", Texts.t("ERR_MISSING_MONEY", {"missing": Money.format(price - pl.wallet_cents)}))
 	pl.spend(price)
 	if def.kind == ItemDefinition.Kind.TOOL:
-		pl.tools.append(def.id)
+		pl.add_tool(def)
+	elif def.kind == ItemDefinition.Kind.MATERIAL:
+		state.camp.storage[def.id] = int(state.camp.storage.get(def.id, 0)) + 1
+		return CommandResult.success(Texts.t("MSG_BOUGHT_STORAGE", {"name": Texts.t(def.name_key), "n": state.camp.storage[def.id]}))
 	else:
 		pl.add_item(def.id, 1)
 	return CommandResult.success(Texts.t("MSG_BOUGHT", {"name": Texts.t(def.name_key)}))
@@ -123,7 +142,10 @@ static func chop_tree(state: GameState, content: GameContent, tree_id: String, s
 		return CommandResult.failure("missed", Texts.t("MSG_CHOP_MISSED"))
 	state.camp.trees_cut[tree_id] = state.current_day()
 	state.camp.wood += content.balance.tree_wood
-	return CommandResult.success(Texts.t("MSG_GOT_WOOD", {"n": content.balance.tree_wood}))
+	var msg := Texts.t("MSG_GOT_WOOD", {"n": content.balance.tree_wood})
+	if state.player.wear_tool("axe"):
+		msg += " " + Texts.t("MSG_TOOL_BROKE", {"name": Texts.t(content.find_item("axe").name_key)})
+	return CommandResult.success(msg)
 
 
 static func can_build(state: GameState, content: GameContent, building_id: String) -> CommandResult:
@@ -220,8 +242,46 @@ static func collect_smoker(state: GameState, content: GameContent) -> CommandRes
 		taken += n
 	if state.camp.smoker_items.is_empty():
 		state.camp.smoker_ready_tick = -1
+	# El olor del primer ahumado se siente lejos (atrae a Beto).
+	state.facts["player"]["smoked_once"] = true
 	var key := "MSG_SMOKER_COLLECTED" if state.camp.smoker_items.is_empty() else "MSG_SMOKER_COLLECTED_PARTIAL"
 	return CommandResult.success(Texts.t(key, {"n": taken}), {"count": taken})
+
+
+# --- Espinel ----------------------------------------------------------------------
+
+## Saca del espinel lo que entre en la mochila.
+static func collect_longline(state: GameState, content: GameContent) -> CommandResult:
+	if not state.camp.has_building("longline"):
+		return CommandResult.failure("no_longline", Texts.t("ERR_NO_LONGLINE"))
+	var line := state.camp.longline_items
+	if line.is_empty():
+		return CommandResult.failure("longline_empty", Texts.t("ERR_LONGLINE_EMPTY"))
+	var free := bag_free(state, content)
+	if free <= 0:
+		return CommandResult.failure("bag_full", Texts.t("ERR_BAG_FULL"))
+	var taken := 0
+	for item_id in _sorted(line.keys()):
+		var n := mini(free, int(line[item_id]))
+		state.player.add_item(item_id, n)
+		state.player.day_fish += n
+		state.player.fish_caught_total += n
+		if n == int(line[item_id]):
+			line.erase(item_id)
+		else:
+			line[item_id] = int(line[item_id]) - n
+		free -= n
+		taken += n
+		if free <= 0:
+			break
+	return CommandResult.success(Texts.t("MSG_LONGLINE_COLLECTED", {"n": taken}), {"count": taken})
+
+
+static func longline_count(state: GameState) -> int:
+	var n := 0
+	for k in state.camp.longline_items:
+		n += int(state.camp.longline_items[k])
+	return n
 
 
 static func _sorted(keys: Array) -> Array:
@@ -246,16 +306,51 @@ static func drink_lake(state: GameState, content: GameContent) -> CommandResult:
 static func _use_fire(state: GameState) -> CommandResult:
 	if not state.camp.has_building("fire"):
 		return CommandResult.failure("no_fire", Texts.t("ERR_NO_FIRE"))
-	if state.camp.wood < 1:
-		return CommandResult.failure("missing_wood", Texts.t("ERR_MISSING_WOOD", {"missing": 1}))
+	if not Simulation.fire_lit(state):
+		return CommandResult.failure("fire_out", Texts.t("ERR_FIRE_OUT"))
 	return CommandResult.success()
+
+
+## Echar una madera al fogón (lo prende si estaba apagado). Con lluvia y sin lona no prende.
+static func add_wood(state: GameState, content: GameContent) -> CommandResult:
+	var camp := state.camp
+	if not camp.has_building("fire"):
+		return CommandResult.failure("no_fire", Texts.t("ERR_NO_FIRE"))
+	if camp.wood < 1:
+		return CommandResult.failure("missing_wood", Texts.t("ERR_MISSING_WOOD", {"missing": 1}))
+	if not Simulation.fire_sheltered_or_dry(state):
+		return CommandResult.failure("raining", Texts.t("ERR_RAIN_NO_FIRE"))
+	var b := content.balance
+	var base := maxi(state.tick, camp.fire_until)
+	if base - state.tick >= b.fire_max_ticks:
+		return CommandResult.failure("fire_full", Texts.t("ERR_FIRE_FULL"))
+	var was_lit := Simulation.fire_lit(state)
+	camp.wood -= 1
+	camp.fire_until = mini(base + Weather.fire_wood_ticks(state, content), state.tick + b.fire_max_ticks)
+	return CommandResult.success(Texts.t("MSG_FIRE_FED" if was_lit else "MSG_FIRE_LIT"))
+
+
+## Sin caña no hay plata: en el fogón se arma una de rama con un poco de madera.
+static func make_rod(state: GameState, content: GameContent) -> CommandResult:
+	if best_rod(state, content) != null:
+		return CommandResult.failure("has_rod", Texts.t("ERR_HAS_ROD"))
+	var need := content.balance.make_rod_wood
+	if state.camp.wood < need:
+		return CommandResult.failure("missing_wood", Texts.t("ERR_MISSING_WOOD", {"missing": need - state.camp.wood}))
+	state.camp.wood -= need
+	state.player.add_tool(content.find_item("rod_basic"))
+	return CommandResult.success(Texts.t("MSG_ROD_MADE"))
+
+
+## Fuego prendido hasta (tick), o -1.
+static func fire_until(state: GameState) -> int:
+	return state.camp.fire_until if Simulation.fire_lit(state) else -1
 
 
 static func boil_water(state: GameState, _content: GameContent) -> CommandResult:
 	var ok := _use_fire(state)
 	if not ok.ok:
 		return ok
-	state.camp.wood -= 1
 	state.player.thirst_bp = PlayerState.FULL
 	return CommandResult.success(Texts.t("MSG_BOILED"))
 
@@ -268,7 +363,6 @@ static func cook_and_eat(state: GameState, content: GameContent, fish_id: String
 	var def := content.find_item(fish_id)
 	if def == null or def.kind != ItemDefinition.Kind.CATCH or not state.player.remove_item(fish_id, 1):
 		return CommandResult.failure("not_enough_items", Texts.t("ERR_NO_FISH"))
-	state.camp.wood -= 1
 	var pl := state.player
 	pl.hunger_bp = mini(PlayerState.FULL, pl.hunger_bp + def.food_bp * content.balance.cook_multiplier)
 	return CommandResult.success(Texts.t("MSG_COOKED", {"name": Texts.t(def.name_key)}))

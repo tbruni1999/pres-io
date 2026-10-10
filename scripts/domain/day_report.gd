@@ -31,6 +31,8 @@ var fund_cents: int = 0
 var rotten: int = 0
 ## La jornada terminó sin que el jugador se fuera a dormir.
 var slept_outside: bool = false
+## Lo que pasó al cerrar y antes de dormir: [{key, n}] (misterio, zorro, vecinos, espinel).
+var events: Array[Dictionary] = []
 
 
 func to_dict() -> Dictionary:
@@ -63,6 +65,7 @@ func to_dict() -> Dictionary:
 		"fund_cents": str(fund_cents),
 		"rotten": rotten,
 		"slept_outside": slept_outside,
+		"events": events.map(func(e: Dictionary) -> Dictionary: return {"key": e["key"], "n": e["n"]}),
 	}
 
 
@@ -106,6 +109,11 @@ static func from_dict(d: Dictionary, r: DictReader) -> DayReport:
 	rep.fund_cents = r.get_big_int(d, "fund_cents", w, 0, big)
 	rep.rotten = r.get_small_int(d, "rotten", w, 0, 1_000_000)
 	rep.slept_outside = r.get_bool(d, "slept_outside", w)
+	for e in r.get_array(d, "events", w):
+		if e is Dictionary:
+			rep.events.append({"key": r.get_string(e, "key", w + ".events"), "n": r.get_small_int(e, "n", w + ".events", 0, 1_000_000)})
+		else:
+			r.fail(w + ".events", "evento inválido")
 	if r.ok() and rep.cash_end_cents != rep.cash_start_cents + rep.income_cents - rep.payments_cents:
 		r.fail(w, "el informe no cuadra: caja final != inicial + ingresos - pagos")
 	return rep

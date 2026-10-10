@@ -1,0 +1,146 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/neighbor_beto.gd" id="1_neighbor_bet"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="3_cloth_navy"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="4_hair_dark"]
+[ext_resource type="Material" path="res://assets/materials/cloth_red.tres" id="5_cloth_red"]
+[ext_resource type="Material" path="res://assets/materials/skin.tres" id="6_skin"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="7_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_gray.tres" id="8_hair_gray"]
+[ext_resource type="Material" path="res://assets/materials/cloth_orange.tres" id="9_cloth_orange"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="10_interactable"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="11_sign_label"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.7, 1.8, 0.6)
+
+[node name="Beto" type="Node3D"]
+script = ExtResource("1_neighbor_bet")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="LegL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.12, 0.4, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.16, 0.8, 0.16)
+material = ExtResource("3_cloth_navy")
+
+[node name="LegR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.12, 0.4, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.16, 0.8, 0.16)
+material = ExtResource("3_cloth_navy")
+
+[node name="ShoeL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.12, 0.04, 0.05)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.18, 0.08, 0.28)
+material = ExtResource("4_hair_dark")
+casts_shadow = false
+
+[node name="ShoeR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.12, 0.04, 0.05)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.18, 0.08, 0.28)
+material = ExtResource("4_hair_dark")
+casts_shadow = false
+
+[node name="Belly" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.05, 0.06)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.62, 0.62, 0.55)
+material = ExtResource("5_cloth_red")
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.3, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.5, 0.36)
+material = ExtResource("5_cloth_red")
+
+[node name="ArmL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.34, 1.15, 0)
+rotation_degrees = Vector3(0, 0, 10)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.13, 0.6, 0.13)
+material = ExtResource("6_skin")
+
+[node name="ArmR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.34, 1.15, 0.05)
+rotation_degrees = Vector3(-25, 0, -10)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.13, 0.6, 0.13)
+material = ExtResource("6_skin")
+
+[node name="Tongs" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.38, 0.95, 0.3)
+rotation_degrees = Vector3(-25, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.04, 0.5)
+material = ExtResource("7_metal_dark")
+casts_shadow = false
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.72, 0)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.3, 0.32, 0.3)
+material = ExtResource("6_skin")
+
+[node name="Mustache" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.66, 0.15)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.22, 0.05, 0.05)
+material = ExtResource("8_hair_gray")
+casts_shadow = false
+
+[node name="EyeL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.06, 1.76, 0.145)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 0.03, 0.02)
+material = ExtResource("4_hair_dark")
+casts_shadow = false
+
+[node name="EyeR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.06, 1.76, 0.145)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 0.03, 0.02)
+material = ExtResource("4_hair_dark")
+casts_shadow = false
+
+[node name="CapTop" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.88, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.32, 0.12, 0.32)
+material = ExtResource("9_cloth_orange")
+
+[node name="CapBill" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.84, 0.2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.22, 0.03, 0.18)
+material = ExtResource("9_cloth_orange")
+casts_shadow = false
+
+[node name="Talk" type="StaticBody3D" parent="."]
+position = Vector3(0, 0.9, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("10_interactable")
+kind = 0
+target_id = "beto"
+
+[node name="Shape" type="CollisionShape3D" parent="Talk"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="Name" type="Label3D" parent="."]
+position = Vector3(0, 2.2, 0)
+billboard = 1
+pixel_size = 0.004
+font_size = 30
+outline_size = 8
+modulate = Color(1, 0.95, 0.85, 1)
+outline_modulate = Color(0, 0, 0, 0.85)
+script = ExtResource("11_sign_label")
+text_key = "NPC_BETO"

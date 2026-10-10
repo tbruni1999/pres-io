@@ -13,6 +13,11 @@ func _ready() -> void:
 	Game.state_replaced.connect(_place_player)
 	ui.wake_at_home.connect(go_home)
 	$World/Dog.player = player
+	$World/Neighbors/Beto.watch_target = player
+	var rain := RainFx.new()
+	rain.name = "Rain"
+	rain.target = player
+	add_child(rain)
 	_place_player()
 
 

@@ -13,3 +13,4 @@ big_chance_bp = 3000
 zone_bonus_bp = 800
 needle_mult = 0.85
 tier = 2
+durability = 120

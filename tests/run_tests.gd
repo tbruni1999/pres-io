@@ -11,6 +11,7 @@ const FIXTURE_V1 := "res://tests/fixtures/save_v1_day2.json"
 const FIXTURE_V2 := "res://tests/fixtures/save_v2_day3.json"
 const FIXTURE_V3 := "res://tests/fixtures/save_v3_day2.json"
 const FIXTURE_V4 := "res://tests/fixtures/save_v4_day2.json"
+const FIXTURE_V5 := "res://tests/fixtures/save_v5_day3.json"
 
 var _failures: PackedStringArray = PackedStringArray()
 var _checks := 0
@@ -68,6 +69,21 @@ func _initialize() -> void:
 		"test_fixture_v4_loads",
 		"test_merchant_story_episodes_and_dog",
 		"test_save_load_every_tick_keeps_merchant_timeline",
+		"test_weather_never_blocks_progress",
+		"test_rain_puts_out_fire_unless_tarp",
+		"test_fire_burns_wood_with_cap",
+		"test_tools_wear_out_and_rod_from_branches",
+		"test_something_happens_every_night",
+		"test_fox_fire_and_dog",
+		"test_lights_mystery_ends_with_reward",
+		"test_beto_arrives_places_and_tends_fire",
+		"test_longline_fishes_overnight",
+		"test_craving_pays_more_prices_never_drop",
+		"test_materials_storage_and_goal",
+		"test_bike_saves_food_and_water",
+		"test_v5_roundtrip_new_fields",
+		"test_fixture_v5_loads",
+		"test_v4_migrates_to_v5_defaults",
 	]
 	for t in tests:
 		_current = t
@@ -280,6 +296,7 @@ func test_zero_values_no_invalid_division() -> bool:
 
 func test_needs_decay_and_tired() -> bool:
 	var s := fed(new_state())
+	s.camp.weather = Weather.CLOUDY  # sin calor: la sed baja al ritmo base
 	var b := CONTENT.balance
 	for i in 100:
 		Simulation.step(s, CONTENT)
@@ -297,14 +314,14 @@ func test_faint_penalty_escalates() -> bool:
 	s.player.thirst_bp = 1
 	Simulation.step(s, CONTENT)
 	check(s.player.faint_pending, "se desmaya al quedarse sin agua")
-	eq(s.player.wallet_cents, 90000, "primer desmayo: pierde 10 %")
+	eq(s.player.wallet_cents, 85000, "primer desmayo: pierde 15 %")
 	eq(s.player.thirst_bp, CONTENT.balance.faint_wake_bp, "despierta con algo de agua")
 	s.player.faint_pending = false
 	s.player.thirst_bp = 1
 	Simulation.step(s, CONTENT)
-	eq(s.player.wallet_cents, 72000, "segundo desmayo: pierde 20 % de lo que queda")
+	eq(s.player.wallet_cents, 59500, "segundo desmayo: pierde 30 % de lo que queda")
 	eq(s.player.faint_count, 2, "se cuentan los desmayos")
-	eq(Simulation.faint_penalty_bp(9, CONTENT.balance), 5000, "el castigo tiene tope de 50 %")
+	eq(Simulation.faint_penalty_bp(9, CONTENT.balance), 6000, "el castigo tiene tope de 60 %")
 	check(s.player.is_consistent(), "la billetera sigue cuadrando")
 	return true
 
@@ -442,8 +459,11 @@ func test_lake_water_and_fire() -> bool:
 	f.camp.buildings.clear()
 	eq(PlayerActions.boil_water(f, CONTENT).code, "no_fire", "sin fogón no se hierve")
 	f.camp.buildings.append("fire")
-	eq(PlayerActions.boil_water(f, CONTENT).code, "missing_wood", "el fogón gasta madera")
+	f.camp.fire_until = -1
+	eq(PlayerActions.boil_water(f, CONTENT).code, "fire_out", "con el fogón apagado no se hierve")
+	eq(PlayerActions.add_wood(f, CONTENT).code, "missing_wood", "prender el fogón gasta madera")
 	f.camp.wood = 2
+	check(PlayerActions.add_wood(f, CONTENT).ok, "prende el fogón con una madera")
 	f.player.thirst_bp = 100
 	check(PlayerActions.boil_water(f, CONTENT).ok, "agua hervida")
 	eq(f.player.thirst_bp, PlayerState.FULL, "el agua hervida llena la sed")
@@ -451,7 +471,7 @@ func test_lake_water_and_fire() -> bool:
 	f.player.add_item("fish_small", 1)
 	check(PlayerActions.cook_and_eat(f, CONTENT, "fish_small").ok, "asa el pescado")
 	eq(f.player.hunger_bp, 1000 + 2000 * CONTENT.balance.cook_multiplier, "asado llena el doble")
-	eq(f.camp.wood, 0, "usó dos maderas")
+	eq(f.camp.wood, 1, "hervir y asar no gastan madera aparte: el fuego ya está prendido")
 	return true
 
 
@@ -1023,4 +1043,331 @@ func test_save_load_every_tick_keeps_merchant_timeline() -> bool:
 			Simulation.step(fed(a), CONTENT)
 			Simulation.step(fed(loaded), CONTENT)
 		eq(JSON.stringify(loaded.camp.to_dict()), JSON.stringify(a.camp.to_dict()), "misma agenda tras guardar en el tick %d" % t)
+	return true
+
+
+# --- v5: clima, fogón, desgaste, noches, vecinos, espinel, antojos, meta -----------
+
+func test_weather_never_blocks_progress() -> bool:
+	var s := new_state(99)
+	var seen := {}
+	var prev_rain := false
+	for d in 80:
+		var day := s.current_day()
+		seen[s.camp.weather] = true
+		var rain := s.camp.weather == Weather.RAIN
+		if rain:
+			check(day >= CONTENT.balance.first_rain_day, "no llueve los primeros días (día %d)" % day)
+			check(not prev_rain, "nunca llueve dos días seguidos (día %d)" % day)
+			var day_start := (day - 1) * s.ticks_per_day
+			check(s.camp.rain_start >= day_start and s.camp.rain_end <= day_start + DayTime.night_offset_ticks(s, CONTENT), "la lluvia es de día y dura unas horas")
+			check(s.camp.rain_end - s.camp.rain_start <= CONTENT.balance.rain_max_ticks, "la lluvia no dura todo el día")
+		else:
+			check(s.camp.rain_start == -1, "sin lluvia no hay ventana")
+		prev_rain = rain
+		advance_fed(s)
+	for k in Weather.KINDS:
+		check(seen.has(k), "en 80 días aparece el clima %s" % k)
+	return true
+
+
+func test_rain_puts_out_fire_unless_tarp() -> bool:
+	var s := fed(new_state())
+	s.camp.wood = 5
+	s.camp.weather = Weather.RAIN
+	s.camp.rain_start = s.tick + 1
+	s.camp.rain_end = s.tick + 30
+	check(Simulation.fire_lit(s), "arranca con el fogón prendido")
+	Simulation.step(s, CONTENT)
+	check(not Simulation.fire_lit(s), "la lluvia apaga el fogón")
+	check(s.notices.has(Texts.t("MSG_RAIN_FIRE_OUT")), "avisa que se apagó")
+	eq(PlayerActions.add_wood(s, CONTENT).code, "raining", "con lluvia no prende")
+	eq(s.camp.wood, 5, "no gasta la madera")
+	s.camp.buildings.append("tarp")
+	check(PlayerActions.add_wood(s, CONTENT).ok, "con lona prende igual")
+	Simulation.step(s, CONTENT)
+	check(Simulation.fire_lit(s), "bajo la lona sigue prendido")
+	return true
+
+
+func test_fire_burns_wood_with_cap() -> bool:
+	var s := fed(new_state())
+	s.camp.weather = Weather.CLOUDY
+	var b := CONTENT.balance
+	for i in b.fire_start_ticks:
+		Simulation.step(fed(s), CONTENT)
+	check(not Simulation.fire_lit(s), "sin leña se apaga")
+	check(s.notices.has(Texts.t("MSG_FIRE_OUT")), "avisa que se apagó")
+	s.camp.wood = 10
+	var n := 0
+	while PlayerActions.add_wood(s, CONTENT).ok:
+		n += 1
+	eq(n, b.fire_max_ticks / b.fire_wood_ticks, "se apila leña hasta el tope")
+	eq(PlayerActions.add_wood(s, CONTENT).code, "fire_full", "más no entra")
+	s.camp.weather = Weather.WIND
+	s.camp.fire_until = -1
+	PlayerActions.add_wood(s, CONTENT)
+	check(s.camp.fire_until - s.tick < b.fire_wood_ticks, "con viento la leña dura menos")
+	return true
+
+
+func test_tools_wear_out_and_rod_from_branches() -> bool:
+	var s := fed(new_state())
+	var rod := CONTENT.find_item("rod_basic")
+	eq(int(s.player.tool_wear.get("rod_basic", 0)), rod.durability, "la caña arranca con todos sus usos")
+	var broke := false
+	for i in rod.durability:
+		var c := PlayerActions.cast_line(s, CONTENT)
+		check(c["ok"], "tira la línea %d" % i)
+		broke = c["broke"]
+		s.player.bag.clear()
+	check(broke, "en el último uso se rompe")
+	check(not s.player.has_tool("rod_basic"), "ya no tiene caña")
+	eq(PlayerActions.cast_line(s, CONTENT)["code"], "no_rod", "sin caña no pesca")
+	s.camp.wood = 2
+	eq(PlayerActions.make_rod(s, CONTENT).code, "missing_wood", "la caña de rama pide madera")
+	s.camp.wood = 3
+	check(PlayerActions.make_rod(s, CONTENT).ok, "arma una caña de rama")
+	eq(s.camp.wood, 0, "gastó la madera")
+	eq(PlayerActions.make_rod(s, CONTENT).code, "has_rod", "no arma otra si ya tiene")
+	# Hacha: se gasta solo al talar.
+	s.player.add_tool(CONTENT.find_item("axe"))
+	var axe := CONTENT.find_item("axe")
+	for i in axe.durability:
+		s.camp.trees_cut.clear()
+		check(PlayerActions.chop_tree(s, CONTENT, "tree_1", true).ok, "tala %d" % i)
+	check(not s.player.has_tool("axe"), "el hacha se rompió")
+	return true
+
+
+func test_something_happens_every_night() -> bool:
+	for seed_value in 60:
+		var s := fed(new_state(seed_value))
+		s.tick = s.ticks_per_day * 6 + 100  # día 7: puede pasar de todo
+		Weather.plan_day(s, CONTENT, 7)
+		Merchants.plan_day(s, CONTENT, 7)
+		s.camp.wood = 4
+		s.player.add_item("fish_small", 2)
+		var rep := Simulation.go_to_bed(s, CONTENT)
+		check(rep != null and not rep.events.is_empty(), "antes de dormir pasó algo (semilla %d)" % seed_value)
+		if rep == null or rep.events.is_empty():
+			continue
+		var key := String(rep.events[0]["key"])
+		check(Texts.t(key) != key, "el evento %s tiene texto" % key)
+		check(s.player.is_consistent(), "la billetera cuadra")
+	for i in range(1, Nights.WEIRD_COUNT + 1):
+		check(Texts.t("EV_WEIRD_%d" % i) != "EV_WEIRD_%d" % i, "rareza %d con texto" % i)
+	return true
+
+
+func test_fox_fire_and_dog() -> bool:
+	var s := fed(new_state())
+	s.player.add_item("fish_small", 1)
+	s.player.add_item("fish_big_smoked", 2)
+	eq(Nights._fox(s, CONTENT, Nights._fish_in_bag(s, CONTENT))["key"], "EV_FOX_FIRE", "el fuego espanta al zorro")
+	s.camp.fire_until = -1
+	var ev := Nights._fox(s, CONTENT, Nights._fish_in_bag(s, CONTENT))
+	eq(ev["key"], "EV_FOX_STOLE", "con el fuego apagado roba")
+	eq(ev["n"], CONTENT.balance.fox_steals, "se lleva dos")
+	eq(s.player.count("fish_big_smoked"), 0, "primero lo más rico")
+	eq(s.player.count("fish_small"), 1, "la mojarra se salvó")
+	s.facts["player"]["has_dog"] = true
+	eq(Nights._fox(s, CONTENT, Nights._fish_in_bag(s, CONTENT))["key"], "EV_FOX_DOG", "Polizón lo corre")
+	eq(s.player.count("fish_small"), 1, "con perro no se lleva nada")
+	s.camp.wood = 9
+	var st := Nights._stranger(s, CONTENT)
+	eq(st["n"], CONTENT.balance.stranger_wood_max, "el desconocido se lleva leña con tope")
+	eq(s.camp.wood, 9 - CONTENT.balance.stranger_wood_max, "falta esa leña")
+	return true
+
+
+func test_lights_mystery_ends_with_reward() -> bool:
+	var s := fed(new_state(5))
+	var money := s.player.wallet_cents
+	var guard := 0
+	while s.camp.night_thread < Nights.LIGHTS_EPISODES and guard < 300:
+		guard += 1
+		advance_fed(s)
+		s.player.bag.clear()
+		s.camp.wood = 0
+		Simulation.go_to_bed(fed(s), CONTENT)
+	eq(s.camp.night_thread, Nights.LIGHTS_EPISODES, "el misterio de las luces llega al final")
+	check(s.has_fact("player", "lights_solved"), "queda resuelto")
+	check(s.player.wallet_cents >= money + Money.from_units(CONTENT.balance.lights_reward_uc), "el bolso tenía plata")
+	for i in range(1, Nights.LIGHTS_EPISODES + 1):
+		check(Texts.t("EV_LIGHTS_%d" % i) != "EV_LIGHTS_%d" % i, "capítulo %d de las luces" % i)
+	return true
+
+
+func test_beto_arrives_places_and_tends_fire() -> bool:
+	var s := fed(new_state())
+	s.camp.weather = Weather.CLOUDY
+	var rep := Simulation.advance_to_end_of_day(s, CONTENT, true)
+	check(not Neighbors.is_present(s, "beto"), "sin ahumado no viene nadie")
+	s.facts["player"]["smoked_once"] = true
+	rep = Simulation.advance_to_end_of_day(s, CONTENT, true)
+	check(Neighbors.is_present(s, "beto"), "el olor del ahumado trae a Beto")
+	check(rep.events.any(func(e: Dictionary) -> bool: return e["key"] == "EV_BETO_ARRIVES"), "el informe avisa")
+	check(not Neighbors.is_living(s, "beto"), "todavía no eligió lugar")
+	eq(Neighbors.place(s, "beto", "roof").code, "bad_spot", "solo lugares válidos")
+	check(Neighbors.place(s, "beto", "lake").ok, "carpa cerca del lago")
+	eq(Neighbors.place(s, "beto", "back").code, "already_placed", "una sola carpa")
+	eq(Neighbors.living_count(s), 1, "un vecino")
+	# Cuida el fuego con tu leña.
+	s.tick += 60  # de día
+	s.camp.weather = Weather.CLOUDY
+	s.camp.rain_start = -1
+	s.camp.rain_end = -1
+	s.camp.fire_until = -1
+	s.camp.wood = 2
+	Simulation.step(fed(s), CONTENT)
+	check(Simulation.fire_lit(s), "Beto prendió el fogón")
+	eq(s.camp.wood, 1, "con tu leña")
+	# Charla: un capítulo por día.
+	eq(Neighbors.talk(s, "beto"), "BETO_EP_1", "primer capítulo")
+	eq(Neighbors.talk(s, "beto"), "", "uno por día")
+	for n in range(1, Neighbors.EPISODES + 1):
+		check(Texts.t("BETO_EP_%d" % n) != "BETO_EP_%d" % n, "existe BETO_EP_%d" % n)
+	# Impuesto Beto.
+	s.player.add_item("fish_small_smoked", 2)
+	rep = Simulation.advance_to_end_of_day(s, CONTENT, true)
+	eq(s.player.count("fish_small_smoked"), 1, "se comió un ahumado")
+	check(rep.events.any(func(e: Dictionary) -> bool: return e["key"] == "EV_BETO_TAX"), "y lo confiesa en el informe")
+	return true
+
+
+func test_longline_fishes_overnight() -> bool:
+	var s := fed(new_state())
+	eq(PlayerActions.collect_longline(s, CONTENT).code, "no_longline", "sin espinel no hay nada")
+	s.camp.buildings.append("longline")
+	Simulation.advance_to_end_of_day(s, CONTENT, true)
+	var n := PlayerActions.longline_count(s)
+	check(n >= CONTENT.balance.longline_min and n <= CONTENT.balance.longline_max, "amaneció pescado (%d)" % n)
+	s.player.add_item("bread", PlayerActions.bag_capacity(s, CONTENT) - 1)
+	var r := PlayerActions.collect_longline(s, CONTENT)
+	eq(r.data["count"], 1, "saca lo que entra")
+	var left := PlayerActions.longline_count(s)
+	var rep := Simulation.advance_to_end_of_day(s, CONTENT, true)
+	check(rep.rotten >= left + 1, "lo que quedó en el espinel se pudre con el resto")
+	return true
+
+
+func test_craving_pays_more_prices_never_drop() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	add_pass(s, 50, "chola", -3.0)
+	Merchants.hail(s, CONTENT, 50)
+	s.camp.craving = {"merchant": "chola", "item": "fish_big"}
+	var base := CONTENT.find_merchant("chola").buy_price_cents("fish_big")
+	eq(Merchants.buy_price_today(s, CONTENT, "chola", "fish_big"), base + base / 2, "el antojo paga 50 % más")
+	eq(Merchants.buy_price_today(s, CONTENT, "chola", "fish_small"), CONTENT.find_merchant("chola").buy_price_cents("fish_small"), "lo demás, normal")
+	s.player.add_item("fish_big", 4)
+	Merchants.sell_to(s, CONTENT, 50, "fish_big", 4)
+	eq(Merchants.buy_price_today(s, CONTENT, "chola", "fish_big"), base + base / 2, "vender mucho no baja el precio")
+	var plans := 0
+	for i in 10:
+		advance_fed(s)
+		if not s.camp.craving.is_empty():
+			plans += 1
+			var who := String(s.camp.craving["merchant"])
+			check(s.camp.passes.any(func(p: Dictionary) -> bool: return p["merchant"] == who), "el del antojo pasa ese día")
+	check(plans > 0, "hay antojos")
+	return true
+
+
+func test_materials_storage_and_goal() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	add_pass(s, 60, "chola", -3.0)
+	Merchants.hail(s, CONTENT, 60)
+	give_money(s, 2000)
+	var bag_before := s.player.bag_count()
+	check(Merchants.buy_from(s, CONTENT, 60, "cement").ok, "compra cemento")
+	eq(int(s.camp.storage.get("cement", 0)), 1, "va al acopio")
+	eq(s.player.bag_count(), bag_before, "no ocupa la mochila")
+	check(not StageGoal.is_complete(s, CONTENT), "falta un montón")
+	eq(StageGoal.found(s, CONTENT).code, "goal_incomplete", "no se funda incompleto")
+	s.camp.storage = {"cement": 6, "sheet_metal": 11}
+	s.facts["player"]["has_deed"] = true
+	for id in ["beto", "x2", "x3"]:
+		s.camp.neighbors[id] = {"spot": id, "since": 1, "talked_day": 0, "ep": 0}
+	check(StageGoal.is_complete(s, CONTENT), "con todo se puede fundar")
+	var wallet := s.player.wallet_cents
+	check(StageGoal.found(s, CONTENT).ok, "pueblito fundado")
+	eq(s.player.wallet_cents, wallet - Money.from_units(CONTENT.balance.goal_money_uc), "se paga la plata")
+	eq(s.camp.storage, {"sheet_metal": 1}, "se usan los materiales y sobra una chapa")
+	check(StageGoal.is_founded(s), "queda fundado")
+	eq(StageGoal.found(s, CONTENT).code, "duplicate", "no se funda dos veces")
+	check(s.player.is_consistent(), "la billetera cuadra")
+	return true
+
+
+func test_bike_saves_food_and_water() -> bool:
+	var a := fed(new_state())
+	var b := fed(new_state())
+	b.player.add_tool(CONTENT.find_item("bike"))
+	for i in 100:
+		Simulation.step(a, CONTENT)
+		Simulation.step(b, CONTENT)
+	check(b.player.hunger_bp > a.player.hunger_bp, "con bici da menos hambre")
+	check(b.player.thirst_bp > a.player.thirst_bp, "y menos sed")
+	return true
+
+
+func test_v5_roundtrip_new_fields() -> bool:
+	var svc := _service()
+	var s := fed(new_state(77))
+	s.camp.buildings.append("longline")
+	s.camp.storage = {"cement": 2}
+	s.camp.craving = {"merchant": "coco", "item": "fish_small"}
+	s.facts["player"]["smoked_once"] = true
+	for d in 4:
+		advance_fed(s)
+		Simulation.go_to_bed(fed(s), CONTENT)
+	Neighbors.place(s, "beto", "road")
+	Neighbors.talk(s, "beto")
+	s.player.wear_tool("rod_basic")
+	for i in 37:
+		Simulation.step(fed(s), CONTENT)
+	check(svc.write_state(s, CONTENT, "test", "v5").ok, "guardado")
+	var loaded := svc.read_slot("v5", CONTENT)
+	check(loaded["ok"], "carga: %s" % loaded["message"])
+	if not loaded["ok"]:
+		return false
+	var l: GameState = loaded["state"]
+	eq(JSON.stringify(l.to_dict("test")), JSON.stringify(s.to_dict("test")), "estado v5 idéntico tras guardar y cargar")
+	# La partida cargada sigue igual que la original.
+	for i in 600:
+		Simulation.step(fed(s), CONTENT)
+		Simulation.step(fed(l), CONTENT)
+	eq(JSON.stringify(l.to_dict("test")), JSON.stringify(s.to_dict("test")), "y sigue igual 600 pasos después")
+	return true
+
+
+func test_fixture_v5_loads() -> bool:
+	var r := _load_fixture(FIXTURE_V5)
+	check(r["ok"], "el fixture v5 carga: %s" % r.get("message", ""))
+	if not r["ok"]:
+		return false
+	var s: GameState = r["state"]
+	check(Neighbors.is_living(s, "beto"), "Beto vive en su carpa")
+	eq(Neighbors.spot_of(s, "beto"), "back", "atrás de la carpa")
+	eq(int(s.camp.storage.get("cement", 0)), 1, "una bolsa de cemento en el acopio")
+	check(s.camp.has_building("longline"), "espinel")
+	check(not s.reports[-1].events.is_empty(), "el informe guarda lo que pasó de noche")
+	return true
+
+
+func test_v4_migrates_to_v5_defaults() -> bool:
+	var r := _load_fixture(FIXTURE_V4)
+	check(r["ok"], "el fixture v4 migra: %s" % r.get("message", ""))
+	if not r["ok"]:
+		return false
+	var s: GameState = r["state"]
+	eq(s.camp.weather, Weather.SUN, "arranca con sol")
+	check(not Simulation.fire_lit(s), "fogón apagado hasta que eches leña")
+	eq(int(s.player.tool_wear.get("rod_basic", 0)), CONTENT.find_item("rod_basic").durability, "la caña con todos sus usos")
+	check(s.camp.neighbors.is_empty() and s.camp.storage.is_empty(), "sin vecinos ni acopio")
+	var rep := Simulation.go_to_bed(fed(s), CONTENT)
+	check(rep != null and not rep.events.is_empty(), "la partida migrada sigue andando")
 	return true

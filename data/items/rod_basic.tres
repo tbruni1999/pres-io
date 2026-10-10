@@ -12,3 +12,4 @@ bite_max_s = 15.0
 big_chance_bp = 1200
 needle_mult = 1.0
 tier = 1
+durability = 40

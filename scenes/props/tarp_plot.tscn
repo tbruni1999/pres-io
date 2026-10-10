@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/camp_piece.gd" id="1_camp_piece"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="3_wood_new"]
+[ext_resource type="Material" path="res://assets/materials/tape_white.tres" id="4_tape_white"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="5_interactable"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="6_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/canvas.tres" id="7_canvas"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.6, 0.4, 0.6)
+
+[node name="TarpPlot" type="Node3D"]
+script = ExtResource("1_camp_piece")
+mode = 0
+target_id = "tarp"
+
+[node name="Before" type="Node3D" parent="."]
+position = Vector3(1.35, 0, -1)
+
+[node name="Stake0" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.3, 0.25, -0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake1" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.3, 0.25, -0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake2" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.3, 0.25, 0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="Stake3" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.3, 0.25, 0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("3_wood_new")
+casts_shadow = false
+
+[node name="StringA" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, -0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.6, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringB" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, 0.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.6, 0.01, 0.01)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringC" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.3, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 0.6)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="StringD" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.3, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 0.6)
+material = ExtResource("4_tape_white")
+casts_shadow = false
+
+[node name="Build" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 0.2, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_interactable")
+kind = 5
+
+[node name="Shape" type="CollisionShape3D" parent="Before/Build"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="After" type="Node3D" parent="."]
+visible = false
+
+[node name="Post0" type="MeshInstance3D" parent="After"]
+position = Vector3(-1, 1.05, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 2.1, 0.07)
+material = ExtResource("6_wood_old")
+
+[node name="Post1" type="MeshInstance3D" parent="After"]
+position = Vector3(1, 1.05, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 2.1, 0.07)
+material = ExtResource("6_wood_old")
+
+[node name="Post2" type="MeshInstance3D" parent="After"]
+position = Vector3(-1, 0.9, 1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 1.8, 0.07)
+material = ExtResource("6_wood_old")
+
+[node name="Post3" type="MeshInstance3D" parent="After"]
+position = Vector3(1, 0.9, 1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 1.8, 0.07)
+material = ExtResource("6_wood_old")
+
+[node name="Canvas" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 1.97, 0)
+rotation_degrees = Vector3(-8, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(2.3, 0.03, 2.3)
+material = ExtResource("7_canvas")
+
+[node name="Rope" type="MeshInstance3D" parent="After"]
+position = Vector3(1, 1.4, 1.6)
+rotation_degrees = Vector3(-50, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1.2)
+material = ExtResource("4_tape_white")
+casts_shadow = false

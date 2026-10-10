@@ -9,4 +9,4 @@ name_key = "BUILD_SMOKEHOUSE"
 wood = 10
 money_uc = 120
 checks = 6
-order = 3
+order = 4
