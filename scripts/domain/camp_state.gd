@@ -43,7 +43,7 @@ func to_dict() -> Dictionary:
 		ps.append({
 			"id": p["id"], "merchant": p["merchant"], "start": str(p["start"]), "status": p["status"],
 			"stop_tick": str(p["stop_tick"]), "leave_tick": str(p["leave_tick"]), "bought": p["bought"],
-			"x": snappedf(float(p.get("x", -Merchants.ROAD_HALF - 1.0)), 0.0001), "v": snappedf(float(p.get("v", 0.0)), 0.0001),
+			"x": float(p.get("x", -Merchants.ROAD_HALF - 1.0)), "v": float(p.get("v", 0.0)),
 			"visited": bool(p.get("visited", false)),
 		})
 	var cut: Array = []

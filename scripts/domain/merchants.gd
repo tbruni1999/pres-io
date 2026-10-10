@@ -127,7 +127,8 @@ static func update(state: GameState, content: GameContent) -> void:
 				if not blocker.is_empty():
 					limit = float(blocker["x"]) - gap
 				var target := minf(x + v, limit)
-				if has_sign and x < 0.0 and target >= 0.0 and limit >= 0.0:
+				# Para una sola vez por pasada (stop_tick < 0), sin depender de redondeos de x.
+				if has_sign and int(p["stop_tick"]) < 0 and x <= 0.0 and target >= 0.0 and limit >= 0.0:
 					# Con el cartel, para justo frente a la choza.
 					p["v"] = 0.0 - x
 					p["x"] = 0.0

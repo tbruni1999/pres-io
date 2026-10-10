@@ -17,6 +17,11 @@ const HAIL_DISTANCE_Z := 7.0
 const HAIL_DISTANCE_X := 32.0
 const TRADE_DISTANCE := 4.5
 
+## Carril de los que esperan (lado de la carpa) y carril de sobrepaso (metros desde el centro).
+const LANE_IN := -0.9
+const LANE_OUT := 1.4
+const LANE_CHANGE_SPEED := 2.5
+
 var _actors: Dictionary = {}
 var _last_status: Dictionary = {}
 
@@ -57,8 +62,12 @@ func _process(_delta: float) -> void:
 			if actor == null:
 				actor = VEHICLES.get(def.vehicle, VEHICLES["horse"]).instantiate()
 				add_child(actor)
+				actor.position.z = LANE_OUT if p["status"] == Merchants.LEAVING else LANE_IN
 				_actors[id] = actor
-			actor.position = Vector3(clampf(Merchants.position_x(p, frac), -Merchants.ROAD_HALF - 5.0, Merchants.ROAD_HALF + 5.0), 0.0, 0.0)
+			# Los que se van sobrepasan por el otro carril para no atravesar a los que esperan.
+			var lane := LANE_OUT if p["status"] == Merchants.LEAVING else LANE_IN
+			var z := move_toward(actor.position.z, lane, LANE_CHANGE_SPEED * get_process_delta_time())
+			actor.position = Vector3(clampf(Merchants.position_x(p, frac), -Merchants.ROAD_HALF - 5.0, Merchants.ROAD_HALF + 5.0), 0.0, z)
 			actor.set_moving(not Merchants.is_waiting(p))
 	for id in _actors.keys():
 		if not seen.has(id):

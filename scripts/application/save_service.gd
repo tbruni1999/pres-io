@@ -30,7 +30,8 @@ func write_state(state: GameState, content: GameContent, game_version: String, s
 	var final_path := slot_path(slot)
 	var tmp_path := final_path + ".tmp"
 	var bak_path := final_path + ".bak"
-	var text := JSON.stringify(state.to_dict(game_version), "\t")
+	# Precisión completa: las posiciones de los comerciantes son floats y no pueden redondearse.
+	var text := JSON.stringify(state.to_dict(game_version), "\t", true, true)
 
 	var f := FileAccess.open(tmp_path, FileAccess.WRITE)
 	if f == null:

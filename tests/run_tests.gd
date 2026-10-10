@@ -67,6 +67,7 @@ func _initialize() -> void:
 		"test_start_in_tent_with_campfire",
 		"test_fixture_v4_loads",
 		"test_merchant_story_episodes_and_dog",
+		"test_save_load_every_tick_keeps_merchant_timeline",
 	]
 	for t in tests:
 		_current = t
@@ -1005,4 +1006,21 @@ func test_merchant_story_episodes_and_dog() -> bool:
 		for n in range(1, Merchants.EPISODES + 1):
 			var k := "%s_EP_%d" % [key, n]
 			check(Texts.t(k) != k, "existe el capítulo %s" % k)
+	return true
+
+
+## Guardar y cargar en cualquier momento no cambia lo que hacen los comerciantes después.
+func test_save_load_every_tick_keeps_merchant_timeline() -> bool:
+	var svc := _service()
+	var base := fed(new_state(1))
+	base.camp.buildings.append("sign")
+	for t in range(0, 140, 7):
+		while base.tick < t:
+			Simulation.step(fed(base), CONTENT)
+		var loaded: GameState = svc.parse_text(JSON.stringify(base.to_dict("t"), "", true, true), CONTENT)["state"]
+		var a := GameState.from_dict(base.to_dict("t"), CONTENT)["state"] as GameState
+		for i in 120:
+			Simulation.step(fed(a), CONTENT)
+			Simulation.step(fed(loaded), CONTENT)
+		eq(JSON.stringify(loaded.camp.to_dict()), JSON.stringify(a.camp.to_dict()), "misma agenda tras guardar en el tick %d" % t)
 	return true
