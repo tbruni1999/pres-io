@@ -12,6 +12,8 @@ var next_pass_id: int = 1
 var branches_taken: PackedStringArray = PackedStringArray()
 ## tree_id -> jornada en que se taló.
 var trees_cut: Dictionary = {}
+## Visitas que tuvo cada comerciante (avanza su historia por entregas).
+var merchant_visits: Dictionary = {}
 ## Ahumadero: item crudo -> cantidad cargada, y tick en que la tanda está lista (-1 = vacío).
 var smoker_items: Dictionary = {}
 var smoker_ready_tick: int = -1
@@ -41,6 +43,8 @@ func to_dict() -> Dictionary:
 		ps.append({
 			"id": p["id"], "merchant": p["merchant"], "start": str(p["start"]), "status": p["status"],
 			"stop_tick": str(p["stop_tick"]), "leave_tick": str(p["leave_tick"]), "bought": p["bought"],
+			"x": snappedf(float(p.get("x", -Merchants.ROAD_HALF - 1.0)), 0.0001), "v": snappedf(float(p.get("v", 0.0)), 0.0001),
+			"visited": bool(p.get("visited", false)),
 		})
 	var cut: Array = []
 	var keys := trees_cut.keys()
@@ -55,6 +59,7 @@ func to_dict() -> Dictionary:
 		"branches_taken": Array(branches_taken),
 		"trees_cut": cut,
 		"smoker_items": _items_to_list(smoker_items),
+		"merchant_visits": _items_to_list(merchant_visits),
 		"smoker_ready_tick": str(smoker_ready_tick),
 	}
 
@@ -92,6 +97,9 @@ static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> Cam
 			"stop_tick": r.get_big_int(p, "stop_tick", w + ".passes", -1, 1 << 62),
 			"leave_tick": r.get_big_int(p, "leave_tick", w + ".passes", -1, 1 << 62),
 			"bought": r.get_small_int(p, "bought", w + ".passes", 0, 100000),
+			"x": r.get_finite_float([p.get("x")], 0, w + ".passes.x"),
+			"v": r.get_finite_float([p.get("v")], 0, w + ".passes.v"),
+			"visited": r.get_bool(p, "visited", w + ".passes"),
 		})
 	c.next_pass_id = r.get_small_int(d, "next_pass_id", w, 1, 100_000_000)
 	for b in r.get_array(d, "branches_taken", w):
@@ -108,6 +116,12 @@ static func from_dict(d: Dictionary, r: DictReader, content: GameContent) -> Cam
 				r.fail(w + ".smoker_items", "no se puede ahumar '%s'" % id)
 			c.smoker_items[id] = r.get_small_int(it, "count", w + ".smoker_items", 1, 100000)
 	c.smoker_ready_tick = r.get_big_int(d, "smoker_ready_tick", w, -1, 1 << 62)
+	for it in r.get_array(d, "merchant_visits", w):
+		if it is Dictionary:
+			var mid := r.get_string(it, "id", w + ".merchant_visits")
+			if content.find_merchant(mid) == null:
+				r.fail(w + ".merchant_visits", "comerciante desconocido '%s'" % mid)
+			c.merchant_visits[mid] = r.get_small_int(it, "count", w + ".merchant_visits", 0, 1_000_000)
 	if c.smoker_items.is_empty() != (c.smoker_ready_tick < 0):
 		r.fail(w, "ahumadero inconsistente (carga y hora de listo)")
 	return c

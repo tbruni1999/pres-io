@@ -35,6 +35,8 @@ extends Resource
 @export var start_hunger_bp: int = 7000
 @export var start_thirst_bp: int = 7000
 @export var start_tools: PackedStringArray = PackedStringArray(["rod_basic"])
+## Lo que ya hay al empezar: una fogatita al lado de la carpa.
+@export var start_buildings: PackedStringArray = PackedStringArray(["fire"])
 ## Lo que bajan hambre y sed por paso administrativo (1 s), en puntos básicos.
 @export var hunger_decay_bp: int = 14
 @export var thirst_decay_bp: int = 21
@@ -69,6 +71,8 @@ extends Resource
 @export var merchant_passes_per_day: int = 4
 ## Cuánto espera parado si nadie le compra (pasos de 1 s).
 @export var merchant_stop_ticks: int = 45
+## Distancia entre vehículos cuando hacen fila frente a la choza (metros).
+@export var merchant_queue_gap: float = 7.5
 ## El primero en pasar el día 1 (para conocer el juego).
 @export var first_merchant: String = "ramiro"
 

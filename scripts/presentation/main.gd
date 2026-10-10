@@ -12,6 +12,7 @@ func _ready() -> void:
 	Game.player_pose_provider = player.get_pose
 	Game.state_replaced.connect(_place_player)
 	ui.wake_at_home.connect(go_home)
+	$World/Dog.player = player
 	_place_player()
 
 

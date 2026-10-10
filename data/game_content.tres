@@ -20,6 +20,7 @@
 [ext_resource type="Resource" path="res://data/items/fish_small_smoked.tres" id="18_fish_small_smoked"]
 [ext_resource type="Resource" path="res://data/items/fish_big_smoked.tres" id="19_fish_big_smoked"]
 [ext_resource type="Resource" path="res://data/buildings/smokehouse.tres" id="20_smokehouse"]
+[ext_resource type="Resource" path="res://data/buildings/shack.tres" id="21_shack"]
 
 [resource]
 script = ExtResource("1_gc")
@@ -27,5 +28,5 @@ balance = ExtResource("2_bal")
 projects = [ExtResource("3_well")]
 items = [ExtResource("4_fish_small"), ExtResource("5_fish_big"), ExtResource("6_bread"), ExtResource("7_water_jug"), ExtResource("8_rod_basic"), ExtResource("9_rod_good"), ExtResource("10_cooler"), ExtResource("11_axe"), ExtResource("18_fish_small_smoked"), ExtResource("19_fish_big_smoked")]
 merchants = [ExtResource("12_ramiro"), ExtResource("13_chola"), ExtResource("14_coco")]
-buildings = [ExtResource("15_fire"), ExtResource("16_sign"), ExtResource("17_dock"), ExtResource("20_smokehouse")]
+buildings = [ExtResource("15_fire"), ExtResource("16_sign"), ExtResource("17_dock"), ExtResource("20_smokehouse"), ExtResource("21_shack")]
 fact_subjects = PackedStringArray("player", "neighbor_rosa")

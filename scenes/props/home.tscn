@@ -1,0 +1,405 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/camp_piece.gd" id="1_camp_piece"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/canvas.tres" id="3_canvas"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="4_wood_old"]
+[ext_resource type="Material" path="res://assets/materials/cloth_red.tres" id="5_cloth_red"]
+[ext_resource type="Material" path="res://assets/materials/paper.tres" id="6_paper"]
+[ext_resource type="Material" path="res://assets/materials/wood_new.tres" id="7_wood_new"]
+[ext_resource type="Material" path="res://assets/materials/tape_white.tres" id="8_tape_white"]
+[ext_resource type="Material" path="res://assets/materials/plastic_blue.tres" id="9_plastic_blue"]
+[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="10_metal_rust"]
+[ext_resource type="Material" path="res://assets/materials/bulb.tres" id="11_bulb"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="12_interactable"]
+[ext_resource type="Material" path="res://assets/materials/window_dark.tres" id="13_window_dark"]
+[ext_resource type="Material" path="res://assets/materials/zinc_rust.tres" id="14_zinc_rust"]
+[ext_resource type="Material" path="res://assets/materials/zinc.tres" id="15_zinc"]
+[ext_resource type="Material" path="res://assets/materials/wood.tres" id="16_wood"]
+[ext_resource type="Material" path="res://assets/materials/cloth_apron.tres" id="17_cloth_apron"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1.5, 0.9, 2.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(0.4, 0.5, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(1, 0.6, 2)
+
+[node name="Home" type="Node3D"]
+script = ExtResource("1_camp_piece")
+mode = 0
+target_id = "shack"
+
+[node name="Before" type="Node3D" parent="."]
+
+[node name="TarpL" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.48, 0.62, -0.6)
+rotation_degrees = Vector3(0, 0, 52)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.25, 0.04, 2.2)
+material = ExtResource("3_canvas")
+
+[node name="TarpR" type="MeshInstance3D" parent="Before"]
+position = Vector3(0.48, 0.62, -0.6)
+rotation_degrees = Vector3(0, 0, -52)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.25, 0.04, 2.2)
+material = ExtResource("3_canvas")
+
+[node name="Ridge" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 1.12, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.05, 2.4)
+material = ExtResource("4_wood_old")
+casts_shadow = false
+
+[node name="PoleF" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.57, 0.55)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 1.15, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="PoleB" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.57, -1.75)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 1.15, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="BackFlap" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.45, -1.72)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.4, 0.9, 0.03)
+material = ExtResource("3_canvas")
+
+[node name="Bedroll" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.06, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.75, 0.12, 1.8)
+material = ExtResource("5_cloth_red")
+
+[node name="Pillow" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.15, -1.3)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.1, 0.3)
+material = ExtResource("6_paper")
+
+[node name="Peg0" type="MeshInstance3D" parent="Before"]
+position = Vector3(-1.3, 0.1, 0.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.2, 0.04)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Peg1" type="MeshInstance3D" parent="Before"]
+position = Vector3(1.3, 0.1, 0.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.2, 0.04)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Peg2" type="MeshInstance3D" parent="Before"]
+position = Vector3(-1.3, 0.1, -2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.2, 0.04)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Peg3" type="MeshInstance3D" parent="Before"]
+position = Vector3(1.3, 0.1, -2)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.04, 0.2, 0.04)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="GuyF" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.7, 1.05)
+rotation_degrees = Vector3(-40, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 1.4)
+material = ExtResource("8_tape_white")
+casts_shadow = false
+
+[node name="Bucket" type="MeshInstance3D" parent="Before"]
+position = Vector3(1, 0.15, 0.5)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.3, 0.3, 0.3)
+material = ExtResource("9_plastic_blue")
+
+[node name="Can" type="MeshInstance3D" parent="Before"]
+position = Vector3(-0.9, 0.08, 0.6)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.12, 0.16, 0.12)
+material = ExtResource("10_metal_rust")
+
+[node name="Rod" type="MeshInstance3D" parent="Before"]
+position = Vector3(1.4, 1, -0.4)
+rotation_degrees = Vector3(0, 0, 12)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 2, 0.03)
+material = ExtResource("7_wood_new")
+
+[node name="Lantern" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.98, 0.5)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.12, 0.18, 0.12)
+material = ExtResource("11_bulb")
+casts_shadow = false
+
+[node name="TentLight" type="OmniLight3D" parent="Before" groups=["night_lights"]]
+position = Vector3(0, 0.9, 0.7)
+light_color = Color(1, 0.78, 0.48, 1)
+light_energy = 1.2
+omni_range = 5.5
+shadow_enabled = false
+
+[node name="Bed" type="StaticBody3D" parent="Before"]
+position = Vector3(0, 0.45, -0.6)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("12_interactable")
+kind = 2
+
+[node name="Shape" type="CollisionShape3D" parent="Before/Bed"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="Stake0" type="MeshInstance3D" parent="Before"]
+position = Vector3(-2.2, 0.25, -1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Stake1" type="MeshInstance3D" parent="Before"]
+position = Vector3(2.2, 0.25, -1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Stake2" type="MeshInstance3D" parent="Before"]
+position = Vector3(-2.2, 0.25, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="Stake3" type="MeshInstance3D" parent="Before"]
+position = Vector3(2.2, 0.25, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.5, 0.05)
+material = ExtResource("7_wood_new")
+casts_shadow = false
+
+[node name="StringA" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, -1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(4.4, 0.01, 0.01)
+material = ExtResource("8_tape_white")
+casts_shadow = false
+
+[node name="StringB" type="MeshInstance3D" parent="Before"]
+position = Vector3(0, 0.42, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(4.4, 0.01, 0.01)
+material = ExtResource("8_tape_white")
+casts_shadow = false
+
+[node name="StringC" type="MeshInstance3D" parent="Before"]
+position = Vector3(-2.2, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 3.6)
+material = ExtResource("8_tape_white")
+casts_shadow = false
+
+[node name="StringD" type="MeshInstance3D" parent="Before"]
+position = Vector3(2.2, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.01, 0.01, 3.6)
+material = ExtResource("8_tape_white")
+casts_shadow = false
+
+[node name="BuildShack" type="StaticBody3D" parent="Before"]
+position = Vector3(2.2, 0.25, 1.8)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("12_interactable")
+kind = 5
+
+[node name="Shape" type="CollisionShape3D" parent="Before/BuildShack"]
+shape = SubResource("BoxShape3D_2")
+
+[node name="After" type="Node3D" parent="."]
+visible = false
+
+[node name="WallBack" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 1.15, -1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(4.4, 2.3, 0.12)
+material = ExtResource("4_wood_old")
+collide = true
+
+[node name="WallWest" type="MeshInstance3D" parent="After"]
+position = Vector3(-2.2, 1.15, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.12, 2.3, 3.6)
+material = ExtResource("4_wood_old")
+collide = true
+
+[node name="WallEast" type="MeshInstance3D" parent="After"]
+position = Vector3(2.2, 1.15, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.12, 2.3, 3.6)
+material = ExtResource("4_wood_old")
+collide = true
+
+[node name="WallFrontA" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.375, 1.15, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.65, 2.3, 0.12)
+material = ExtResource("4_wood_old")
+collide = true
+
+[node name="WallFrontB" type="MeshInstance3D" parent="After"]
+position = Vector3(1.375, 1.15, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.65, 2.3, 0.12)
+material = ExtResource("4_wood_old")
+collide = true
+
+[node name="WallFrontTop" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 2.1, 1.8)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.1, 0.4, 0.12)
+material = ExtResource("4_wood_old")
+
+[node name="PlankPatch" type="MeshInstance3D" parent="After"]
+position = Vector3(1.3, 1.1, 1.87)
+rotation_degrees = Vector3(0, 0, 8)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.9, 0.5, 0.02)
+material = ExtResource("7_wood_new")
+
+[node name="Window" type="MeshInstance3D" parent="After"]
+position = Vector3(2.27, 1.4, -0.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.02, 0.5, 0.7)
+material = ExtResource("13_window_dark")
+
+[node name="Roof" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 2.34, 0.15)
+script = ExtResource("2_kit_shape")
+size = Vector3(5, 0.06, 4.4)
+material = ExtResource("14_zinc_rust")
+
+[node name="RoofPatch" type="MeshInstance3D" parent="After"]
+position = Vector3(-0.8, 2.38, -0.6)
+rotation_degrees = Vector3(0, 12, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(1.2, 0.02, 0.9)
+material = ExtResource("15_zinc")
+
+[node name="Floor" type="MeshInstance3D" parent="After"]
+position = Vector3(0, 0.015, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(4.2, 0.03, 3.4)
+material = ExtResource("16_wood")
+
+[node name="BedFrame" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.55, 0.16, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.95, 0.32, 2)
+material = ExtResource("4_wood_old")
+
+[node name="Mattress" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.55, 0.38, -0.6)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.85, 0.12, 1.85)
+material = ExtResource("17_cloth_apron")
+
+[node name="Blanket" type="MeshInstance3D" parent="After"]
+position = Vector3(-1.55, 0.46, -0.15)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.88, 0.05, 1.1)
+material = ExtResource("5_cloth_red")
+
+[node name="Bed" type="StaticBody3D" parent="After"]
+position = Vector3(-1.55, 0.3, -0.6)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("12_interactable")
+kind = 2
+
+[node name="Shape" type="CollisionShape3D" parent="After/Bed"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="Table" type="MeshInstance3D" parent="After"]
+position = Vector3(1.4, 0.72, -1.25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.8, 0.05, 0.6)
+material = ExtResource("16_wood")
+
+[node name="Leg0" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.35, -1.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.7, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="Leg1" type="MeshInstance3D" parent="After"]
+position = Vector3(1.75, 0.35, -1.5)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.7, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="Leg2" type="MeshInstance3D" parent="After"]
+position = Vector3(1.05, 0.35, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.7, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="Leg3" type="MeshInstance3D" parent="After"]
+position = Vector3(1.75, 0.35, -1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.7, 0.05)
+material = ExtResource("4_wood_old")
+
+[node name="Lamp" type="MeshInstance3D" parent="After"]
+position = Vector3(1.3, 0.85, -1.25)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.12, 0.2, 0.12)
+material = ExtResource("11_bulb")
+casts_shadow = false
+
+[node name="Light" type="OmniLight3D" parent="After" groups=["night_lights"]]
+position = Vector3(1.2, 1.4, -1)
+light_color = Color(1, 0.8, 0.5, 1)
+light_energy = 1.1
+omni_range = 5.0
+shadow_enabled = false
+
+[node name="PorchLantern" type="MeshInstance3D" parent="After"]
+position = Vector3(0.9, 1.85, 2)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.16, 0.22, 0.16)
+material = ExtResource("11_bulb")
+casts_shadow = false
+
+[node name="PorchLight" type="OmniLight3D" parent="After" groups=["night_lights"]]
+position = Vector3(0.9, 1.8, 2.3)
+light_color = Color(1, 0.75, 0.45, 1)
+light_energy = 1.6
+omni_range = 7.0
+shadow_enabled = false
+
+[node name="Crate" type="MeshInstance3D" parent="After"]
+position = Vector3(1.6, 0.2, 1.1)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.5, 0.4, 0.5)
+material = ExtResource("7_wood_new")
+collide = true

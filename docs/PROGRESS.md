@@ -3,7 +3,20 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: "Choza y lago" + noche y ahumadero (7 de octubre de 2026)
+## Estado actual: carpa, fila de comerciantes, estética y diálogos (10 de octubre de 2026)
+
+Novedades de esta entrega:
+- **Arranque en carpa con fogatita** (la choza es una mejora construible).
+- **Fila de comerciantes**: cada pasada guarda su posición; los que llegan detrás de uno parado esperan a 7,5 m.
+- **Historias por entregas**: 10 capítulos por comerciante, uno por visita; el de Coco termina con el perro Polizón, que te sigue y de noche se echa junto al fuego.
+- **Estética** con técnicas livianas: texturas procedurales tileables de 512 px (compresión de GPU y mipmaps), mapeo triplanar
+  (sin costuras en primitivas), shader de suelo que mezcla tierra y pasto con una máscara, shader de agua con normales en movimiento
+  y fresnel, pasto y juncos con MultiMesh por zonas (sin sombras, con distancia máxima), glow suave, ajuste de contraste y saturación,
+  y parpadeo de la fogata.
+- Medido en el recorrido de capturas (render por software): máximo **256 llamadas de dibujo** y **~21.000 primitivas** por cuadro
+  (presupuesto del brief: 400 y 500.000). No hizo falta agrupar mallas estáticas: el número ya está por debajo del objetivo.
+
+## Estado anterior: "Choza y lago" + noche y ahumadero (7 de octubre de 2026)
 
 Cambio de dirección pedido por Tomás después de probar H1: empezar sin nada, muy manual y grindero,
 con NPC graciosos. El H1 anterior (asentamiento, escritorio, caja) quedó en el historial de Git
@@ -33,8 +46,8 @@ Contenedor Linux, Intel Xeon 2,1 GHz (4 vCPU), sin GPU. Godot 4.7.2 oficial.
 | Comprobación | Comando | Resultado |
 |---|---|---|
 | Importación | `godot --headless --path . --import` | sin errores |
-| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **41 pruebas, 354 comprobaciones OK** |
-| Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **57 comprobaciones OK** |
+| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **48 pruebas, 446 comprobaciones OK** |
+| Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **58 comprobaciones OK** |
 | Render real | `xvfb-run ... godot --path . res://tools/screenshot_tour.tscn` | 26 capturas sin errores de script (llvmpipe), incluidas atardecer y noche |
 
 Las pruebas de dominio cubren además de lo de H1: hambre/sed, cansancio, desmayo con castigo creciente,

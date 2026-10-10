@@ -14,3 +14,4 @@ sells = {"bread": 7, "water_jug": 5}
 requires_building = "sign"
 weight = 2
 lines_prefix = "COCO"
+story_end_fact = "has_dog"

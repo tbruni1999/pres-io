@@ -3,7 +3,7 @@ extends RefCounted
 ## Fuente de verdad de la partida. Los objetos 3D y la UI solo la representan.
 ## No depende del SceneTree: se puede crear, simular y validar en pruebas headless.
 
-const SCHEMA_VERSION := 3
+const SCHEMA_VERSION := 4
 const PLAYER_BOUNDS := 75.0
 
 var world_seed: int = 0
@@ -38,6 +38,7 @@ static func create_new(content: GameContent, seed_value: int) -> GameState:
 	s.treasury = TreasuryState.create(b.starting_cash_cents())
 	s.player = PlayerState.create(b)
 	s.camp = CampState.new()
+	s.camp.buildings = PackedStringArray(b.start_buildings)
 	for id in content.project_ids():
 		s.projects[id] = ProjectState.create(content.find_project(id))
 	for subject in content.fact_subjects:
@@ -133,6 +134,9 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	var migrated_v2 := version == 2
 	if version == 2:
 		d = migrate_v2_to_v3(d)
+		version = 3
+	if version == 3:
+		d = migrate_v3_to_v4(d, content)
 
 	var s := GameState.new()
 	var max_tick := 1 << 62
@@ -240,6 +244,35 @@ static func _drop_night_passes(s: GameState, content: GameContent) -> void:
 		var def := content.find_merchant(p["merchant"])
 		if p["status"] == Merchants.SCHEDULED and int(p["start"]) + def.crossing_ticks >= night_tick:
 			p["status"] = Merchants.GONE
+
+
+## v3 -> v4: los comerciantes guardan su posición (para formar fila) y el refugio
+## inicial pasó a ser una carpa: quien venía jugando ya tenía la choza, se la conserva.
+static func migrate_v3_to_v4(d: Dictionary, content: GameContent) -> Dictionary:
+	var out := d.duplicate(true)
+	out["schema_version"] = 4
+	var camp: Variant = out.get("camp")
+	if not (camp is Dictionary):
+		return out
+	var tick_v: Variant = out.get("tick")
+	var t := float(String(tick_v).to_int()) if tick_v is String else 0.0
+	var passes: Variant = camp.get("passes", [])
+	for p in (passes if passes is Array else []):
+		if not (p is Dictionary):
+			continue
+		var def := content.find_merchant(String(p.get("merchant", "")))
+		if def == null:
+			continue
+		var legacy := {"status": p.get("status", Merchants.SCHEDULED), "start": String(p.get("start", "0")).to_int(),
+			"stop_tick": String(p.get("stop_tick", "-1")).to_int(), "leave_tick": String(p.get("leave_tick", "-1")).to_int()}
+		p["x"] = Merchants.legacy_position_x(legacy, def, t)
+		p["v"] = Merchants.speed(def) if legacy["status"] in [Merchants.PASSING, Merchants.LEAVING] else 0.0
+		p["visited"] = false
+	camp["merchant_visits"] = []
+	var b: Variant = camp.get("buildings", [])
+	if b is Array and not b.has("shack"):
+		b.append("shack")
+	return out
 
 
 ## v2 (choza y lago) -> v3 (noche y ahumadero): ahumadero vacío y marca de "dormiste afuera".

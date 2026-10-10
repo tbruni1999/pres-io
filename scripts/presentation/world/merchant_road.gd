@@ -1,7 +1,7 @@
 class_name MerchantRoad
 extends Node3D
 ## Dibuja a los comerciantes del día sobre el camino. La posición sale de
-## Merchants.position_x(tick), así que se reconstruye sola tras cargar o al pausar.
+## la posición guardada de cada pasada (Merchants.position_x), así que se reconstruye sola tras cargar.
 ## El nodo se ubica en el centro del camino, frente a la choza (X = 0).
 
 signal merchant_arriving(def: MerchantDefinition)
@@ -38,7 +38,7 @@ func _reset() -> void:
 
 func _process(_delta: float) -> void:
 	var s := Game.state
-	var t := float(s.tick) + (0.0 if Game.is_paused() else Game.clock.step_fraction())
+	var frac := 0.0 if Game.is_paused() else Game.clock.step_fraction()
 	var seen := {}
 	for p in s.camp.passes:
 		var id := int(p["id"])
@@ -51,15 +51,15 @@ func _process(_delta: float) -> void:
 			elif status == Merchants.GONE and prev == Merchants.PASSING:
 				merchant_passed.emit(def)
 			_last_status[id] = status
-		if status in [Merchants.PASSING, Merchants.STOPPED, Merchants.LEAVING]:
+		if Merchants.is_on_road(p):
 			seen[id] = true
 			var actor: Node3D = _actors.get(id)
 			if actor == null:
 				actor = VEHICLES.get(def.vehicle, VEHICLES["horse"]).instantiate()
 				add_child(actor)
 				_actors[id] = actor
-			actor.position = Vector3(clampf(Merchants.position_x(p, def, t), -Merchants.ROAD_HALF - 5.0, Merchants.ROAD_HALF + 5.0), 0.0, 0.0)
-			actor.set_moving(status != Merchants.STOPPED)
+			actor.position = Vector3(clampf(Merchants.position_x(p, frac), -Merchants.ROAD_HALF - 5.0, Merchants.ROAD_HALF + 5.0), 0.0, 0.0)
+			actor.set_moving(not Merchants.is_waiting(p))
 	for id in _actors.keys():
 		if not seen.has(id):
 			_actors[id].queue_free()
@@ -79,7 +79,7 @@ func context_for(player_pos: Vector3) -> Dictionary:
 		if p["status"] == Merchants.PASSING and x >= Merchants.HAIL_MIN_X and x <= Merchants.HAIL_MAX_X \
 				and absf(local.z) < HAIL_DISTANCE_Z and absf(local.x - x) < HAIL_DISTANCE_X:
 			return {"kind": "hail", "pass_id": id, "name": name, "prefix": def.lines_prefix, "text": Texts.t("ACTION_HAIL", {"name": name})}
-		if p["status"] == Merchants.STOPPED and Vector2(local.x - x, local.z).length() < TRADE_DISTANCE:
+		if Merchants.is_waiting(p) and Vector2(local.x - x, local.z).length() < TRADE_DISTANCE:
 			return {"kind": "trade", "pass_id": id, "name": name, "prefix": def.lines_prefix, "text": Texts.t("ACTION_TRADE", {"name": name})}
 	return {}
 

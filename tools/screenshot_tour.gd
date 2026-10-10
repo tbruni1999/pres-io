@@ -32,6 +32,7 @@ func _run() -> void:
 
 	var spawn: Marker3D = main.get_node("World/PlayerSpawn")
 	await _shot("01_despertar", spawn.global_position, rad_to_deg(spawn.global_rotation.y), -4)
+	await _shot_at("01b_carpa", Vector3(4.5, 0.05, 6.0), Vector3(0.0, 0.6, -0.5))
 	await _shot_at("02_frente_choza", Vector3(-6.0, 0.05, 7.5), Vector3(0.0, 1.2, 0.0))
 	await _shot_at("03_camino", Vector3(0.5, 0.05, 4.0), Vector3(-25.0, 1.0, 12.6))
 	await _shot_at("04_lago", Vector3(-3.0, 0.05, -12.0), Vector3(2.0, 0.0, -36.0))
@@ -51,7 +52,7 @@ func _run() -> void:
 	while s.tick < int(p["start"]) + 14:
 		Simulation.step(s, game.content)
 	await _shot_at("06_ramiro_llega", Vector3(-6.0, 0.05, 9.0), Vector3(-20.0, 1.3, 12.6))
-	while Merchants.position_x(p, game.content.find_merchant("ramiro"), s.tick) < -8.0:
+	while Merchants.position_x(p) < -8.0:
 		Simulation.step(s, game.content)
 	await _frames(2)
 	player.apply_pose({"position": Vector3(-6.0, 0.05, 9.0), "yaw": 0.0, "pitch": 0.0})
@@ -115,10 +116,11 @@ func _run() -> void:
 	# Otros comerciantes.
 	for q in s.camp.passes:
 		q["status"] = Merchants.GONE
-	s.camp.passes.append({"id": 900, "merchant": "chola", "start": s.tick - 12, "status": Merchants.PASSING, "stop_tick": -1, "leave_tick": -1, "bought": 0})
-	s.camp.passes.append({"id": 901, "merchant": "coco", "start": s.tick - 20, "status": Merchants.PASSING, "stop_tick": -1, "leave_tick": -1, "bought": 0})
+	s.camp.passes.append({"id": 900, "merchant": "chola", "start": s.tick - 12, "status": Merchants.STOPPED, "stop_tick": s.tick, "leave_tick": s.tick + 999, "bought": 0, "visited": false, "x": 0.0, "v": 0.0})
+	s.camp.passes.append({"id": 901, "merchant": "coco", "start": s.tick - 20, "status": Merchants.QUEUED, "stop_tick": -1, "leave_tick": -1, "bought": 0, "visited": false, "x": -7.5, "v": 0.0})
+	s.camp.passes.append({"id": 902, "merchant": "ramiro", "start": s.tick - 20, "status": Merchants.QUEUED, "stop_tick": -1, "leave_tick": -1, "bought": 0, "visited": false, "x": -15.0, "v": 0.0})
 	await _frames(4)
-	await _shot_at("18_chola_y_coco", Vector3(-1.0, 0.05, 6.5), Vector3(-16.0, 1.2, 12.6))
+	await _shot_at("18_fila_comerciantes", Vector3(-1.0, 0.05, 6.5), Vector3(-16.0, 1.2, 12.6))
 
 	ui.open_panel(ui.bag, {})
 	await _frames(4)
@@ -165,3 +167,7 @@ func _shot(shot_name: String, pos: Vector3, yaw: float, pitch: float, settle: in
 func _capture(shot_name: String) -> void:
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(out_dir.path_join(shot_name + ".png"))
+	print("%-26s draw_calls=%4d primitivas=%7d objetos=%4d" % [shot_name,
+		Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
+		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)])

@@ -46,3 +46,5 @@ merchant_stop_ticks = 45
 first_merchant = "ramiro"
 smoker_capacity = 8
 smoke_ticks = 90
+merchant_queue_gap = 7.5
+start_buildings = PackedStringArray("fire")

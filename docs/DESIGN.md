@@ -33,12 +33,17 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Pozo y obras del barrio | No las hacés vos: son **beneficio comunitario** con colecta (vos aportás, los vecinos suman). |
 | Noche | La jornada va de 06:00 a 24:00. Desde las 19:30 atardece; desde las 21:00 es de noche: no pica nada y no pasan comerciantes. Si llegan las 24:00 y no estás en la cama, dormís afuera: amanecés en la choza con más hambre y sed. |
 | Ahumadero | 10 madera + 120 UC. Una tanda: hasta 8 pescados crudos + 1 madera, lista en ~3 h de juego. Lo ahumado no se pudre y se paga casi el doble. |
+| Refugio | Arrancás con una **carpita y una fogatita**. La choza es una mejora (15 madera + 100 UC). |
+| Comerciantes en fila | Si hay uno parado frente a la choza, los que vienen atrás **hacen fila** a 7,5 m y avanzan cuando se va el de adelante. Se les puede vender a todos. |
+| Historias por entregas | Cada comerciante cuenta un capítulo por visita (10 en total): Ramiro y la multa de Turbo, la Chola y la caja del remate (termina con la escritura del campo: hay que fundar pueblo), Coco y el ladrón de sánguches (termina con **Polizón, el perro**, que se queda con vos). |
 | Mina | Va **después** del ahumadero. El pico lo trae un **comerciante nuevo** que empieza a pasar más adelante (progresión posterior). |
 
 ## Progresión prevista
-1. **Choza y lago** (hecho): pesca, comerciantes, madera, fogón, cartel, muelle, noche y ahumadero.
-2. **Más actividades**: un comerciante nuevo trae el pico → minería con comprador de mineral; contratar un ayudante.
-3. **Llegan vecinos** atraídos por lo que armaste: Rosa, colectas (el pozo), favores y confianza.
+1. **Carpa y lago** (hecho): pesca, comerciantes en fila con historias por entregas, madera, fogatita, cartel, ahumadero, choza, muelle, noche y el perro.
+   Meta de ritmo: un salto grande cada ~10 días de juego (1-2 horas reales).
+2. **Tres locos en carpa**: primeros vecinos en carpas rudimentarias; la pesca empieza a automatizarse.
+3. **Pueblito**: otros empleos; recién acá el comerciante nuevo trae el pico y empieza la minería (que después también se automatiza).
+4. **Más vecinos** atraídos por lo que armaste: Rosa, colectas (el pozo), favores y confianza.
 4. **Referente → delegado**: caja común, primeras obras del barrio.
 5. **Alcalde → región → país**: impuestos, presupuestos, áreas; lo básico ya funciona solo.
 

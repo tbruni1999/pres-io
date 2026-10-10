@@ -4,7 +4,7 @@ extends SceneTree
 ## Los fixtures de esquemas anteriores (v1, v2) no se regeneran: son históricos.
 
 const CONTENT := preload("res://data/game_content.tres")
-const OUT := "res://tests/fixtures/save_v3_day2.json"
+const OUT := "res://tests/fixtures/save_v4_day2.json"
 
 
 func _initialize() -> void:
@@ -28,8 +28,18 @@ func _initialize() -> void:
 	PlayerActions.load_smoker(s, CONTENT)
 	for i in 30:
 		Simulation.step(s, CONTENT)
+	# Dos comerciantes: uno frena con señas y el otro hace fila detrás.
+	s.camp.passes.clear()
+	s.camp.passes.append({"id": 50, "merchant": "ramiro", "start": s.tick, "status": Merchants.PASSING, "stop_tick": -1, "leave_tick": -1, "bought": 0, "visited": false, "x": -20.0, "v": 0.0})
+	s.camp.passes.append({"id": 51, "merchant": "chola", "start": s.tick, "status": Merchants.PASSING, "stop_tick": -1, "leave_tick": -1, "bought": 0, "visited": false, "x": -40.0, "v": 0.0})
+	s.camp.next_pass_id = 52
+	Merchants.hail(s, CONTENT, 50)
+	for i in 12:
+		pl.hunger_bp = PlayerState.FULL
+		pl.thirst_bp = PlayerState.FULL
+		Simulation.step(s, CONTENT)
 	s.player_pose = {"position": Vector3(-3.0, 0.05, 1.0), "yaw": 0.4, "pitch": -5.0}
-	var text := JSON.stringify(s.to_dict("0.3.0-noche"), "\t")
+	var text := JSON.stringify(s.to_dict("0.4.0-fila"), "\t")
 	var f := FileAccess.open(OUT, FileAccess.WRITE)
 	f.store_string(text + "\n")
 	f.close()

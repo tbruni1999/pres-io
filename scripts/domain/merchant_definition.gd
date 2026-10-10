@@ -28,3 +28,6 @@ func buy_price_cents(item_id: String) -> int:
 
 func sell_price_cents(item_id: String) -> int:
 	return Money.from_units(int(sells.get(item_id, 0)))
+## Hecho que queda registrado en el jugador al terminar su historia por entregas
+## (ej. Coco: "has_dog", el perro polizón baja del camión).
+@export var story_end_fact: String = ""

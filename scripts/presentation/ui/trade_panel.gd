@@ -40,7 +40,15 @@ func on_open(args: Dictionary) -> void:
 		request_close.call_deferred()
 		return
 	_title.text = _cap(Texts.t(_merchant.name_key))
-	_quip.text = "«%s»" % ui.quip(_merchant.lines_prefix, "GREET")
+	# Historia por entregas: un capítulo por visita; después, saludos sueltos.
+	var visit := Game.begin_merchant_visit(_pass_id)
+	if visit >= 1 and visit <= Merchants.EPISODES:
+		_quip.text = "«%s»" % Texts.t("%s_EP_%d" % [_merchant.lines_prefix, visit])
+		_title.text += "   ·   " + Texts.t("TRADE_EPISODE", {"n": visit, "total": Merchants.EPISODES})
+		if visit == Merchants.EPISODES and not _merchant.story_end_fact.is_empty():
+			ui.post_notice.call_deferred(Texts.t("MSG_STORY_END_" + _merchant.story_end_fact.to_upper()))
+	else:
+		_quip.text = "«%s»" % ui.quip(_merchant.lines_prefix, "GREET")
 	_feedback.text = ""
 	refresh()
 
@@ -93,7 +101,7 @@ func _on_sell(item_id: String, qty: int) -> void:
 	var r := Game.sell_to_merchant(_pass_id, item_id, qty)
 	_feedback.text = r.message
 	if r.ok:
-		_quip.text = "«%s»" % ui.quip(_merchant.lines_prefix, "SOLD")
+		_quip.text = "«%s»" % ui.quip(_merchant.lines_prefix, "SMOKED" if item_id.ends_with("_smoked") else "SOLD")
 	ui.play_feedback(r.ok)
 	refresh()
 

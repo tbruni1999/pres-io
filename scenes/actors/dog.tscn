@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/dog_follower.gd" id="1_dog_follower"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/car_rust.tres" id="3_car_rust"]
+[ext_resource type="Material" path="res://assets/materials/cloth_apron.tres" id="4_cloth_apron"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="5_hair_dark"]
+
+[node name="Dog" type="Node3D"]
+script = ExtResource("1_dog_follower")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.42, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.28, 0.26, 0.62)
+material = ExtResource("3_car_rust")
+
+[node name="Belly" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.3, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.24, 0.1, 0.5)
+material = ExtResource("4_cloth_apron")
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.6, 0.38)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.24, 0.22, 0.26)
+material = ExtResource("3_car_rust")
+
+[node name="Snout" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.55, 0.55)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.14, 0.11, 0.16)
+material = ExtResource("4_cloth_apron")
+
+[node name="Nose" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.58, 0.63)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.06, 0.05, 0.04)
+material = ExtResource("5_hair_dark")
+casts_shadow = false
+
+[node name="EarL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.1, 0.72, 0.36)
+rotation_degrees = Vector3(0, 0, 25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.14, 0.09)
+material = ExtResource("5_hair_dark")
+
+[node name="EarR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.1, 0.72, 0.36)
+rotation_degrees = Vector3(0, 0, -25)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.14, 0.09)
+material = ExtResource("5_hair_dark")
+
+[node name="EyeL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.06, 0.64, 0.51)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 0.03, 0.02)
+material = ExtResource("5_hair_dark")
+casts_shadow = false
+
+[node name="EyeR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.06, 0.64, 0.51)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.03, 0.03, 0.02)
+material = ExtResource("5_hair_dark")
+casts_shadow = false
+
+[node name="Tail" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.55, -0.4)
+rotation_degrees = Vector3(-35, 0, 0)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.05, 0.05, 0.3)
+material = ExtResource("3_car_rust")
+
+[node name="Leg0" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.09, 0.15, 0.22)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 0.3, 0.07)
+material = ExtResource("3_car_rust")
+
+[node name="Leg1" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.09, 0.15, 0.22)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 0.3, 0.07)
+material = ExtResource("3_car_rust")
+
+[node name="Leg2" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.09, 0.15, -0.22)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 0.3, 0.07)
+material = ExtResource("3_car_rust")
+
+[node name="Leg3" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.09, 0.15, -0.22)
+script = ExtResource("2_kit_shape")
+size = Vector3(0.07, 0.3, 0.07)
+material = ExtResource("3_car_rust")

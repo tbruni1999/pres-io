@@ -10,6 +10,7 @@
 [ext_resource type="Material" path="res://assets/materials/flame.tres" id="8_flame"]
 [ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="9_metal_dark"]
 [ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="10_wood_old"]
+[ext_resource type="Script" path="res://scripts/presentation/world/fire_flicker.gd" id="11_fire_flicker"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(1.2, 0.4, 1.2)
@@ -205,6 +206,7 @@ light_color = Color(1, 0.6, 0.25, 1)
 light_energy = 1.8
 omni_range = 6.0
 shadow_enabled = false
+script = ExtResource("11_fire_flicker")
 
 [node name="Use" type="StaticBody3D" parent="After"]
 position = Vector3(0, 0.3, 0)

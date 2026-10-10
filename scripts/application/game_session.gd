@@ -194,6 +194,15 @@ func buy_from_merchant(pass_id: int, item_id: String) -> CommandResult:
 	return _player_command("buy", Merchants.buy_from(state, content, pass_id, item_id))
 
 
+func begin_merchant_visit(pass_id: int) -> int:
+	var had_dog := state.has_fact("player", "has_dog")
+	var n := Merchants.begin_visit(state, content, pass_id)
+	_log("visit %d -> %d" % [pass_id, n])
+	if not had_dog and state.has_fact("player", "has_dog"):
+		facts_changed.emit()
+	return n
+
+
 func dismiss_merchant(pass_id: int) -> void:
 	Merchants.dismiss(state, pass_id)
 	_log("dismiss %d" % pass_id)

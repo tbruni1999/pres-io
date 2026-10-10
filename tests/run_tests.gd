@@ -10,6 +10,7 @@ const TEST_SAVE_DIR := "user://test_saves"
 const FIXTURE_V1 := "res://tests/fixtures/save_v1_day2.json"
 const FIXTURE_V2 := "res://tests/fixtures/save_v2_day3.json"
 const FIXTURE_V3 := "res://tests/fixtures/save_v3_day2.json"
+const FIXTURE_V4 := "res://tests/fixtures/save_v4_day2.json"
 
 var _failures: PackedStringArray = PackedStringArray()
 var _checks := 0
@@ -61,6 +62,11 @@ func _initialize() -> void:
 		"test_session_wakes_home_when_day_ends_outside",
 		"test_faint_on_last_tick_is_not_sleeping_outside",
 		"test_v2_migration_drops_night_passes",
+		"test_merchants_queue_with_sign",
+		"test_merchants_queue_behind_hailed",
+		"test_start_in_tent_with_campfire",
+		"test_fixture_v4_loads",
+		"test_merchant_story_episodes_and_dog",
 	]
 	for t in tests:
 		_current = t
@@ -336,9 +342,8 @@ func test_fishing_deterministic_and_bag_limit() -> bool:
 
 ## Avanza pasos hasta que la pasada llegue a la posición x (o cambie de estado).
 func run_until_x(s: GameState, p: Dictionary, x: float) -> void:
-	var def := CONTENT.find_merchant(p["merchant"])
 	var guard := 0
-	while guard < 2000 and Merchants.position_x(p, def, s.tick) < x and (p["status"] == Merchants.SCHEDULED or p["status"] == Merchants.PASSING):
+	while guard < 2000 and Merchants.position_x(p) < x and (p["status"] == Merchants.SCHEDULED or p["status"] == Merchants.PASSING):
 		Simulation.step(fed(s), CONTENT)
 		guard += 1
 
@@ -433,6 +438,7 @@ func test_lake_water_and_fire() -> bool:
 			sick += 1
 	check(sick > 40 and sick < 110, "cae mal más o menos 1 de cada 3 veces (%d/200)" % sick)
 	var f := new_state()
+	f.camp.buildings.clear()
 	eq(PlayerActions.boil_water(f, CONTENT).code, "no_fire", "sin fogón no se hierve")
 	f.camp.buildings.append("fire")
 	eq(PlayerActions.boil_water(f, CONTENT).code, "missing_wood", "el fogón gasta madera")
@@ -464,6 +470,7 @@ func test_wood_and_building() -> bool:
 	advance_fed(s)
 	check(PlayerActions.tree_available(s, CONTENT, "tree_1"), "el árbol volvió a crecer")
 	s.camp.wood = 3
+	s.camp.buildings.clear()
 	var before := JSON.stringify(s.to_dict("t"))
 	eq(PlayerActions.build(s, CONTENT, "sign").code, "missing_wood", "al cartel le falta madera")
 	eq(JSON.stringify(s.to_dict("t")), before, "construir sin materiales no cambia nada")
@@ -708,7 +715,7 @@ func test_fixture_v2_migrates() -> bool:
 ## Fixture del esquema actual (3). Se regenera con tools/make_fixture.gd.
 func test_fixture_v3_loads() -> bool:
 	var r := _load_fixture(FIXTURE_V3)
-	check(r["ok"], "el fixture v3 carga: %s" % r.get("message", ""))
+	check(r["ok"], "el fixture v3 carga migrado: %s" % r.get("message", ""))
 	if not r["ok"]:
 		return false
 	var s: GameState = r["state"]
@@ -716,6 +723,9 @@ func test_fixture_v3_loads() -> bool:
 	check(s.camp.has_building("smokehouse"), "tiene ahumadero")
 	eq(PlayerActions.smoker_status(s), PlayerActions.SMOKER_SMOKING, "con una tanda ahumándose")
 	check(s.reports[0].slept_outside, "el día 1 durmió afuera")
+	check(s.camp.has_building("shack"), "quien venía jugando conserva su choza")
+	for p in s.camp.passes:
+		check(p.has("x") and p.has("v"), "las pasadas migradas tienen posición")
 	return true
 
 
@@ -896,4 +906,103 @@ func test_v2_migration_drops_night_passes() -> bool:
 	check(r["ok"], "migra: %s" % r.get("message", ""))
 	if r["ok"]:
 		eq((r["state"] as GameState).camp.passes[0]["status"], Merchants.GONE, "la pasada nocturna vieja ya no ocurre")
+	return true
+
+
+## Agrega una pasada que ya viene por el camino en la posición x.
+func add_pass(s: GameState, id: int, merchant: String, x: float) -> Dictionary:
+	var p := {"id": id, "merchant": merchant, "start": s.tick, "status": Merchants.PASSING,
+		"stop_tick": -1, "leave_tick": -1, "bought": 0, "visited": false, "x": x, "v": 0.0}
+	s.camp.passes.append(p)
+	return p
+
+
+func test_merchants_queue_with_sign() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	s.camp.buildings.append("sign")
+	var gap := CONTENT.balance.merchant_queue_gap
+	var a := add_pass(s, 1, "coco", -3.0)
+	var b := add_pass(s, 2, "chola", -12.0)
+	var c := add_pass(s, 3, "chola", -30.0)
+	for i in 20:
+		Simulation.step(fed(s), CONTENT)
+	eq(a["status"], Merchants.STOPPED, "el primero para frente a la choza")
+	eq(Merchants.position_x(a), 0.0, "en la puerta")
+	eq(b["status"], Merchants.QUEUED, "el segundo hace fila")
+	eq(Merchants.position_x(b), -gap, "a %.1f m" % gap)
+	eq(c["status"], Merchants.QUEUED, "el tercero también")
+	eq(Merchants.position_x(c), -2.0 * gap, "detrás del segundo")
+	s.player.add_item("fish_small", 2)
+	check(Merchants.sell_to(s, CONTENT, 2, "fish_small", 1).ok, "se le puede vender al que espera en la fila")
+	Merchants.dismiss(s, 1)
+	var guard := 0
+	while b["status"] != Merchants.STOPPED and guard < 50:
+		Simulation.step(fed(s), CONTENT)
+		guard += 1
+	eq(b["status"], Merchants.STOPPED, "cuando se va el primero, el segundo avanza y para")
+	eq(Merchants.position_x(b), 0.0, "ahora está en la puerta")
+	for i in 3:
+		Simulation.step(fed(s), CONTENT)
+	eq(Merchants.position_x(c), -gap, "el tercero avanza un lugar")
+	return true
+
+
+func test_merchants_queue_behind_hailed() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	var a := add_pass(s, 1, "ramiro", -20.0)
+	var b := add_pass(s, 2, "chola", -45.0)
+	check(Merchants.hail(s, CONTENT, 1).ok, "frena Ramiro con señas")
+	for i in 12:
+		Simulation.step(fed(s), CONTENT)
+	eq(b["status"], Merchants.QUEUED, "la Chola no lo atraviesa: espera atrás")
+	check(absf(Merchants.position_x(b) - (Merchants.position_x(a) - CONTENT.balance.merchant_queue_gap)) < 0.01, "a la distancia de la fila")
+	Merchants.dismiss(s, 1)
+	for i in 3:
+		Simulation.step(fed(s), CONTENT)
+	eq(b["status"], Merchants.PASSING, "sin cartel, cuando Ramiro se va, la Chola sigue viaje")
+	return true
+
+
+func test_start_in_tent_with_campfire() -> bool:
+	var s := new_state()
+	check(s.camp.has_building("fire"), "arranca con una fogatita")
+	check(not s.camp.has_building("shack"), "y sin choza: carpa")
+	s.camp.wood = 15
+	give_money(s, 100)
+	check(PlayerActions.build(s, CONTENT, "shack").ok, "la choza se construye")
+	return true
+
+
+func test_fixture_v4_loads() -> bool:
+	var r := _load_fixture(FIXTURE_V4)
+	check(r["ok"], "el fixture v4 carga: %s" % r.get("message", ""))
+	if not r["ok"]:
+		return false
+	var s: GameState = r["state"]
+	check(not s.camp.has_building("shack"), "en carpa")
+	var waiting := 0
+	for p in s.camp.passes:
+		if Merchants.is_waiting(p):
+			waiting += 1
+	eq(waiting, 2, "dos comerciantes esperando (uno parado y uno en fila)")
+	return true
+
+
+func test_merchant_story_episodes_and_dog() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	for i in Merchants.EPISODES:
+		var p := add_pass(s, 100 + i, "coco", -20.0)
+		Merchants.hail(s, CONTENT, 100 + i)
+		eq(Merchants.begin_visit(s, CONTENT, 100 + i), i + 1, "visita %d de Coco" % (i + 1))
+		eq(Merchants.begin_visit(s, CONTENT, 100 + i), i + 1, "reabrir el comercio no cuenta otra visita")
+		check(s.has_fact("player", "has_dog") == (i + 1 == Merchants.EPISODES), "el perro llega recién en el capítulo final")
+		Merchants.dismiss(s, 100 + i)
+	eq(int(s.camp.merchant_visits.get("ramiro", 0)), 0, "cada comerciante lleva su propia historia")
+	for key in ["RAMIRO", "CHOLA", "COCO"]:
+		for n in range(1, Merchants.EPISODES + 1):
+			var k := "%s_EP_%d" % [key, n]
+			check(Texts.t(k) != k, "existe el capítulo %s" % k)
 	return true

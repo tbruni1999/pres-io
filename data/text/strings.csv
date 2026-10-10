@@ -9,6 +9,8 @@ OBJ_FIRST_FISH,Pescá en la orilla del lago
 OBJ_HAIL,"Cuando pase alguien por el camino, salí y hacele señas (E)"
 OBJ_FIRE,Juntá 3 ramas y armá el fogón
 OBJ_SIGN,Cartel: 4 madera + 40 UC (los comerciantes paran solos)
+OBJ_SHACK,Choza: 15 madera + 100 UC (adiós carpa)
+BUILD_SHACK,Choza
 OBJ_DOCK,Muelle: 20 madera + 150 UC (más tarariras)
 OBJ_DONE,"Por ahora, esto es todo. Pronto llegan vecinos."
 OBJ_EAT,"¡Comé algo, que te caés!"
@@ -57,7 +59,7 @@ ITEM_FISH_SMALL_SMOKED,Mojarra ahumada
 ITEM_FISH_BIG_SMOKED,Tararira ahumada
 BUILD_SMOKEHOUSE,Ahumadero
 OBJ_SMOKEHOUSE,Ahumadero: 10 madera + 120 UC (el ahumado no se pudre y vale más)
-OBJ_NIGHT,Es de noche: andá a dormir a la choza
+OBJ_NIGHT,Es de noche: andá a dormir
 HUD_CLOCK,{time}
 ERR_NIGHT_NO_FISH,De noche no pica nada. Los peces también duermen.
 ERR_NO_SMOKEHOUSE,Primero hay que construir el ahumadero.
@@ -167,46 +169,118 @@ RAMIRO_GREET_1,"¡Sooo, Turbo! Buenas. ¿Qué pescaste, campeón?"
 RAMIRO_GREET_2,"Turbo quería parar. Yo no, pero manda él."
 RAMIRO_GREET_3,"Buenas. No me mire así, el caballo es el que huele."
 RAMIRO_GREET_4,"¿Pescado de hoy? ¿Seguro? Turbo, olfateá."
-RAMIRO_SOLD_1,"Lindo pescado. Turbo dice que está flaco, pero Turbo es vegetariano."
-RAMIRO_SOLD_2,Le pago poco porque el caballo come mucho.
-RAMIRO_SOLD_3,Esto en la ciudad lo venden como salmón.
 RAMIRO_BUY_1,"Pan de ayer. De anteayer, si somos honestos."
 RAMIRO_BUY_2,Buena compra. Turbo aprueba con la cola.
-RAMIRO_NOTHING_1,¿Me paró para nada? Turbo no te va a perdonar.
-RAMIRO_NOTHING_2,Sin pescado no hay negocio. Ni amistad.
-RAMIRO_BYE_1,"¡Arre, Turbo! …Turbo. …Turbo, dale."
-RAMIRO_BYE_2,Nos vemos. Turbo te manda saludos.
-RAMIRO_PASS_1,Turbo ni te miró.
-RAMIRO_PASS_2,Se escuchó un relincho burlón.
 CHOLA_GREET_1,"¡Frené de milagro! El Fitito no tiene frenos, tiene fe."
 CHOLA_GREET_2,Rápido que tengo el motor prendido desde 1987.
 CHOLA_GREET_3,"¿Qué tenés? Y no me digas «pescado», ya sé que es pescado."
 CHOLA_GREET_4,"Hola, corazón. Te compro todo, pero barato."
-CHOLA_SOLD_1,Esta tararira me mira raro. Me la llevo igual.
-CHOLA_SOLD_2,Te pago bien porque me caés bien. Hoy.
-CHOLA_SOLD_3,Mi sobrino pesca mejor. Mi sobrino tiene cuatro años.
 CHOLA_BUY_1,"¡Vendido! Sin garantía, sin devolución, sin factura."
 CHOLA_BUY_2,Esto lo traje de Brasil. O de la feria. Algún lado.
-CHOLA_NOTHING_1,¿Me hiciste frenar para charlar? Te cobro el embrague.
-CHOLA_NOTHING_2,"Volvé cuando tengas algo, divino."
-CHOLA_BYE_1,"¡Chau! Si no arranca, empujame."
-CHOLA_BYE_2,"Me voy antes de que se recaliente. El motor, digo."
-CHOLA_PASS_1,La Chola pasó a fondo. Ni te vio. O te vio y aceleró.
-CHOLA_PASS_2,Solo quedó el humo del Fitito.
 COCO_GREET_1,Leí el cartel. Me encantó la letra. ¿Quién te enseñó a escribir?
 COCO_GREET_2,"¡Buenas! Camión vacío, corazón lleno. ¿Qué tenés?"
 COCO_GREET_3,Freno acá porque el cartel me lo ordenó. Soy muy obediente.
-COCO_SOLD_1,Lo llevo al mercado. Les digo que lo pescó un profesional.
-COCO_SOLD_2,Pago bien porque el camión es de mi cuñado.
-COCO_SOLD_3,Con esto mi suegra me va a querer. Un poco.
 COCO_BUY_1,"Llevá, llevá. Lo que no vendo, se pone triste."
 COCO_BUY_2,"Buena elección. Mala para mí, pero buena."
-COCO_NOTHING_1,"¿Nada? Bueno, por lo menos el cartel está lindo."
-COCO_NOTHING_2,Freno igual por el cartel. Soy así.
+RAMIRO_EP_1,¿Sabés qué le llegó a Turbo? Una multa. Por exceso de velocidad. A Turbo. Que tarda diez minutos en darse vuelta.
+RAMIRO_EP_2,"Fui a reclamar la multa. No hay oficina, no hay nadie. Hay un buzón clavado en un sauce. Turbo le dejó un regalito."
+RAMIRO_EP_3,Llegó otra multa: por estacionar en doble fila. ¿Doble fila de qué? Acá hay un camino y una vaca.
+RAMIRO_EP_4,"Me quedé despierto vigilando el buzón. Me dormí. A la mañana había otra multa. Esta era para mí, por roncar."
+RAMIRO_EP_5,"Turbo encontró huellas al lado del sauce. De alpargata, talle 46. Ya descarté a medio mundo. Bueno, a tres."
+RAMIRO_EP_6,"Lo agarré. Es el Tito, mi primo, con una gorra de cartón que dice Inspector. Dice que se nombró él mismo. Por concurso."
+RAMIRO_EP_7,"El Tito ya juntó 340 UC en multas. Le pregunté para qué. Para un semáforo, dice. Acá. Para Turbo."
+RAMIRO_EP_8,"Se armó lío: Coco no quiere pagar la multa del camión. Dice que el camión es del cuñado, así que la multa también."
+RAMIRO_EP_9,"Hubo asamblea bajo el sauce. Votamos el Tito, una vaca, Turbo y yo. Ganó el semáforo. Turbo votó dos veces, creo."
+RAMIRO_EP_10,El Tito volvió de la ciudad: sin pueblo no dan semáforo. Así que vamos a fundar uno. Te anotó primero. Turbo es tesorero.
+RAMIRO_SOLD_1,"Lindo pescado. Turbo dice que está flaco, pero Turbo es vegetariano."
+RAMIRO_SOLD_2,Te pago poco porque el caballo come mucho. Y porque tengo una multa.
+RAMIRO_SOLD_3,Esto en la ciudad lo venden como salmón. Con luz baja.
+RAMIRO_SOLD_4,"Trato hecho. Turbo resopló, que en su idioma es te estafaron."
+RAMIRO_SOLD_5,"Te lo compro, pero no le digas al Tito que tengo plata. Multa todo."
+RAMIRO_SOLD_6,Te lo compro. No le cuentes a mi señora que gasté en algo que me mira.
+RAMIRO_SMOKED_1,"¡Ahumado! Esto ya es gastronomía. Turbo, sacate el sombrero. Ah, no tenés."
+RAMIRO_SMOKED_2,Huele a asado de domingo. Turbo se puso nostálgico y no sabemos de qué.
+RAMIRO_SMOKED_3,"Ahumado te lo pago mejor. No mucho mejor, no te emociones."
+RAMIRO_SMOKED_4,"Mi abuelo ahumaba así. Bueno, quemaba así. Parecido."
+RAMIRO_NOTHING_1,¿Me paraste para nada? Turbo no te va a perdonar. Tiene memoria de elefante.
+RAMIRO_NOTHING_2,"Sin pescado no hay negocio. Ni amistad. Bueno, amistad un poco."
+RAMIRO_NOTHING_3,Frenar a Turbo cuesta. Arrancarlo cuesta el doble. Pensalo la próxima.
+RAMIRO_NOTHING_4,Me hiciste perder diez minutos. A esta velocidad son casi dos metros.
+RAMIRO_BYE_1,"¡Arre, Turbo! …Turbo. …Turbo, dale. …Bueno, cuando quieras."
+RAMIRO_BYE_2,"Nos vemos. Turbo te manda saludos. Mentira, pero queda lindo."
+RAMIRO_BYE_3,"Me voy despacito, que si voy rápido el Tito me multa."
+RAMIRO_BYE_4,Me voy antes de que Turbo decida quedarse a vivir acá.
+RAMIRO_PASS_1,"Turbo ni te miró. Ramiro tampoco, pero se notó que quería."
+RAMIRO_PASS_2,Se escuchó un relincho burlón alejándose.
+RAMIRO_PASS_3,"Ramiro saludó con el sombrero. Turbo, con la cola. Menos amable."
+RAMIRO_PASS_4,"Pasaron de largo. A esa velocidad, todavía los podés alcanzar caminando."
+CHOLA_EP_1,Compré en un remate una caja cerrada que dice FRÁGIL y NO ABRIR. Pagué tres UC. No la abrí. Por respeto.
+CHOLA_EP_2,La caja hace tic tac. Mi cuñada dice que es un reloj. Mi cuñada también dijo que el Fitito no llegaba a 1990.
+CHOLA_EP_3,"Le pregunté al rematador qué había adentro. Me dijo: si supiera, no te la vendía a tres UC. El vivo tiene lógica."
+CHOLA_EP_4,Anoche la caja dejó de hacer tic tac. Ahora hace tac tic. Algo cambió ahí adentro y no me gusta nada.
+CHOLA_EP_5,Vino un señor de traje preguntando por una caja. Le dije que no sé de qué caja me habla. La tenía en la falda.
+CHOLA_EP_6,El de traje me ofreció cien UC. Le pedí doscientos. Se fue ofendido. Nunca regateé tan mal y tan bien a la vez.
+CHOLA_EP_7,"Hoy la caja amaneció con una etiqueta nueva. Dice: Propiedad de la Intendencia. Y abajo, en lápiz: perdón."
+CHOLA_EP_8,"La abrí. Bueno, la abrió el Fitito: frené con fe y salió volando. Adentro había… mejor te cuento la próxima."
+CHOLA_EP_9,"Adentro había un despertador, un sello y un papel viejo: Escritura del campo junto al arroyo. Corazón, eso es acá."
+CHOLA_EP_10,"Según el papel, este campo es mío. Y el de traje lo quiere lotear. Vos y yo, más los que vengan: armamos pueblo antes que él."
+CHOLA_SOLD_1,Esta mojarra está flaca. Como mi paciencia. Igual me la llevo.
+CHOLA_SOLD_2,Te pago bien porque me caés bien. Mañana capaz que no.
+CHOLA_SOLD_3,"Tararira con cara de ofendida. Ideal, en casa todos tenemos esa cara."
+CHOLA_SOLD_4,Mi sobrino pesca mejor. Mi sobrino tiene cuatro años y usa una media de red.
+CHOLA_SOLD_5,"Te redondeo para abajo. Para arriba no sé, nunca lo probé."
+CHOLA_SOLD_6,Lo vendo en el pueblo como pescado de importación. Del arroyo de al lado.
+CHOLA_SMOKED_1,¡Ahumado! Esto ya es gourmet. Lo vendo con mantel.
+CHOLA_SMOKED_2,Con esto el Fitito va a oler a parrillada una semana. Valió la pena.
+CHOLA_SMOKED_3,"Ahumado de verdad, no como el que vendo yo, que es mojarra con humo del Fitito."
+CHOLA_SMOKED_4,"Ahumadito, divino. Vos estás para poner un restorán. Una carpa con mantel, digo."
+CHOLA_NOTHING_1,¿Me hiciste frenar para charlar? El Fitito frena una vez por día. Era hoy.
+CHOLA_NOTHING_2,Ni una mojarra. Ni un yuyo. Ni un abrazo. Qué falta de visión comercial.
+CHOLA_NOTHING_3,¿Sin pescado? Te vendo una tostadora. Funciona si la mirás con cariño.
+CHOLA_NOTHING_4,"Bueno, te dejo el humo del caño de escape. Ese te lo regalo."
+CHOLA_BYE_1,"¡Chau! Si no arranca, empujame. Si arranca, correme."
+CHOLA_BYE_2,"Me voy antes de que se recaliente. El motor, digo. Yo ya vengo recalentada."
+CHOLA_BYE_3,"Rezá por mí que bajo la cuesta. Con fe, como siempre."
+CHOLA_BYE_4,"Me voy con fe, sin frenos y con tu pescado. Lo más importante, en ese orden."
+CHOLA_PASS_1,La Chola pasó a fondo. Ni te vio. O te vio y aceleró.
+CHOLA_PASS_2,"Tocó bocina tres veces. Según ella, eso significa chau, mañana y no frena."
+CHOLA_PASS_3,La Chola saludó con la mano. Con la mano del volante. Uy.
+CHOLA_PASS_4,Solo quedó el humo del Fitito y un olor a garrafa.
+COCO_EP_1,"Pregunta rara: ¿a vos te falta comida? A mí, de la cabina, me desaparece medio sánguche por viaje. Siempre la mitad. Qué educado."
+COCO_EP_2,"Hoy faltó el sánguche entero y una media. Una sola. Mi cuñado dice que es un fantasma. Un fantasma no usa medias, Ricardo."
+COCO_EP_3,Puse una trampa: milanesa y campanita. Sonó a las tres de la mañana. Prendí la luz y quedaba el pan. Solo el pan. Es un profesional.
+COCO_EP_4,"Encontré pelitos marrones en el asiento. Mi suegra dice que son míos. Soy pelado, señora. ¿Viste pelitos así cerca del cartel?"
+COCO_EP_5,"Hay huellitas de barro en el estribo. Barro de lago. De tu lago. Mirá la orilla a la mañana, que el ladrón madruga más que vos."
+COCO_EP_6,Le conté a mi cuñado. Se puso pálido: del camión no se habla. ¿Qué tiene el camión? Ahora tengo dos misterios y medio sánguche.
+COCO_EP_7,"Anoche, entre los cajones, escuché un ronquido. Chiquito. Le canté para que saliera y se calló. Tan mal no canto, ¿no? No contestes."
+COCO_EP_8,El cuñado confesó: el camión no es de él. Es de mi suegra. Y la suegra viene a ver qué hago con su camión. Rezá por mí.
+COCO_EP_9,"¿Viste ramas mordidas junto a tu carpa? Dejé una mojarra tuya en la cabina de carnada. Hoy cuando frene, algo va a bajar. Atento."
+COCO_EP_10,"¡Era un perro! Un mes de polizón comiéndome los sánguches. Bajó, te miró y se quedó. Es tuyo. Ponele nombre, que a mí no me hace caso."
+COCO_SOLD_1,Lo llevo al mercado. Les digo que lo pescó un profesional. No digo cuál.
+COCO_SOLD_2,"Pago bien porque el camión es de mi cuñado. La plata también, creo."
+COCO_SOLD_3,"Con esto mi suegra me va a querer. Un poco. Un poquito. Nada, pero lo intento."
+COCO_SOLD_4,"Lo voy a llevar cantando. El pescado no se queja, es el mejor público que tengo."
+COCO_SOLD_5,"Trato hecho. Si mi cuñado pregunta, regateé muchísimo."
+COCO_SOLD_6,"Cargado. El camión hace un ruido nuevo, pero de contento."
+COCO_SMOKED_1,¿Ahumado? Esto huele a domingo. Mi suegra no se merece esto. Me lo como yo.
+COCO_SMOKED_2,"Este dura más que mi cuñado sin pedirme plata. O sea, bastante."
+COCO_SMOKED_3,Esto lo vendo como gourmet. Le pongo una ramita arriba y cobro el doble.
+COCO_SMOKED_4,"Ahumado, qué categoría. Va adelante, en el asiento del acompañante. Con cinturón."
+COCO_NOTHING_1,"¿Nada? Bueno, por lo menos el cartel está lindo. Y yo frené. Soy así."
+COCO_NOTHING_2,"Freno igual porque el cartel me lo ordenó. El cartel manda, como mi suegra."
+COCO_NOTHING_3,"¿Me paraste para charlar? Me encanta. Te canto una. No, mejor no."
+COCO_NOTHING_4,"Sin pescado no hay venta, pero chisme siempre hay. Otro día te cuento más."
 COCO_BYE_1,¡Nos vemos! Saludá al lago de mi parte.
-COCO_BYE_2,"Me voy, que el camión hace un ruido nuevo."
-COCO_PASS_1,Coco tocó bocina y siguió.
-COCO_PASS_2,Coco pasó cantando. Desafinado.
+COCO_BYE_2,"Me voy, que el camión hace un ruido nuevo y quiero ver si es grave."
+COCO_BYE_3,"Chau. Si llama mi suegra, decile que ya salí. Hace una hora."
+COCO_BYE_4,"Me voy cantando. Tapate los oídos, es por tu bien."
+COCO_PASS_1,Coco tocó bocina y siguió. Desafinó hasta la bocina.
+COCO_PASS_2,Coco pasó cantando. Los pájaros se fueron todos.
+COCO_PASS_3,"Coco te saludó con la mano. Atrás, entre cajones, algo meneó la cola."
+COCO_PASS_4,El camión pasó de largo. Desde la cabina se oyó un ladrido. Y después a Coco: shh.
+TRADE_EPISODE,Capítulo {n} de {total}
+MSG_STORY_END_HAS_DOG,Tenés perro. Se llama Polizón. Ya se comió algo tuyo.
+DOG_NAME,Polizón
 BAG_TITLE,Mochila
 BAG_EMPTY,Vacía. Como la heladera.
 BAG_EAT,Comer

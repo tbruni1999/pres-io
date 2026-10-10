@@ -107,7 +107,7 @@ func _run() -> void:
 	# 1) Despertar en la choza: se puede dormir mirando la cama.
 	var spawn: Vector3 = main.get_node("World/PlayerSpawn").global_position
 	check(player.global_position.distance_to(spawn) < 0.5, "aparece en la choza")
-	await look(Vector3(0.3, 0.05, -0.6), 90, -32)
+	await look(Vector3(0.3, 0.05, 1.3), 0, -35)
 	check(ctx_kind() == "sleep", "mirando la cama se puede dormir (%s)" % ctx_kind())
 
 	# 2) Pescar en la orilla con skillcheck (el tiempo sigue corriendo).
@@ -158,7 +158,7 @@ func _run() -> void:
 	s.player.add_item("fish_small", 3)
 	var p: Dictionary = s.camp.passes[0]
 	var ramiro: MerchantDefinition = game.content.find_merchant("ramiro")
-	while Merchants.position_x(p, ramiro, s.tick) < -20.0:
+	while Merchants.position_x(p) < -20.0:
 		Simulation.step(s, game.content)
 	await look(Vector3(-6.0, 0.05, 9.5), 0, 0)
 	check(ctx_kind() == "hail", "se le puede hacer señas (%s)" % ctx_kind())
@@ -179,25 +179,27 @@ func _run() -> void:
 	check(ui.active_panel() == null, "Esc cierra el comercio")
 	check(p["status"] == Merchants.LEAVING, "Ramiro sigue viaje")
 
-	# 6) Construir el fogón martillando.
-	s.camp.wood = 3
-	await look(Vector3(3.3, 0.05, 1.9), 180, -45)
-	check(ctx_kind() == "build", "se puede construir el fogón (%s)" % ctx_kind())
+	# 6) Arranca con fogatita; construir el cartel martillando.
+	check(s.camp.has_building("fire") and piece("FirePlot").get_node("After").visible, "arranca con la fogatita prendida")
+	s.camp.wood = 4
+	s.player.earn(Money.from_units(40))
+	await look(Vector3(-3.4, 0.05, 7.6), 180, -45)
+	check(ctx_kind() == "build", "se puede construir el cartel (%s)" % ctx_kind())
 	press("interact")
 	await wait_physics()
 	check(ui.current_activity() is Activities.Strikes, "arranca a martillar")
 	await miss_check()
-	check(not s.camp.has_building("fire"), "un martillazo errado no termina la obra")
+	check(not s.camp.has_building("sign"), "un martillazo errado no termina la obra")
 	guard = 0
 	while ui.current_activity() != null and guard < 6:
 		await hit_check()
 		guard += 1
-	check(s.camp.has_building("fire") and s.camp.wood == 0, "fogón construido con la madera")
-	check(piece("FirePlot").get_node("After").visible, "se ve el fogón")
-	await wait_physics()
+	check(s.camp.has_building("sign") and s.camp.wood == 0, "cartel construido con la madera")
+	check(piece("SignPlot").get_node("After").visible, "se ve el cartel")
 	s.camp.wood = 1
 	s.player.thirst_bp = 1000
-	check(ctx_kind() == "fire", "se puede usar el fogón (%s)" % ctx_kind())
+	await look(Vector3(3.3, 0.05, 1.9), 180, -45)
+	check(ctx_kind() == "fire", "se puede usar la fogata (%s)" % ctx_kind())
 	press("interact")
 	await wait_physics()
 	check(ui.active_panel() == ui.fire, "panel del fogón")
@@ -240,14 +242,14 @@ func _run() -> void:
 
 	# 6c) La noche: oscurece, no pica y hay faroles.
 	var day_night: DayNight = main.get_node("DayNight")
-	var porch: OmniLight3D = main.get_node("World/Shack/PorchLight")
+	var porch: OmniLight3D = main.get_node("World/Home/Before/TentLight")
 	day_night.apply_now()
 	var porch_day := porch.light_energy
 	var day_tick: int = s.tick
 	s.tick = (s.current_day() - 1) * s.ticks_per_day + DayTime.night_offset_ticks(s, game.content) + 20
 	day_night.apply_now()
 	check(day_night.nightness > 0.9, "de noche está oscuro (%.2f)" % day_night.nightness)
-	check(porch.light_energy > porch_day, "el farol de la choza brilla más de noche")
+	check(porch.light_energy > porch_day, "el farol de la carpa brilla más de noche")
 	await look(Vector3(-3.0, 0.05, -15.6), 6, -38)
 	check(ctx_kind() == "none" and String(ui.context().get("text", "")).contains("noche"), "de noche no se puede pescar")
 	s.tick = day_tick
@@ -260,12 +262,12 @@ func _run() -> void:
 	var wallet_saved: int = s.player.wallet_cents
 	game.new_game()
 	await wait_physics()
-	check(not piece("FirePlot").get_node("After").visible, "partida nueva sin fogón")
+	check(not piece("SignPlot").get_node("After").visible, "partida nueva sin cartel")
 	var loaded := game.load_game() as CommandResult
 	check(loaded.ok, "carga: " + loaded.message)
 	await wait_physics()
 	s = game.state
-	check(piece("FirePlot").get_node("After").visible, "tras cargar, el fogón vuelve")
+	check(piece("SignPlot").get_node("After").visible, "tras cargar, el cartel vuelve")
 	check(s.player.wallet_cents == wallet_saved, "tras cargar, la misma plata")
 	check(not piece("Woods/Branches1").get_node("Before").visible, "tras cargar, las ramas siguen juntadas")
 
@@ -300,7 +302,7 @@ func _run() -> void:
 
 	# 9) Dormir desde la cama.
 	day = game.state.current_day()
-	await look(Vector3(0.3, 0.05, -0.6), 90, -32)
+	await look(Vector3(0.3, 0.05, 1.3), 0, -35)
 	press("interact")
 	await wait_physics()
 	check(ui.active_panel() == ui.report and game.state.current_day() == day + 1, "dormir termina el día")

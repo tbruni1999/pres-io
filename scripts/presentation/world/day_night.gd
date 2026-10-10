@@ -5,8 +5,8 @@ extends Node
 ## Se actualiza 10 veces por segundo (cambiar el cielo cada fotograma es caro).
 
 const UPDATE_INTERVAL := 0.1
-const SUNRISE := 360.0
-const SUNSET := 1230.0
+const SUNRISE := 300.0
+const SUNSET := 1275.0
 const MAX_ELEVATION := 62.0
 
 @export var sun_path: NodePath = ^"../Sun"
@@ -74,4 +74,6 @@ func apply_minute(m: float) -> void:
 		var l := light as Light3D
 		if not l.has_meta("base_energy"):
 			l.set_meta("base_energy", l.light_energy)
-		l.light_energy = float(l.get_meta("base_energy")) * (0.25 + 0.75 * nightness)
+		var e := float(l.get_meta("base_energy")) * (0.25 + 0.75 * nightness)
+		l.set_meta("night_energy", e)
+		l.light_energy = e
