@@ -59,6 +59,8 @@ func _initialize() -> void:
 		"test_smoker_cycle",
 		"test_smoked_fish_keeps_and_sells_better",
 		"test_session_wakes_home_when_day_ends_outside",
+		"test_faint_on_last_tick_is_not_sleeping_outside",
+		"test_v2_migration_drops_night_passes",
 	]
 	for t in tests:
 		_current = t
@@ -867,3 +869,31 @@ func _cleanup_dir(path: String) -> void:
 	for file in dir.get_files():
 		dir.remove(file)
 	DirAccess.remove_absolute(path)
+
+
+func test_faint_on_last_tick_is_not_sleeping_outside() -> bool:
+	var s := new_state()
+	s.player.thirst_bp = 1
+	s.tick = s.ticks_per_day - 1
+	var rep := Simulation.step(s, CONTENT)
+	check(rep != null and rep.fainted, "se desmayó al cerrar")
+	check(not rep.slept_outside, "no se cobra además dormir afuera")
+	eq(s.player.thirst_bp, CONTENT.balance.faint_wake_bp, "despierta con el agua del desmayo")
+	return true
+
+
+func test_v2_migration_drops_night_passes() -> bool:
+	var f := FileAccess.open(FIXTURE_V2, FileAccess.READ)
+	var d: Dictionary = JSON.parse_string(f.get_as_text())
+	var day_start := int(String(d["tick"]).to_int() / int(d["ticks_per_day"])) * int(d["ticks_per_day"])
+	d["camp"]["passes"] = [{"id": 99, "merchant": "ramiro", "start": str(day_start + 470), "status": "scheduled", "stop_tick": "-1", "leave_tick": "-1", "bought": 0}]
+	d["camp"]["next_pass_id"] = 100
+	d["reports"] = null
+	var bad := _service().parse_text(JSON.stringify(d), CONTENT)
+	check(not bad["ok"], "informes nulos se rechazan con mensaje, sin error de script")
+	d["reports"] = []
+	var r := _service().parse_text(JSON.stringify(d), CONTENT)
+	check(r["ok"], "migra: %s" % r.get("message", ""))
+	if r["ok"]:
+		eq((r["state"] as GameState).camp.passes[0]["status"], Merchants.GONE, "la pasada nocturna vieja ya no ocurre")
+	return true

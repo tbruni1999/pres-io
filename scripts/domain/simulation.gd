@@ -140,7 +140,8 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 	report.rotten = rotten
 
 	# 6c) Terminó la jornada y no estabas en la cama: dormiste a la intemperie.
-	if not resting:
+	# Si en este mismo paso se desmayó, cuenta como desmayo, no como dormir afuera.
+	if not resting and not pl.faint_pending:
 		var b := content.balance
 		report.slept_outside = true
 		pl.hunger_bp = maxi(mini(pl.hunger_bp, b.slept_outside_floor_bp), pl.hunger_bp - b.slept_outside_loss_bp)

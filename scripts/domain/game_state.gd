@@ -130,6 +130,7 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	if version == 1:
 		d = migrate_v1_to_v2(d, content)
 		version = 2
+	var migrated_v2 := version == 2
 	if version == 2:
 		d = migrate_v2_to_v3(d)
 
@@ -204,6 +205,8 @@ static func from_dict(d: Dictionary, content: GameContent) -> Dictionary:
 	if not r.ok():
 		return {"state": null, "errors": r.errors, "future_version": false}
 	s.rng.state = rng_state
+	if migrated_v2:
+		_drop_night_passes(s, content)
 	return {"state": s, "errors": PackedStringArray(), "future_version": false}
 
 
@@ -230,6 +233,15 @@ static func migrate_v1_to_v2(d: Dictionary, content: GameContent) -> Dictionary:
 	return out
 
 
+## Las agendas de v2 no conocían la noche: quien pasaría de noche ya no pasa.
+static func _drop_night_passes(s: GameState, content: GameContent) -> void:
+	var night_tick := (s.current_day() - 1) * s.ticks_per_day + DayTime.night_offset_ticks(s, content)
+	for p in s.camp.passes:
+		var def := content.find_merchant(p["merchant"])
+		if p["status"] == Merchants.SCHEDULED and int(p["start"]) + def.crossing_ticks >= night_tick:
+			p["status"] = Merchants.GONE
+
+
 ## v2 (choza y lago) -> v3 (noche y ahumadero): ahumadero vacío y marca de "dormiste afuera".
 static func migrate_v2_to_v3(d: Dictionary) -> Dictionary:
 	var out := d.duplicate(true)
@@ -240,7 +252,8 @@ static func migrate_v2_to_v3(d: Dictionary) -> Dictionary:
 			camp["smoker_items"] = []
 		if not camp.has("smoker_ready_tick"):
 			camp["smoker_ready_tick"] = "-1"
-	for rep in out.get("reports", []):
+	var reps: Variant = out.get("reports", [])
+	for rep in (reps if reps is Array else []):
 		if rep is Dictionary and not rep.has("slept_outside"):
 			rep["slept_outside"] = false
 	return out
