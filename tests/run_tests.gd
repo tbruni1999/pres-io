@@ -86,6 +86,9 @@ func _initialize() -> void:
 		"test_v4_migrates_to_v5_defaults",
 		"test_goal_reachable_with_real_neighbors",
 		"test_v4_smoker_counts_as_smoked",
+		"test_salim_arrives_from_busy_road_and_sells",
+		"test_salim_megaphone_and_salt",
+		"test_raul_board_and_scan",
 	]
 	for t in tests:
 		_current = t
@@ -1291,7 +1294,8 @@ func test_materials_storage_and_goal() -> bool:
 	eq(StageGoal.found(s, CONTENT).code, "goal_incomplete", "no se funda incompleto")
 	s.camp.storage = {"cement": 6, "sheet_metal": 11}
 	s.facts["player"]["has_deed"] = true
-	s.camp.neighbors["beto"] = {"spot": "lake", "since": 1, "talked_day": 0, "ep": 0}
+	for pair in [["beto", "lake"], ["salim", "back"], ["raul", "road"]]:
+		s.camp.neighbors[pair[0]] = {"spot": pair[1], "since": 1, "talked_day": 0, "ep": 0}
 	check(StageGoal.is_complete(s, CONTENT), "con todo se puede fundar")
 	var wallet := s.player.wallet_cents
 	check(StageGoal.found(s, CONTENT).ok, "pueblito fundado")
@@ -1376,9 +1380,16 @@ func test_v4_migrates_to_v5_defaults() -> bool:
 
 func test_goal_reachable_with_real_neighbors() -> bool:
 	var s := fed(new_state())
+	# Los tres llegan de a uno, cada uno atraído por lo suyo.
 	s.facts["player"]["smoked_once"] = true
-	Simulation.advance_to_end_of_day(s, CONTENT, true)
+	s.facts["player"]["busy_road"] = true
+	s.facts["player"]["lake_lights_2"] = true
+	for i in 3:
+		Simulation.advance_to_end_of_day(fed(s), CONTENT, true)
+	eq(s.camp.neighbors.size(), 3, "llegaron los tres, uno por día")
 	Neighbors.place(s, "beto", "back")
+	Neighbors.place(s, "salim", "lake")
+	Neighbors.place(s, "raul", "road")
 	s.camp.storage = {"cement": 6, "sheet_metal": 10}
 	s.facts["player"]["has_deed"] = true
 	give_money(s, 1500)
@@ -1395,4 +1406,100 @@ func test_v4_smoker_counts_as_smoked() -> bool:
 	if s == null:
 		return false
 	check(s.camp.has_building("smokehouse") and s.has_fact("player", "smoked_once"), "quien ya tenía ahumadero atrae a Beto")
+	return true
+
+
+func living(s: GameState, id: String, spot: String) -> void:
+	s.camp.neighbors[id] = {"spot": spot, "since": 1, "talked_day": 0, "ep": 0}
+
+
+func test_salim_arrives_from_busy_road_and_sells() -> bool:
+	var s := fed(new_state())
+	s.camp.passes.clear()
+	s.camp.buildings.append("sign")
+	s.player.add_item("fish_small", 6)
+	for i in 3:
+		add_pass(s, 70 + i, "chola", -3.0)
+		Merchants.hail(s, CONTENT, 70 + i)
+		check(Merchants.sell_to(s, CONTENT, 70 + i, "fish_small", 1).ok, "vende en la parada %d" % (i + 1))
+		check(s.has_fact("player", "busy_road") == (i == 2), "el camino se mueve recién con tres paradas")
+		Merchants.dismiss(s, 70 + i)
+	var rep := Simulation.advance_to_end_of_day(fed(s), CONTENT, true)
+	check(Neighbors.is_present(s, "salim"), "llegó Salim")
+	check(rep.events.any(func(e: Dictionary) -> bool: return e["key"] == "EV_SALIM_ARRIVES"), "lo avisa el informe")
+	eq(Neighbors.salim_buy(s, CONTENT, "salt").code, "unknown_neighbor", "sin carpa no vende")
+	Neighbors.place(s, "salim", "back")
+	s.player.bag.clear()
+	give_money(s, 200)
+	var w := s.player.wallet_cents
+	check(Neighbors.salim_buy(s, CONTENT, "salt").ok, "compra sal")
+	eq(w - s.player.wallet_cents, Money.from_units(10), "a 10 UC")
+	eq(Neighbors.salim_buy(s, CONTENT, "tape").code, "rod_fine", "la cinta solo si la caña está gastada")
+	s.player.tool_wear["rod_basic"] = 5
+	check(Neighbors.salim_buy(s, CONTENT, "tape").ok, "encinta la caña")
+	eq(int(s.player.tool_wear["rod_basic"]), 5 + CONTENT.balance.tape_uses, "le devuelve usos")
+	check(Neighbors.salim_buy(s, CONTENT, "umbrella").ok, "compra la sombrilla")
+	check(s.player.has_tool("umbrella"), "la sombrilla es herramienta")
+	s.camp.weather = Weather.SUN
+	eq(Weather.thirst_bp(s, CONTENT), 10000, "con sombrilla el sol no da más sed")
+	s.camp.neighbors["salim"]["ep"] = 10
+	eq(Neighbors.salim_price_cents(s, "salt"), Money.from_units(15), "inflación: +1 cada 2 capítulos, tope +5")
+	check(s.player.is_consistent(), "billetera cuadra")
+	for n in range(1, Neighbors.EPISODES + 1):
+		check(Texts.t("SALIM_EP_%d" % n) != "SALIM_EP_%d" % n, "existe SALIM_EP_%d" % n)
+	return true
+
+
+func test_salim_megaphone_and_salt() -> bool:
+	var s := fed(new_state())
+	living(s, "salim", "back")
+	s.player.add_item("fish_big", 2)
+	s.player.add_item("fish_small", 1)
+	s.player.add_item("salt", 2)
+	var rep := Simulation.advance_to_end_of_day(s, CONTENT, true)
+	eq(s.player.count("fish_big"), 2, "la sal salvó las dos tarariras")
+	eq(s.player.count("fish_small"), 0, "la mojarra sin sal se pudrió")
+	eq(s.player.count("salt"), 0, "la sal se gastó")
+	eq(rep.rotten, 1, "una podrida")
+	check(rep.events.any(func(e: Dictionary) -> bool: return e["key"] == "EV_SALIM_MEGAPHONE"), "el megáfono te despierta")
+	check(s.player.hunger_bp < PlayerState.FULL, "y arrancás con hambre")
+	var l := fed(new_state())
+	living(l, "salim", "lake")
+	l.camp.weather = Weather.SUN
+	var hunger := l.player.hunger_bp
+	Simulation.advance_to_end_of_day(l, CONTENT, true)
+	l.camp.weather = Weather.SUN
+	l.camp.rain_start = -1
+	l.camp.rain_end = -1
+	eq(l.player.hunger_bp, hunger, "con la carpa en el lago no te despierta")
+	check(Weather.bite_bp(l, CONTENT) > 10000, "pero espanta los peces de 6 a 9")
+	l.tick += Neighbors.MEGAPHONE_TICKS
+	eq(Weather.bite_bp(l, CONTENT), 10000, "después de las 9, normal")
+	return true
+
+
+func test_raul_board_and_scan() -> bool:
+	var s := fed(new_state(8))
+	s.camp.night_thread = 2
+	Simulation.advance_to_end_of_day(s, CONTENT, true)
+	check(Neighbors.is_present(s, "raul"), "las luces trajeron a Raúl (también en partidas viejas)")
+	Neighbors.place(s, "raul", "road")
+	var board := Neighbors.raul_board(s, CONTENT)
+	check(board.size() >= 2, "el pizarrón trae clima y comerciantes")
+	var passes := 0
+	for line in board:
+		if line["key"] == "RAUL_BOARD_PASS":
+			passes += 1
+		var t := Texts.t(line["key"], line["params"])
+		check(not t.contains("{"), "texto completo: %s" % t)
+	eq(passes, s.camp.passes.size(), "anota a todos los que pasan hoy")
+	# En el camino, escanea siempre: la parada dura menos.
+	s.camp.passes.clear()
+	add_pass(s, 90, "ramiro", -3.0)
+	Merchants.hail(s, CONTENT, 90)
+	var p := s.camp.find_pass(90)
+	eq(int(p["leave_tick"]) - int(p["stop_tick"]), CONTENT.balance.merchant_stop_ticks * 7 / 10, "la parada dura 30 % menos")
+	check(s.notices.has(Texts.t("MSG_RAUL_SCAN", {"name": Texts.t("MERCHANT_RAMIRO")})), "avisa que lo escaneó")
+	for n in range(1, Neighbors.EPISODES + 1):
+		check(Texts.t("RAUL_EP_%d" % n) != "RAUL_EP_%d" % n, "existe RAUL_EP_%d" % n)
 	return true

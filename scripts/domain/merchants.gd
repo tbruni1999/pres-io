@@ -165,7 +165,7 @@ static func update(state: GameState, content: GameContent) -> void:
 					# Con el cartel, para justo frente a la choza.
 					p["v"] = 0.0 - x
 					p["x"] = 0.0
-					_stop(p, t, content)
+					_stop(state, p, t, content)
 				elif target <= x + 0.001 and limit < INF:
 					p["v"] = 0.0
 					p["x"] = maxf(x, limit) if x > limit else x
@@ -201,10 +201,15 @@ static func _waiting_ahead(state: GameState, p: Dictionary) -> Dictionary:
 	return best
 
 
-static func _stop(p: Dictionary, t: int, content: GameContent) -> void:
+static func _stop(state: GameState, p: Dictionary, t: int, content: GameContent) -> void:
 	p["status"] = STOPPED
 	p["stop_tick"] = t
-	p["leave_tick"] = t + content.balance.merchant_stop_ticks
+	var wait := content.balance.merchant_stop_ticks
+	# Raúl sale a "escanearlo" con la antena y el comerciante se va antes.
+	if Neighbors.raul_scans(state):
+		wait = wait * (10000 - content.balance.raul_stop_cut_bp) / 10000
+		state.notices.append(Texts.t("MSG_RAUL_SCAN", {"name": Texts.t(content.find_merchant(p["merchant"]).name_key)}))
+	p["leave_tick"] = t + wait
 
 
 static func active_pass(state: GameState) -> Dictionary:
@@ -243,7 +248,7 @@ static func hail(state: GameState, content: GameContent, pass_id: int) -> Comman
 	if p["status"] != PASSING or x > HAIL_MAX_X or x < HAIL_MIN_X:
 		return CommandResult.failure("too_far", Texts.t("ERR_MERCHANT_TOO_FAR"))
 	p["v"] = 0.0
-	_stop(p, state.tick, content)
+	_stop(state, p, state.tick, content)
 	return CommandResult.success("", {"merchant": def.id})
 
 
@@ -293,6 +298,14 @@ static func sell_to(state: GameState, content: GameContent, pass_id: int, item_i
 	state.player.remove_item(item_id, qty)
 	state.player.earn(total)
 	p["bought"] = int(p["bought"]) + qty
+	# Mucho movimiento en el camino (tres paradas con venta en el día y cartel) atrae a Salim.
+	if state.camp.has_building(SIGN_BUILDING):
+		var stops := 0
+		for q in state.camp.passes:
+			if int(q["bought"]) > 0:
+				stops += 1
+		if stops >= 3:
+			state.facts["player"]["busy_road"] = true
 	return CommandResult.success(Texts.t("MSG_SOLD", {"n": qty, "name": Texts.t(content.find_item(item_id).name_key), "total": Money.format(total)}), {"total_cents": total, "qty": qty})
 
 

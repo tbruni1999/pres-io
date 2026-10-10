@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/presentation/world/neighbor_beto.gd" id="1_neighbor_bet"]
+[ext_resource type="Script" path="res://scripts/presentation/world/loco_actor.gd" id="1_loco_actor"]
 [ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
 [ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="3_cloth_navy"]
 [ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="4_hair_dark"]
@@ -16,7 +16,7 @@
 size = Vector3(0.7, 1.8, 0.6)
 
 [node name="Beto" type="Node3D"]
-script = ExtResource("1_neighbor_bet")
+script = ExtResource("1_loco_actor")
 
 [node name="Body" type="Node3D" parent="."]
 

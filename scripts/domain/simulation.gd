@@ -143,11 +143,26 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 	#     (lo que está en el ahumadero no está en la mochila).
 	var pl := state.player
 	var rotten := 0
-	for item_id in pl.bag.keys():
+	# La sal de Salim salva un pescado crudo por bolsa (primero los grandes) y se gasta.
+	var salted := 0
+	var keys := pl.bag.keys()
+	keys.sort()
+	var saved := {}
+	for item_id in ["fish_big", "fish_small"]:
+		var n := mini(pl.count("salt"), pl.count(item_id))
+		if n > 0:
+			pl.remove_item("salt", n)
+			saved[item_id] = n
+			salted += n
+	for item_id in keys:
 		var item := content.find_item(item_id)
 		if item != null and item.perishable:
-			rotten += pl.count(item_id)
-			pl.remove_item(item_id, pl.count(item_id))
+			var lost := pl.count(item_id) - int(saved.get(item_id, 0))
+			if lost > 0:
+				rotten += lost
+				pl.remove_item(item_id, lost)
+	if salted > 0:
+		report.events.append({"key": "EV_SALTED", "n": salted})
 	# El espinel también: lo que no sacaste hoy se echa a perder.
 	for item_id in state.camp.longline_items:
 		rotten += int(state.camp.longline_items[item_id])
@@ -155,6 +170,8 @@ static func _close_day(state: GameState, content: GameContent, day: int, resting
 	report.rotten = rotten
 
 	# 6b') Vecinos: el impuesto Beto y quién llega mañana (atraído por algo).
+	if Neighbors.megaphone_wakes(state, content):
+		report.events.append({"key": "EV_SALIM_MEGAPHONE", "n": 0})
 	if Neighbors.beto_tax(state) > 0:
 		report.events.append({"key": "EV_BETO_TAX", "n": 1})
 	var arrived := Neighbors.check_arrivals(state, day)

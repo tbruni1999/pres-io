@@ -45,6 +45,8 @@ static func before_bed(state: GameState, content: GameContent) -> Dictionary:
 		"lights":
 			state.camp.night_thread += 1
 			var ep := state.camp.night_thread
+			if ep >= 2:
+				state.facts["player"]["lake_lights_2"] = true
 			if ep == LIGHTS_EPISODES:
 				state.player.earn(Money.from_units(b.lights_reward_uc))
 				state.facts["player"]["lights_solved"] = true

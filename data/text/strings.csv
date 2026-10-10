@@ -435,8 +435,8 @@ EV_LONGLINE,El espinel amaneció con {n} pescado(s).
 NPC_BETO,Beto
 ACTION_BETO_TALK,Charlar con Beto
 ACTION_BETO_PLACE,Beto: ¿dónde pongo la carpa?
-PLACE_TITLE,¿Dónde pone la carpa Beto?
-PLACE_BODY,"«Donde digas, jefe. Lejos del ronquido, si se puede. Del mío.»"
+PLACE_TITLE,¿Dónde se instala {name}?
+PLACE_BODY,«Donde digas.»
 PLACE_LAKE,Cerca del lago
 PLACE_BACK,Atrás de tu carpa
 PLACE_ROAD,Al lado del camino
@@ -477,3 +477,69 @@ FOGON_NEXT,(La etapa del pueblito llega en la próxima versión.)
 MSG_STORY_END_HAS_DEED,"Chola te dio una copia de la escritura. Ahora el campo tiene papeles. Y vos, un enemigo de traje."
 MERCHANT_BUYS_CRAVING,{price} ¡antojo!
 FIRE_TOMORROW,(mañana)
+NPC_SALIM,Salim
+NPC_RAUL,"Raúl ""Antena"""
+ACTION_SALIM_PLACE,Salim: ¿dónde pongo la manta?
+ACTION_RAUL_PLACE,Raúl: ¿dónde clavo la antena?
+ACTION_SALIM_TALK,Ver la manta de Salim
+ACTION_RAUL_TALK,Mirar el pizarrón de Raúl
+OBJ_PLACE_SALIM,Llegó Salim con una manta llena de cosas. Decidí dónde se instala
+OBJ_PLACE_RAUL,Llegó un tal Raúl con una antena. Decidí dónde la clava
+MSG_SALIM_PLACED,Salim abrió la manta. Ya te ofreció tres cosas y un Rolex.
+MSG_RAUL_PLACED,Raúl clavó la antena. Dice que ya tiene señal. ¿De qué? No dice.
+EV_SALIM_ARRIVES,Mañana llega Salim. Lo trajo el movimiento del camino.
+EV_RAUL_ARRIVES,Mañana llega Raúl. Vio las luces del lago y dice que lo llamaron.
+EV_SALIM_MEGAPHONE,"A las 6 en punto: «¡OFERTA, OFERTA!». El megáfono de Salim. Arrancás con hambre."
+EV_SALTED,La sal de Salim salvó {n} pescado(s) de pudrirse.
+MSG_RAUL_SCAN,Raúl salió a escanear a {name} con la antena. Se va a ir antes.
+MSG_TAPE_FIXED,Cinta aisladora en la {name}. Quedó fea pero tiene {n} usos.
+ERR_ROD_FINE,La caña está sana. Salim igual te la quería encintar.
+ITEM_SALT,Sal gruesa
+ITEM_UMBRELLA,Sombrilla
+ITEM_TAPE,Cinta aisladora
+SHOP_SALT,Salva un pescado crudo de pudrirse esta noche
+SHOP_TAPE,Le devuelve 15 usos a tu caña
+SHOP_UMBRELLA,Con sol no te da más sed de la normal
+SHOP_BUY,Comprar · {price}
+SHOP_NO_CREDIT,"Al contado. Siempre. (Y los precios suben, nunca bajan.)"
+NEIGHBOR_ALREADY_TALKED,Hoy ya te contó lo suyo.
+RAUL_BOARD_TITLE,Pizarrón de Raúl (hoy)
+RAUL_BOARD_WEATHER,Clima: {weather}
+RAUL_BOARD_RAIN,Llueve de {from} a {to}
+RAUL_BOARD_PASS,Pasa {name} a eso de las {time}
+RAUL_BOARD_CRAVING,Antojo: {name} paga más por {item}
+RAUL_BOARD_EMPTY,Ya pasó todo lo que tenía que pasar hoy. Según el marciano.
+SALIM_EP_1,"Soy Salim. Vendo de todo. Lo que no tengo, lo consigo. Lo que no consigo, no existe."
+SALIM_EP_2,"Busco a un socio, el Gallego Paz. Se fue con un container de linternas. Mis linternas."
+SALIM_EP_3,"Si un pescado te sale con un papelito adentro, es del Gallego. Él firmaba todo."
+SALIM_EP_4,El megáfono es de familia. Mi abuelo vendía alfajores a gritos en Constitución.
+SALIM_EP_5,Me llegó una pista: compraban linternas al por mayor por la ruta. Alguien de traje.
+SALIM_EP_6,"Precios suben, maestro. Inflación. No es mío, es del país. Yo solo la acompaño."
+SALIM_EP_7,¡Las luces del lago son MIS linternas! El Gallego se las vende al de traje.
+SALIM_EP_8,Le mandé una carta al Gallego. Me devolvió una linterna. Sin pilas. Ofensivo.
+SALIM_EP_9,"Si el de traje lotea esto, me quedo sin clientes. Vos sos mi cliente. Mi único."
+SALIM_EP_10,"Repartí linternas gratis. Única vez en mi vida. Cuando haya pueblito, abro «El Todo Salim»."
+SALIM_QUIP_1,¿Fiado? Fiado vendía mi abuelo. Por eso yo vendo y él está en una foto.
+SALIM_QUIP_2,"Esto no es caro, maestro. Caro es lo que pagás por no tenerlo."
+SALIM_QUIP_3,"Rolex original. Bueno, original de acá."
+SALIM_QUIP_4,"Si mañana sube, no me mires a mí. Mirá al dólar."
+SALIM_QUIP_5,Llevate dos y pagás dos. Promoción honesta.
+RAUL_EP_1,"Raúl Benítez, radioaficionado. Las luces del lago me llamaron. Por frecuencia, no por nombre."
+RAUL_EP_2,Quiero que me abduzcan. Dicen que allá hay jubilación interplanetaria. En dólares.
+RAUL_EP_3,Armé un captador con una olla y un rayo de bici. Capté a la Chola puteando a un pozo.
+RAUL_EP_4,Mi pizarrón no falla. El clima me lo dicta un marciano. O un vecino de Florida. Misma voz.
+RAUL_EP_5,Las luces hacen zumbido. Los platos voladores no zumban. Los drones sí. Sospechoso.
+RAUL_EP_6,Es un dron. Saca fotos del campo. Las manda a un tal «Loteos del Lago S.A.».
+RAUL_EP_7,No me desanimo: el de traje es un agente de otro planeta. Uno que cobra en cuotas.
+RAUL_EP_8,Le apunté la antena al dron y se cayó al lago. Ahora es un dron-pescado.
+RAUL_EP_9,"En el dron había fotos tuyas pescando. Saliste lindo. Bueno, saliste."
+RAUL_EP_10,"Necesito una computadora para mandarle mails a la nave. Cuando haya pueblito, soy el técnico."
+RAUL_QUIP_1,"No te acerques al cartel, que me cortás la frecuencia."
+RAUL_QUIP_2,Hoy la nave no transmite. Feriado galáctico.
+RAUL_QUIP_3,"La antena es para escanear comerciantes. Por las dudas sean marcianos. Ramiro, seguro."
+RAUL_QUIP_4,Turbo me mira raro. Turbo sabe algo.
+RAUL_QUIP_5,"El pronóstico es gratis. La paciencia de los comerciantes, no."
+BETO_TALK_TITLE,Beto
+PLACE_BODY_BETO,"«Donde digas, jefe. Lejos del ronquido, si se puede. Del mío.»"
+PLACE_BODY_SALIM,"«Cerca del camino vendo más. Cerca del lago grito más. Vos elegís, maestro.»"
+PLACE_BODY_RAUL,"«Necesito señal. Cuanto más cerca del camino, mejor escaneo. A los comerciantes no les gusta.»"

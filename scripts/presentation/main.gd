@@ -13,7 +13,9 @@ func _ready() -> void:
 	Game.state_replaced.connect(_place_player)
 	ui.wake_at_home.connect(go_home)
 	$World/Dog.player = player
-	$World/Neighbors/Beto.watch_target = player
+	for loco in $World/Neighbors.get_children():
+		if "watch_target" in loco:
+			loco.watch_target = player
 	var rain := RainFx.new()
 	rain.name = "Rain"
 	rain.target = player

@@ -4,14 +4,18 @@ extends GamePanel
 ## al fundar el pueblito se rearman las casas).
 
 var _id := ""
+var _title: Label
+var _body_text: Label
 var _content := VBoxContainer.new()
 var _feedback: Label
 
 
 func _init() -> void:
 	super()
-	body.add_child(UIKit.title(Texts.t("PLACE_TITLE")))
-	body.add_child(UIKit.label(Texts.t("PLACE_BODY"), 17, UIKit.COLOR_TEXT, true))
+	_title = UIKit.title("")
+	body.add_child(_title)
+	_body_text = UIKit.label("", 17, UIKit.COLOR_TEXT, true)
+	body.add_child(_body_text)
 	_content.add_theme_constant_override("separation", 8)
 	body.add_child(_content)
 	_feedback = UIKit.label("", 17, UIKit.COLOR_ACCENT, true)
@@ -21,6 +25,8 @@ func _init() -> void:
 
 func on_open(args: Dictionary) -> void:
 	_id = String(args.get("id", "beto"))
+	_title.text = Texts.t("PLACE_TITLE", {"name": Texts.t("NPC_" + _id.to_upper())})
+	_body_text.text = Texts.t("PLACE_BODY_" + _id.to_upper())
 	_feedback.text = ""
 	UIKit.clear(_content)
 	for spot in Neighbors.SPOTS:

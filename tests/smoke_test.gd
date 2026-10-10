@@ -285,7 +285,45 @@ func _run() -> void:
 	check(ctx_kind() == "talk", "se puede charlar con Beto (%s)" % ctx_kind())
 	press("interact")
 	await wait_physics()
+	check(ui.active_panel() == ui.neighbor, "se abre la charla con Beto")
 	check(int(s.camp.neighbors["beto"]["ep"]) == 1, "primer capítulo de Beto")
+	press("pause")
+	await wait_physics()
+	check(ui.active_panel() == null, "Esc cierra la charla")
+
+	# 6e') Salim (lo trae el camino con movimiento) y su manta; Raúl y su pizarrón.
+	s.facts["player"]["busy_road"] = true
+	s.player.hunger_bp = PlayerState.FULL
+	s.player.thirst_bp = PlayerState.FULL
+	game.sleep()
+	await wait_physics()
+	var salim: Node3D = main.get_node("World/Neighbors/Salim")
+	check(salim.visible, "llegó Salim")
+	game.place_neighbor("salim", "road")
+	await wait_physics()
+	await look(salim.global_position + Vector3(0, 0.05, -2.0), 180, -12)
+	check(ctx_kind() == "talk", "se puede ir a la manta de Salim (%s)" % ctx_kind())
+	press("interact")
+	await wait_physics()
+	check(ui.active_panel() == ui.neighbor, "panel de Salim")
+	s.player.earn(Money.from_units(20))
+	var salt_before: int = s.player.count("salt")
+	ui.neighbor._buy("salt")
+	check(s.player.count("salt") == salt_before + 1, "le compró sal a Salim")
+	press("pause")
+	await wait_physics()
+	s.camp.night_thread = 2
+	s.player.hunger_bp = PlayerState.FULL
+	s.player.thirst_bp = PlayerState.FULL
+	game.sleep()
+	await wait_physics()
+	check(main.get_node("World/Neighbors/Raul").visible, "llegó Raúl")
+	game.place_neighbor("raul", "back")
+	ui.open_panel(ui.neighbor, {"id": "raul"})
+	await wait_physics()
+	check(ui.neighbor._content.get_child_count() >= 2, "el pizarrón de Raúl muestra el día")
+	ui.close_panel()
+	await wait_physics()
 
 	# 6f) Espinel: amanece con pescado y se saca manteniendo E.
 	s.camp.buildings.append("longline")

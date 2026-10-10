@@ -195,6 +195,10 @@ func talk_neighbor(id: String) -> String:
 	return key
 
 
+func salim_buy(item_id: String) -> CommandResult:
+	return _player_command("salim_buy", Neighbors.salim_buy(state, content, item_id))
+
+
 func found_pueblo() -> CommandResult:
 	var result := StageGoal.found(state, content)
 	_player_command("found_pueblo", result)

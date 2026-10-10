@@ -3,7 +3,48 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: clima, noches, Beto y la meta del pueblito (10 de octubre de 2026, esquema 5)
+## Estado actual: los tres locos en carpa (10 de octubre de 2026)
+
+- **Salim** (vende sal, cinta aisladora y sombrilla; megáfono a la mañana) y **Raúl "Antena"** (pizarrón con el día;
+  espanta a los comerciantes con la antena) se suman a Beto. Cada uno llega solo, atraído por algo, y elegís dónde va su carpa.
+- **Panel de charla** para cada loco (el capítulo de hoy queda a la vista; antes era un aviso de 4 s) con la manta de Salim y el pizarrón de Raúl.
+- La meta del pueblito vuelve a pedir **los tres vecinos**: ya se puede completar jugando.
+- Catálogo de 10 locos más (para el pueblito) en [`LOCOS.md`](LOCOS.md).
+- Sin cambio de esquema de guardado (sigue en 5): solo hay ids nuevos de vecinos y objetos.
+
+| Comprobación | Resultado |
+|---|---|
+| Pruebas de dominio | **69 pruebas, 1.022 comprobaciones OK** |
+| Prueba de humo | **84 comprobaciones OK** (llegan Salim y Raúl, comprar en la manta, pizarrón) |
+| Capturas | recorrido completo sin errores; máximo 341 llamadas de dibujo |
+
+## Hoja de ruta: lo que queda (relevamiento del 10 de octubre)
+
+**Inmediato (juego)**
+- Etapa del **pueblito**: hoy fundarlo solo muestra el fogón. Falta el mundo nuevo (casas rearmadas, empleos, la computadora). *Grande.*
+- **Minería**: comerciante nuevo que trae el pico, picar con skillcheck, comprador de mineral, después mina automática. *Grande.*
+- **Ayudantes con sueldo** (la mina): se van si no les pagás. *Mediano.*
+- Prueba de **estrategias**: que la meta se alcance jugando por dos caminos en ~10 días, sin regalar plata. *Mediano.*
+
+**UX que falta**
+- Menú principal con "Continuar" (hoy siempre arranca partida nueva) y "Salir" con confirmación. *Mediano / chico.*
+- Releer las historias de comerciantes y locos (un cuaderno). *Mediano.*
+- Ayuda de controles en el juego; scroll en paneles largos; avisos que no se pierdan. *Chico / mediano.*
+- Colisión de los vehículos. *Chico.*
+
+**Después**
+- Rosa, la colecta del pozo, confianza y ascenso a referente (el dominio ya existe, falta llevarlo al juego).
+- Dilemas (doña Rosa y su "orégano"), seguridad que escala hasta el **secuestro**, ganadería, agricultura, mercados mejores,
+  delegado → alcalde → región → país.
+
+**Técnico / entrega (del brief)**
+- Exportar el **.exe de Windows** (faltan plantillas 4.7.2) y probarlo, con guardado en `%APPDATA%`. *Mediano.*
+- Medir **rendimiento** con el protocolo del brief en el hardware objetivo (lo tiene que correr Tomás) y perfiles de calidad Bajo/Medio. *Mediano.*
+- Fusionar mallas estáticas (341 de 400 llamadas de dibujo). *Chico.*
+- **Audio** del mundo: sonidos 3D de fogón, agua, lluvia, caballo, motor, perro. *Mediano.*
+- Textos de errores de carga al CSV; overlay F3 con p99 y costo de simulación p95. *Chico.*
+
+## Estado anterior: clima, noches, Beto y la meta del pueblito (10 de octubre de 2026, esquema 5)
 
 Respuestas de Tomás a las 24 preguntas, ya implementadas (detalle en [`DESIGN.md`](DESIGN.md)):
 - **Clima del día** (sol, nublado, viento, lluvia) con efectos reales y sin trabar: la lluvia dura unas horas,
@@ -42,7 +83,6 @@ pero ya está más cerca: el próximo paso de estética debería fusionar mallas
 ### No verificado
 - Balance real de la nueva dureza (desgaste, leña que se va, Beto comiendo ahumados): falta que Tomás lo juegue.
 - La etapa del pueblito en sí: fundar el pueblito hoy muestra el fogón y queda marcado; el mundo nuevo viene después.
-- Los otros dos locos (uno que vende y uno que da beneficios) todavía no existen; mientras tanto la meta pide solo a Beto.
 
 ## Siguiente paso propuesto
 1. Los otros dos locos (atraídos por el cartel y por el muelle/el perro), con sus problemas.

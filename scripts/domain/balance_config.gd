@@ -103,6 +103,15 @@ extends Resource
 @export var longline_max: int = 4
 @export var longline_big_bp: int = 1500
 
+@export_group("Locos")
+## Raúl acorta la parada de los comerciantes que escanea (puntos básicos).
+@export var raul_stop_cut_bp: int = 3000
+## Cinta aisladora de Salim: usos que le devuelve a la caña.
+@export var tape_uses: int = 15
+## Megáfono de Salim: hambre al despertar (carpa lejos del lago) o piques más lentos (carpa en el lago).
+@export var megaphone_hunger_bp: int = 1500
+@export var megaphone_bite_bp: int = 13000
+
 @export_group("Meta del pueblito")
 @export var goal_money_uc: int = 1500
 @export var goal_materials: Dictionary = {"sheet_metal": 10, "cement": 6}

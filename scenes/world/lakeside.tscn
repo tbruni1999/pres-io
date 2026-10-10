@@ -26,11 +26,13 @@
 [ext_resource type="PackedScene" path="res://scenes/props/longline_plot.tscn" id="24_longline_plo"]
 [ext_resource type="PackedScene" path="res://scenes/props/neighbor_tent.tscn" id="25_neighbor_ten"]
 [ext_resource type="PackedScene" path="res://scenes/actors/beto.tscn" id="26_beto"]
-[ext_resource type="Script" path="res://scripts/presentation/world/grass_field.gd" id="27_grass_field"]
-[ext_resource type="Material" path="res://assets/materials/grass_blades.tres" id="28_grass_blades"]
-[ext_resource type="PackedScene" path="res://scenes/props/tree.tscn" id="29_tree"]
-[ext_resource type="Material" path="res://assets/materials/tire.tres" id="30_tire"]
-[ext_resource type="Material" path="res://assets/materials/grass_dry.tres" id="31_grass_dry"]
+[ext_resource type="PackedScene" path="res://scenes/actors/salim.tscn" id="27_salim"]
+[ext_resource type="PackedScene" path="res://scenes/actors/raul.tscn" id="28_raul"]
+[ext_resource type="Script" path="res://scripts/presentation/world/grass_field.gd" id="29_grass_field"]
+[ext_resource type="Material" path="res://assets/materials/grass_blades.tres" id="30_grass_blades"]
+[ext_resource type="PackedScene" path="res://scenes/props/tree.tscn" id="31_tree"]
+[ext_resource type="Material" path="res://assets/materials/tire.tres" id="32_tire"]
+[ext_resource type="Material" path="res://assets/materials/grass_dry.tres" id="33_grass_dry"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(240, 1, 240)
@@ -698,17 +700,23 @@ spot = "road"
 [node name="Beto" parent="Neighbors" instance=ExtResource("26_beto")]
 position = Vector3(4.9, 0, 2.3)
 
+[node name="Salim" parent="Neighbors" instance=ExtResource("27_salim")]
+position = Vector3(-5.6, 0, 7.4)
+
+[node name="Raul" parent="Neighbors" instance=ExtResource("28_raul")]
+position = Vector3(-1.8, 0, -13.2)
+
 [node name="Grass" type="Node3D" parent="."]
-script = ExtResource("27_grass_field")
-material = ExtResource("28_grass_blades")
+script = ExtResource("29_grass_field")
+material = ExtResource("30_grass_blades")
 area_size = 160.0
 per_chunk = 240
 exclude_circles = PackedVector3Array(0, -36, 21, 0, 0, 3.2, 3.3, 3.6, 1.2, -4.8, -0.6, 1.8, -3.4, 9.4, 1.0, 5.2, -10.8, 1.6, -1.4, -7.2, 1.6, 8.4, 7.4, 1.6)
 exclude_rects = PackedVector4Array(-120, 9.6, 120, 15.6, -0.9, 1.5, 0.9, 10.5)
 
 [node name="Reeds" type="Node3D" parent="."]
-script = ExtResource("27_grass_field")
-material = ExtResource("28_grass_blades")
+script = ExtResource("29_grass_field")
+material = ExtResource("30_grass_blades")
 area_size = 50.0
 chunk_size = 12.5
 per_chunk = 160
@@ -723,43 +731,43 @@ position = Vector3(0, 0, -36)
 
 [node name="Decor" type="Node3D" parent="."]
 
-[node name="FarTree0" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree0" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(-45, 0, 25)
 rotation_degrees = Vector3(0, 0, 0)
 
-[node name="FarTree1" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree1" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(40, 0, 30)
 rotation_degrees = Vector3(0, 61, 0)
 
-[node name="FarTree2" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree2" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(-55, 0, -10)
 rotation_degrees = Vector3(0, 122, 0)
 
-[node name="FarTree3" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree3" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(55, 0, -5)
 rotation_degrees = Vector3(0, 183, 0)
 
-[node name="FarTree4" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree4" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(-40, 0, -60)
 rotation_degrees = Vector3(0, 244, 0)
 
-[node name="FarTree5" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree5" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(45, 0, -62)
 rotation_degrees = Vector3(0, 305, 0)
 
-[node name="FarTree6" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree6" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(0, 0, -70)
 rotation_degrees = Vector3(0, 6, 0)
 
-[node name="FarTree7" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree7" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(-15, 0, 40)
 rotation_degrees = Vector3(0, 67, 0)
 
-[node name="FarTree8" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree8" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(18, 0, 42)
 rotation_degrees = Vector3(0, 128, 0)
 
-[node name="FarTree9" parent="Decor" instance=ExtResource("29_tree")]
+[node name="FarTree9" parent="Decor" instance=ExtResource("31_tree")]
 position = Vector3(60, 0, 40)
 rotation_degrees = Vector3(0, 189, 0)
 
@@ -803,7 +811,7 @@ position = Vector3(-4.5, 0.11, 3.5)
 script = ExtResource("2_kit_shape")
 shape = 1
 size = Vector3(0.7, 0.22, 0.7)
-material = ExtResource("30_tire")
+material = ExtResource("32_tire")
 
 [node name="FencePost0" type="MeshInstance3D" parent="Decor"]
 position = Vector3(-8, 0.55, 9.8)
@@ -832,42 +840,42 @@ material = ExtResource("11_wood_old")
 position = Vector3(0, 1.5, -84)
 script = ExtResource("2_kit_shape")
 size = Vector3(176, 4, 8)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="BermSouth" type="MeshInstance3D" parent="Edges"]
 position = Vector3(0, 1.5, 84)
 script = ExtResource("2_kit_shape")
 size = Vector3(176, 4, 8)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="BermWestA" type="MeshInstance3D" parent="Edges"]
 position = Vector3(-84, 1.5, -37)
 script = ExtResource("2_kit_shape")
 size = Vector3(8, 4, 94)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="BermWestB" type="MeshInstance3D" parent="Edges"]
 position = Vector3(-84, 1.5, 49)
 script = ExtResource("2_kit_shape")
 size = Vector3(8, 4, 70)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="BermEastA" type="MeshInstance3D" parent="Edges"]
 position = Vector3(84, 1.5, -37)
 script = ExtResource("2_kit_shape")
 size = Vector3(8, 4, 94)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="BermEastB" type="MeshInstance3D" parent="Edges"]
 position = Vector3(84, 1.5, 49)
 script = ExtResource("2_kit_shape")
 size = Vector3(8, 4, 70)
-material = ExtResource("31_grass_dry")
+material = ExtResource("33_grass_dry")
 collide = true
 
 [node name="RoadWallW" type="StaticBody3D" parent="Edges"]

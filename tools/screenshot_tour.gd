@@ -158,6 +158,27 @@ func _run() -> void:
 	await _frames(4)
 	await _shot_at("23_lona_bici", Vector3(0.5, 0.05, 7.5), Vector3(1.5, 0.9, 2.5))
 	await _shot_at("24_beto_carpa", Vector3(3.5, 0.05, -4.0), Vector3(5.6, 0.9, -9.8))
+	s.facts["player"]["busy_road"] = true
+	s.camp.night_thread = maxi(2, s.camp.night_thread)
+	game.sleep()
+	game.sleep()
+	game.place_neighbor("salim", "road")
+	game.place_neighbor("raul", "back")
+	s.camp.weather = Weather.SUN
+	s.camp.rain_start = -1
+	s.camp.rain_end = -1
+	await _frames(4)
+	await _shot_at("24b_salim", Vector3(5.5, 0.05, 4.5), Vector3(9.0, 0.9, 8.5))
+	await _shot_at("24c_raul", Vector3(1.5, 0.05, -1.5), Vector3(-1.2, 1.2, -5.5))
+	_pose_at(Vector3(5.5, 0.05, 4.5), Vector3(9.0, 0.9, 8.5))
+	ui.open_panel(ui.neighbor, {"id": "salim"})
+	await _frames(4)
+	await _capture("24d_panel_salim")
+	ui.close_panel()
+	ui.open_panel(ui.neighbor, {"id": "raul"})
+	await _frames(4)
+	await _capture("24e_panel_raul")
+	ui.close_panel()
 	await _shot_at("25_espinel", Vector3(-17.0, 0.05, -18.0), Vector3(-11.0, 0.2, -26.0))
 	_pose_at(Vector3(3.3, 0.05, 1.6), Vector3(3.3, 0.2, 3.6))
 	ui.open_panel(ui.fire, {})

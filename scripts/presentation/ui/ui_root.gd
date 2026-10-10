@@ -25,6 +25,7 @@ var bag := BagPanel.new()
 var report := ReportPanel.new()
 var place := PlacePanel.new()
 var message := MessagePanel.new()
+var neighbor := NeighborPanel.new()
 var pause_menu := PauseMenu.new()
 var debug_overlay := DebugOverlay.new()
 
@@ -57,7 +58,7 @@ func _ready() -> void:
 	_center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_center)
-	for p: GamePanel in [trade, fire, smoker, bag, report, place, message, pause_menu]:
+	for p: GamePanel in [trade, fire, smoker, bag, report, place, message, neighbor, pause_menu]:
 		p.ui = self
 		p.close_requested.connect(close_panel)
 		_center.add_child(p)
@@ -260,10 +261,7 @@ func _use_context() -> void:
 		"place":
 			open_panel(place, {"id": ctx["id"]})
 		"talk":
-			var nid := String(ctx["id"])
-			var key := Game.talk_neighbor(nid)
-			var line := Texts.t(key) if not key.is_empty() else quip(nid.to_upper(), "QUIP")
-			post_notice("%s: «%s»" % [Texts.t("NPC_" + nid.to_upper()), line])
+			open_panel(neighbor, {"id": ctx["id"]})
 		"smoker":
 			open_panel(smoker)
 		"sleep":

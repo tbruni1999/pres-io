@@ -41,7 +41,7 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 ## Decisiones del 10 de octubre (respuestas a las 24 preguntas)
 | Tema | Decisión |
 |---|---|
-| Salto de etapa (carpa → pueblito) | Juntar **plata + materiales comprados** (chapas a Coco, cemento a la Chola), la **escritura** (final de la historia de la Chola) y **tres vecinos con carpa** (mientras no existan los tres, se piden los que ya pueden llegar). Se ve en la mochila (Tab). Más adelante, en el pueblito, llega **la computadora**. |
+| Salto de etapa (carpa → pueblito) | Juntar **plata + materiales comprados** (chapas a Coco, cemento a la Chola), la **escritura** (final de la historia de la Chola) y **tres vecinos con carpa** (Beto, Salim y Raúl). Se ve en la mochila (Tab). Más adelante, en el pueblito, llega **la computadora**. |
 | Antes de dormir | **Siempre pasa algo**: un misterio por entregas (las luces del lago, 6 capítulos que terminan en un plano de LOTEO del de traje), rarezas graciosas (12), una botella con plata, un regalo anónimo o un susto. |
 | Celebración de etapa | **Fogón con los vecinos** al fundar el pueblito. |
 | Mal día | Pega fuerte: desmayo más caro, dormir afuera más duro, el zorro y el desconocido se llevan cosas. |
@@ -65,7 +65,24 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 - **Ayuda**: mantiene el fogón prendido todo el día.
 - **Problema**: lo hace con **tu** leña, lo necesites o no, y cobra el "impuesto Beto": se come un ahumado tuyo por día.
 - **Historia**: 10 capítulos, uno por día de charla (la parrilla que se le prendió fuego, el de traje que compra campos, el country con cancha de golf en el lago…).
-- Los otros dos locos (uno que vende y uno que da beneficios) quedan para la próxima tanda.
+
+### Salim, el vendedor
+- **Lo trae**: el camino con movimiento (cartel + venderles a tres paradas en un mismo día).
+- **Vende** (al contado, sin fiado): sal gruesa 10 UC (salva un pescado crudo esa noche), cinta aisladora 20 UC
+  (+15 usos a tu caña), sombrilla 80 UC (con sol no da más sed). **Inflación**: +1 UC cada 2 capítulos, hasta +5. Nunca baja.
+- **Problema**: megáfono de 6 a 9. Con su carpa en el lago, los peces pican 30 % más lento a esa hora; en otro lado, te despierta con hambre.
+- **Historia**: busca al Gallego Paz, que se fue con sus linternas… que resultan ser las luces del lago. Termina queriendo abrir «El Todo Salim» en el pueblito.
+
+### Raúl "Antena", el de los beneficios
+- **Lo traen**: las luces del lago (dos capítulos vistos).
+- **Beneficio**: su pizarrón dice el clima del día, si llueve y de qué hora a qué hora, quién pasa por el camino y a qué hora, y el antojo.
+- **Problema**: sale a "escanear" a los comerciantes con la antena y se van 30 % antes. Pasa siempre si su carpa está
+  al lado del camino, la mitad de las veces en el lago y poco atrás de tu carpa.
+- **Historia**: quiere que lo abduzcan para cobrar una jubilación interplanetaria; descubre que las luces son un dron
+  de "Loteos del Lago S.A."; termina pidiendo una computadora (el puente a la computadora del pueblito).
+
+Los tres lugares para carpa son un rompecabezas: Salim en el lago te arruina la mañana de pesca, Raúl en el camino te acorta las paradas.
+El catálogo completo de candidatos (10 locos más para el pueblito) está en [`LOCOS.md`](LOCOS.md).
 
 ## Progresión prevista
 1. **Carpa y lago** (hecho): pesca, comerciantes en fila con historias por entregas, madera, fogatita, cartel, ahumadero, choza, muelle, noche y el perro.

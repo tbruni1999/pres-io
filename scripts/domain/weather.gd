@@ -53,22 +53,26 @@ static func is_raining(state: GameState) -> bool:
 	return state.camp.rain_start >= 0 and state.tick >= state.camp.rain_start and state.tick < state.camp.rain_end
 
 
-## Multiplicador (puntos básicos) de la sed: con sol pega el calor; con lluvia casi no.
+## Multiplicador (puntos básicos) de la sed: con sol pega el calor (salvo con sombrilla); con lluvia casi no.
 static func thirst_bp(state: GameState, content: GameContent) -> int:
 	if is_raining(state):
 		return content.balance.rain_thirst_bp
-	if state.camp.weather == SUN:
+	if state.camp.weather == SUN and not state.player.has_tool("umbrella"):
 		return content.balance.sun_thirst_bp
 	return 10000
 
 
 ## Multiplicador (puntos básicos) de la espera del pique: nublado y con lluvia pican más.
 static func bite_bp(state: GameState, content: GameContent) -> int:
+	var bp := 10000
 	if is_raining(state):
-		return content.balance.rain_bite_bp
-	if state.camp.weather == CLOUDY:
-		return content.balance.cloudy_bite_bp
-	return 10000
+		bp = content.balance.rain_bite_bp
+	elif state.camp.weather == CLOUDY:
+		bp = content.balance.cloudy_bite_bp
+	# El megáfono de Salim espanta los peces si su carpa está en el lago.
+	if Neighbors.megaphone_scares_fish(state):
+		bp = bp * content.balance.megaphone_bite_bp / 10000
+	return bp
 
 
 ## Con viento la leña dura menos.

@@ -1,11 +1,11 @@
 extends Node3D
-## Beto en el mundo. Solo presentación: aparece cuando llegó (Neighbors), espera al lado
-## del fogón hasta que elegís dónde va su carpa y después se queda junto a ella.
+## Un loco en el mundo (Beto, Salim, Raúl). Solo presentación: aparece cuando llegó
+## (Neighbors), espera en su punto hasta que elegís dónde va su carpa y después se queda junto a ella.
 ## Mira al jugador si está cerca (decide 4 veces por segundo, gira suave).
 
-const WAIT_POINT := Vector3(4.9, 0, 2.3)
-
 @export var neighbor_id: String = "beto"
+## Dónde espera recién llegado, antes de tener carpa.
+@export var wait_point: Vector3 = Vector3(4.9, 0, 2.3)
 @export var notice_radius: float = 6.0
 
 var watch_target: Node3D
@@ -34,7 +34,7 @@ func _stand_point(spot: String) -> Vector3:
 	for tent in get_tree().get_nodes_in_group("neighbor_tents"):
 		if String(tent.get("spot")) == spot and not spot.is_empty():
 			return (tent.get_node("Stand") as Node3D).global_position
-	return WAIT_POINT
+	return wait_point
 
 
 func _process(delta: float) -> void:
