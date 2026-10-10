@@ -21,8 +21,10 @@ static func requirements(state: GameState, content: GameContent) -> Array[Dictio
 		out.append({"key": "GOAL_ITEM", "item": id, "have": have, "need": need, "ok": have >= need})
 	var deed := state.has_fact("player", b.goal_fact)
 	out.append({"key": "GOAL_DEED", "have": 1 if deed else 0, "need": 1, "ok": deed})
+	# Mientras no existan los tres locos, se piden los que ya pueden llegar (si no, la meta traba).
+	var need_n := mini(b.goal_neighbors, Neighbors.ATTRACTED_BY.size())
 	var n := Neighbors.living_count(state)
-	out.append({"key": "GOAL_NEIGHBORS", "have": n, "need": b.goal_neighbors, "ok": n >= b.goal_neighbors})
+	out.append({"key": "GOAL_NEIGHBORS", "have": n, "need": need_n, "ok": n >= need_n})
 	return out
 
 

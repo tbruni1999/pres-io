@@ -41,7 +41,7 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 ## Decisiones del 10 de octubre (respuestas a las 24 preguntas)
 | Tema | Decisión |
 |---|---|
-| Salto de etapa (carpa → pueblito) | Juntar **plata + materiales comprados** (chapas a Coco, cemento a la Chola), la **escritura** (final de la historia de la Chola) y **tres vecinos con carpa**. Se ve en la mochila (Tab). Más adelante, en el pueblito, llega **la computadora**. |
+| Salto de etapa (carpa → pueblito) | Juntar **plata + materiales comprados** (chapas a Coco, cemento a la Chola), la **escritura** (final de la historia de la Chola) y **tres vecinos con carpa** (mientras no existan los tres, se piden los que ya pueden llegar). Se ve en la mochila (Tab). Más adelante, en el pueblito, llega **la computadora**. |
 | Antes de dormir | **Siempre pasa algo**: un misterio por entregas (las luces del lago, 6 capítulos que terminan en un plano de LOTEO del de traje), rarezas graciosas (12), una botella con plata, un regalo anónimo o un susto. |
 | Celebración de etapa | **Fogón con los vecinos** al fundar el pueblito. |
 | Mal día | Pega fuerte: desmayo más caro, dormir afuera más duro, el zorro y el desconocido se llevan cosas. |

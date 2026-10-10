@@ -304,6 +304,16 @@ static func migrate_v4_to_v5(d: Dictionary, content: GameContent) -> Dictionary:
 		camp["craving"] = {}
 		camp["night_thread"] = 0
 		camp["neighbors"] = []
+	# Quien ya ahumaba antes de v5 cuenta como "ya ahumó" (atrae a Beto).
+	var smoked := false
+	if camp is Dictionary:
+		var bl: Variant = camp.get("buildings", [])
+		smoked = bl is Array and bl.has("smokehouse")
+	if smoked:
+		var fl: Variant = out.get("facts", [])
+		for f in (fl if fl is Array else []):
+			if f is Dictionary and f.get("subject") == "player" and f.get("facts") is Array and not f["facts"].has("smoked_once"):
+				f["facts"].append("smoked_once")
 	var pl: Variant = out.get("player_state")
 	if pl is Dictionary:
 		var wear: Array = []

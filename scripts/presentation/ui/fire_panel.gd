@@ -30,8 +30,14 @@ func refresh() -> void:
 	var lit := Simulation.fire_lit(s)
 	var status := Texts.t("FIRE_STATUS_OUT")
 	if lit:
-		var until_min := DayTime.minute_of_day(s, c) + DayTime.ticks_to_minutes(s, c, s.camp.fire_until - s.tick)
-		status = Texts.t("FIRE_STATUS_LIT", {"time": DayTime.format_clock(fmod(until_min, 1440.0))})
+		# Desde el tick absoluto: a las 24:00 el día siguiente arranca a las 06:00 sin hueco.
+		var ft := s.camp.fire_until
+		var tpd := s.ticks_per_day
+		var b := c.balance
+		var until_min := b.day_start_minute + float(ft % tpd) * (b.day_end_minute - b.day_start_minute) / tpd
+		status = Texts.t("FIRE_STATUS_LIT", {"time": DayTime.format_clock(until_min)})
+		if ft / tpd > s.tick / tpd:
+			status += " " + Texts.t("FIRE_TOMORROW")
 	_content.add_child(UIKit.label(status, 19, UIKit.COLOR_ACCENT if lit else UIKit.COLOR_BAD))
 	_content.add_child(UIKit.label(Texts.t("FIRE_WOOD", {"n": s.camp.wood}), 17, UIKit.COLOR_MUTED))
 	if Weather.is_raining(s) and not s.camp.has_building("tarp"):

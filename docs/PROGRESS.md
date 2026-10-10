@@ -22,13 +22,16 @@ Respuestas de Tomás a las 24 preguntas, ya implementadas (detalle en [`DESIGN.m
 - **Malos días más duros**: desmayo 15 % → 30 % → … (tope 60 %), dormir afuera cuesta más.
 
 ### Bugs corregidos en esta tanda
-- Ninguno abierto de la tanda anterior; la revisión de esta tanda se anota acá al cerrarla.
+Revisión independiente (repetición de 12 días con guardar/cargar cada día idéntica byte a byte; migraciones v1–v4 → v5 jugadas):
+- La meta pedía 3 vecinos pero solo existe Beto: no se podía completar. Ahora pide los que ya pueden llegar (hoy 1; sube solo cuando lleguen los otros dos).
+- El panel del fogón mostraba mal la hora de "prendido hasta" si pasaba de las 24:00 (el día siguiente arranca a las 06:00). Ahora se calcula desde el tick y dice "(mañana)".
+- Partidas v4 con ahumadero no atraían a Beto hasta otra tanda: la migración marca "ya ahumó".
 
 ### Verificado en este entorno
 | Comprobación | Comando | Resultado |
 |---|---|---|
 | Importación | `godot --headless --path . --import` | sin errores |
-| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **64 pruebas, 959 comprobaciones OK** |
+| Pruebas de dominio | `godot --headless --path . --script tests/run_tests.gd` | **66 pruebas, 962 comprobaciones OK** |
 | Prueba de humo | `godot --headless --path . res://tests/smoke_test.tscn` | **76 comprobaciones OK** |
 | Render real | `xvfb-run ... godot --path . res://tools/screenshot_tour.tscn` | 33 capturas sin errores de script (llvmpipe), incluidas lluvia, nublado, Beto y su carpa, espinel, lona y bici |
 
@@ -39,7 +42,7 @@ pero ya está más cerca: el próximo paso de estética debería fusionar mallas
 ### No verificado
 - Balance real de la nueva dureza (desgaste, leña que se va, Beto comiendo ahumados): falta que Tomás lo juegue.
 - La etapa del pueblito en sí: fundar el pueblito hoy muestra el fogón y queda marcado; el mundo nuevo viene después.
-- Los otros dos locos (uno que vende y uno que da beneficios) todavía no existen, así que la meta no se puede completar jugando.
+- Los otros dos locos (uno que vende y uno que da beneficios) todavía no existen; mientras tanto la meta pide solo a Beto.
 
 ## Siguiente paso propuesto
 1. Los otros dos locos (atraídos por el cartel y por el muelle/el perro), con sus problemas.

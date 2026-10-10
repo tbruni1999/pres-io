@@ -84,6 +84,8 @@ func _initialize() -> void:
 		"test_v5_roundtrip_new_fields",
 		"test_fixture_v5_loads",
 		"test_v4_migrates_to_v5_defaults",
+		"test_goal_reachable_with_real_neighbors",
+		"test_v4_smoker_counts_as_smoked",
 	]
 	for t in tests:
 		_current = t
@@ -1289,8 +1291,7 @@ func test_materials_storage_and_goal() -> bool:
 	eq(StageGoal.found(s, CONTENT).code, "goal_incomplete", "no se funda incompleto")
 	s.camp.storage = {"cement": 6, "sheet_metal": 11}
 	s.facts["player"]["has_deed"] = true
-	for id in ["beto", "x2", "x3"]:
-		s.camp.neighbors[id] = {"spot": id, "since": 1, "talked_day": 0, "ep": 0}
+	s.camp.neighbors["beto"] = {"spot": "lake", "since": 1, "talked_day": 0, "ep": 0}
 	check(StageGoal.is_complete(s, CONTENT), "con todo se puede fundar")
 	var wallet := s.player.wallet_cents
 	check(StageGoal.found(s, CONTENT).ok, "pueblito fundado")
@@ -1370,4 +1371,28 @@ func test_v4_migrates_to_v5_defaults() -> bool:
 	check(s.camp.neighbors.is_empty() and s.camp.storage.is_empty(), "sin vecinos ni acopio")
 	var rep := Simulation.go_to_bed(fed(s), CONTENT)
 	check(rep != null and not rep.events.is_empty(), "la partida migrada sigue andando")
+	return true
+
+
+func test_goal_reachable_with_real_neighbors() -> bool:
+	var s := fed(new_state())
+	s.facts["player"]["smoked_once"] = true
+	Simulation.advance_to_end_of_day(s, CONTENT, true)
+	Neighbors.place(s, "beto", "back")
+	s.camp.storage = {"cement": 6, "sheet_metal": 10}
+	s.facts["player"]["has_deed"] = true
+	give_money(s, 1500)
+	check(StageGoal.is_complete(s, CONTENT), "con los vecinos que existen hoy la meta se puede cumplir")
+	return true
+
+
+func test_v4_smoker_counts_as_smoked() -> bool:
+	var f := FileAccess.open(FIXTURE_V4, FileAccess.READ)
+	var d: Dictionary = JSON.parse_string(f.get_as_text())
+	var r := GameState.from_dict(d, CONTENT)
+	var s: GameState = r["state"]
+	check(s != null, "migra")
+	if s == null:
+		return false
+	check(s.camp.has_building("smokehouse") and s.has_fact("player", "smoked_once"), "quien ya tenía ahumadero atrae a Beto")
 	return true
