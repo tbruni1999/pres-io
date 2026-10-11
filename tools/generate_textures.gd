@@ -23,6 +23,8 @@ func _initialize() -> void:
 	_water_normal("water_normal", 51)
 	_grass_blades("grass_blades", 61)
 	_mask("noise_mask", 71)
+	_fabric("fabric", 81)
+	_skin("skin_mottle", 91)
 	print("texturas generadas en ", OUT)
 	quit(0)
 
@@ -144,6 +146,34 @@ func _grass_blades(name: String, seed_value: int) -> void:
 func _mask(name: String, seed_value: int) -> void:
 	var img := _noise(seed_value, 0.006, 4).get_seamless_image(SIZE, SIZE, false, false, 0.3)
 	img.convert(Image.FORMAT_L8)
+	_save(img, name)
+
+
+## Tela de ropa: sarga diagonal fina y pelusa. Casi blanca para que el color del material la tiña.
+func _fabric(name: String, seed_value: int) -> void:
+	var grain := _noise(seed_value, 0.25, 2).get_seamless_image(SIZE, SIZE, false, false, 0.1)
+	var fibers := _noise(seed_value + 1, 0.04, 3).get_seamless_image(SIZE, SIZE, false, false, 0.2)
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			# Sarga: diagonal de 8 px (divide a 512, así es tileable).
+			var twill := sin((x + y) * TAU / 8.0) * 0.5 + 0.5
+			var l := 0.84 + twill * 0.07 + (grain.get_pixel(x, y).r - 0.5) * 0.05 + (fibers.get_pixel(x, y).r - 0.5) * 0.06
+			img.set_pixel(x, y, Color(clampf(l, 0.0, 1.0), clampf(l, 0.0, 1.0), clampf(l, 0.0, 1.0)))
+	_save(img, name)
+
+
+## Piel: manchas cálidas muy suaves. Casi blanca para que el tono del material la tiña.
+func _skin(name: String, seed_value: int) -> void:
+	var base := _noise(seed_value, 0.02, 3).get_seamless_image(SIZE, SIZE, false, false, 0.2)
+	var pores := _noise(seed_value + 1, 0.4, 1).get_seamless_image(SIZE, SIZE, false, false, 0.1)
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			var v := base.get_pixel(x, y).r
+			var c := Color(1.0, 0.96, 0.92).lerp(Color(0.9, 0.82, 0.78), v * 0.6)
+			c = c.darkened(maxf(0.0, pores.get_pixel(x, y).r - 0.7) * 0.4)
+			img.set_pixel(x, y, c)
 	_save(img, name)
 
 

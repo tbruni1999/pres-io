@@ -191,52 +191,126 @@ size = Vector3(1, 0.2, 1)
 material = ExtResource("8_tire")
 
 [node name="Torso" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.5, 1.18, 0)
+position = Vector3(-0.5, 1.26, 0)
+scale = Vector3(1, 1, 0.7273)
 script = ExtResource("2_kit_shape")
-size = Vector3(0.42, 0.55, 0.3)
+shape = 3
+size = Vector3(0.44, 0.6, 0.44)
 material = ExtResource("9_cloth_khaki2")
 
-[node name="Head" type="MeshInstance3D" parent="Body"]
+[node name="Neck" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.5, 1.62, 0)
 script = ExtResource("2_kit_shape")
-shape = 3
-size = Vector3(0.24, 0.27, 0.24)
+shape = 4
+size = Vector3(0.12, 0.12, 0.12)
 material = ExtResource("10_skin")
 
-[node name="Hair" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.52, 1.7, 0)
+[node name="Head" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.5, 1.77, 0)
+scale = Vector3(1, 1, 0.9231)
 script = ExtResource("2_kit_shape")
 shape = 3
-size = Vector3(0.25, 0.14, 0.25)
-material = ExtResource("11_hair_gray")
+size = Vector3(0.26, 0.3, 0.26)
+material = ExtResource("10_skin")
 
-[node name="HatBrim" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.5, 1.76, 0)
+[node name="Nose" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.5, 1.74, 0.13)
+scale = Vector3(1, 1, 1.1111)
 script = ExtResource("2_kit_shape")
-shape = 1
-size = Vector3(0.5, 0.03, 0.5)
-material = ExtResource("12_straw")
+shape = 3
+size = Vector3(0.045, 0.07, 0.045)
+material = ExtResource("10_skin")
+casts_shadow = false
 
-[node name="HatTop" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.5, 1.84, 0)
+[node name="EarL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.635, 1.77, -0.02)
+scale = Vector3(1, 1, 0.8333)
 script = ExtResource("2_kit_shape")
-shape = 1
-size = Vector3(0.26, 0.16, 0.26)
-material = ExtResource("12_straw")
+shape = 3
+size = Vector3(0.06, 0.09, 0.06)
+material = ExtResource("10_skin")
+casts_shadow = false
+
+[node name="EarR" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.365, 1.77, -0.02)
+scale = Vector3(1, 1, 0.8333)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.06, 0.09, 0.06)
+material = ExtResource("10_skin")
+casts_shadow = false
 
 [node name="EyeL" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.385, 1.65, -0.05)
+position = Vector3(-0.56, 1.81, 0.12)
+scale = Vector3(1, 1, 0.5)
 script = ExtResource("2_kit_shape")
-size = Vector3(0.02, 0.03, 0.03)
+shape = 3
+size = Vector3(0.04, 0.045, 0.04)
 material = ExtResource("4_hair_dark")
 casts_shadow = false
 
 [node name="EyeR" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.385, 1.65, 0.05)
+position = Vector3(-0.44, 1.81, 0.12)
+scale = Vector3(1, 1, 0.5)
 script = ExtResource("2_kit_shape")
-size = Vector3(0.02, 0.03, 0.03)
+shape = 3
+size = Vector3(0.04, 0.045, 0.04)
 material = ExtResource("4_hair_dark")
 casts_shadow = false
+
+[node name="Hair" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.5, 1.9, -0.01)
+scale = Vector3(1, 1, 0.931)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.29, 0.15, 0.29)
+material = ExtResource("11_hair_gray")
+
+[node name="ArmL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.2, 1.4, -0.22)
+rotation_degrees = Vector3(0, 0, 55)
+script = ExtResource("2_kit_shape")
+shape = 4
+size = Vector3(0.12, 0.55, 0.12)
+material = ExtResource("9_cloth_khaki2")
+
+[node name="HandL" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.02, 1.26, -0.198)
+scale = Vector3(1, 1, 1)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.11, 0.12, 0.11)
+material = ExtResource("10_skin")
+
+[node name="ArmR" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.2, 1.4, 0.22)
+rotation_degrees = Vector3(0, 0, 55)
+script = ExtResource("2_kit_shape")
+shape = 4
+size = Vector3(0.12, 0.55, 0.12)
+material = ExtResource("9_cloth_khaki2")
+
+[node name="HandR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.02, 1.26, 0.198)
+scale = Vector3(1, 1, 1)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.11, 0.12, 0.11)
+material = ExtResource("10_skin")
+
+[node name="HatBrim" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.5, 1.96, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.5, 0.02, 0.5)
+material = ExtResource("12_straw")
+
+[node name="HatTop" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.5, 2.04, 0)
+script = ExtResource("2_kit_shape")
+shape = 1
+size = Vector3(0.26, 0.16, 0.26)
+material = ExtResource("12_straw")
 
 [node name="Name" type="Label3D" parent="."]
 position = Vector3(0.5, 2.9, 0)

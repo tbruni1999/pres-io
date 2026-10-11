@@ -5,9 +5,11 @@ extends MeshInstance3D
 ## Editable desde el inspector (tamaño, material, colisión). Se construye una sola vez
 ## al entrar al árbol; reemplazable más adelante por modelos glTF sin tocar reglas.
 
-enum Shape { BOX, CYLINDER, CONE, SPHERE }
+## CAPSULE va al final para no cambiar el número de las formas que ya están en las escenas.
+enum Shape { BOX, CYLINDER, CONE, SPHERE, CAPSULE }
 
 ## Caja: ancho, alto, fondo. Cilindro/cono/esfera: x = diámetro, y = altura.
+## Esfera con x != y da un elipsoide (torsos, cabezas); cápsula: x = diámetro, y = largo total.
 @export var shape: Shape = Shape.BOX:
 	set(v):
 		shape = v
@@ -75,9 +77,17 @@ func _rebuild() -> void:
 			var s := SphereMesh.new()
 			s.radius = size.x * 0.5
 			s.height = size.y
-			s.radial_segments = 12
-			s.rings = 6
+			# Más anillos y lados que antes: sin facetas se lee como cuerpo y no como cajas.
+			s.radial_segments = 18
+			s.rings = 10
 			m = s
+		Shape.CAPSULE:
+			var k := CapsuleMesh.new()
+			k.radius = size.x * 0.5
+			k.height = maxf(size.y, size.x)
+			k.radial_segments = maxi(segments, 12)
+			k.rings = 6
+			m = k
 	m.material = material
 	mesh = m
 	if not Engine.is_editor_hint():
@@ -104,5 +114,10 @@ func _build_collision() -> void:
 			var s := SphereShape3D.new()
 			s.radius = size.x * 0.5
 			cs.shape = s
+		Shape.CAPSULE:
+			var k := CapsuleShape3D.new()
+			k.radius = size.x * 0.5
+			k.height = maxf(size.y, size.x)
+			cs.shape = k
 	body.add_child(cs)
 	add_child(body)
