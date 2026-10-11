@@ -82,7 +82,7 @@ size = Vector3(0.15, 0.08, 0.15)
 material = ExtResource("4_hair_dark_st")
 casts_shadow = false
 
-[node name="Neck" type="MeshInstance3D" parent="Body"]
+[node name="HorseNeck" type="MeshInstance3D" parent="Body"]
 position = Vector3(2.15, 1.55, 0)
 rotation_degrees = Vector3(0, 0, -35)
 script = ExtResource("2_kit_shape")
@@ -110,13 +110,13 @@ script = ExtResource("2_kit_shape")
 size = Vector3(0.1, 0.6, 0.1)
 material = ExtResource("4_hair_dark_st")
 
-[node name="EarL" type="MeshInstance3D" parent="Body"]
+[node name="HorseEarL" type="MeshInstance3D" parent="Body"]
 position = Vector3(2.45, 2.05, -0.08)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.06, 0.15, 0.06)
 material = ExtResource("3_car_rust")
 
-[node name="EarR" type="MeshInstance3D" parent="Body"]
+[node name="HorseEarR" type="MeshInstance3D" parent="Body"]
 position = Vector3(2.45, 2.05, 0.08)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.06, 0.15, 0.06)

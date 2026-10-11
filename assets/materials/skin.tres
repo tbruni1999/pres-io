@@ -6,6 +6,3 @@
 albedo_color = Color(0.72, 0.52, 0.4, 1)
 albedo_texture = ExtResource("1_skin")
 roughness = 0.7
-uv1_scale = Vector3(2.0, 2.0, 2.0)
-uv1_triplanar = true
-uv1_world_triplanar = false

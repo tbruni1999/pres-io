@@ -67,7 +67,7 @@ func _refresh() -> void:
 # --- Estantería ----------------------------------------------------------------
 
 func _build_shelf() -> void:
-	var wood := load("res://assets/materials/wood_old.tres") as Material
+	var wood := load("res://assets/materials/wood_rack.tres") as Material
 	_box(_frame, Vector3(1.8, 1.62, 0.03), Vector3(0, 0.81, -0.19), wood)
 	for x in [-0.9, 0.9]:
 		_box(_frame, Vector3(0.05, 1.66, 0.42), Vector3(x, 0.83, 0.0), wood)
@@ -78,9 +78,10 @@ func _build_shelf() -> void:
 
 func _refresh_shelf(s: GameState) -> void:
 	var entries := _shelf_entries(s)
+	var places := SHELF_LEVELS.size() * SHELF_COLUMNS.size()
 	var slot := 0
 	for e in entries:
-		if slot >= SHELF_LEVELS.size() * SHELF_COLUMNS.size():
+		if slot >= places:
 			break
 		var level: float = SHELF_LEVELS[slot / SHELF_COLUMNS.size()]
 		var x: float = SHELF_COLUMNS[slot % SHELF_COLUMNS.size()]
@@ -92,29 +93,34 @@ func _refresh_shelf(s: GameState) -> void:
 		if n > 1:
 			_count_at(Vector3(x, level + 0.2, 0.12), "×%d" % n)
 		slot += 1
+	if entries.size() > places:
+		_count_at(Vector3(0.62, 1.76, 0.12), "+%d" % (entries.size() - places))
 
 
+## Herramientas primero (son lo que más importa ver), después lo de la mochila y el acopio.
 func _shelf_entries(s: GameState) -> Array:
 	var out: Array = []
 	var pl := s.player
-	var ids := pl.bag.keys()
-	for id in s.camp.storage.keys():
-		ids.append(id)
-	ids.sort()
-	for id in ids:
-		var n := pl.count(id) if pl.bag.has(id) else int(s.camp.storage[id])
-		if n > 0:
-			out.append([id, n])
 	for t in pl.tools:
 		if t != "bike":
 			out.append([t, 1])
+	var ids := pl.bag.keys()
+	ids.sort()
+	for id in ids:
+		if pl.count(id) > 0:
+			out.append([id, pl.count(id)])
+	var stored := s.camp.storage.keys()
+	stored.sort()
+	for id in stored:
+		if int(s.camp.storage[id]) > 0:
+			out.append([id, int(s.camp.storage[id])])
 	return out
 
 
 # --- Red de pescados -----------------------------------------------------------
 
 func _build_net() -> void:
-	var wood := load("res://assets/materials/wood_old.tres") as Material
+	var wood := load("res://assets/materials/wood_rack.tres") as Material
 	for x in [-1.0, 1.0]:
 		_box(_frame, Vector3(0.06, 1.95, 0.06), Vector3(x, 0.975, 0.0), wood)
 	_box(_frame, Vector3(2.12, 0.06, 0.06), Vector3(0, 1.95, 0.0), wood)
@@ -158,7 +164,7 @@ func _fish_units(s: GameState) -> Array:
 # --- Leñero ----------------------------------------------------------------------
 
 func _build_wood() -> void:
-	_box(_frame, Vector3(1.4, 0.06, 0.62), Vector3(0, 0.03, 0.0), load("res://assets/materials/wood_old.tres") as Material)
+	_box(_frame, Vector3(1.4, 0.06, 0.62), Vector3(0, 0.03, 0.0), load("res://assets/materials/wood_rack.tres") as Material)
 	_logs = MultiMeshInstance3D.new()
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D

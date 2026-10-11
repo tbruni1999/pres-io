@@ -4,9 +4,10 @@ Cada decisión indica qué se eligió y por qué. Se revisan cuando una prueba l
 
 ## Inventario visible y personas (11 de octubre, sin cambio de esquema)
 - **Lo que se ve es derivado del estado**: estanterías, red y leñero se rearman cuando cambian la mochila, el acopio, el espinel o la leña (`camp_changed`, `player_changed`). No se guarda nada nuevo.
-- **Fusión de mallas en tiempo de carga** (`MeshMerger`): por material, con `SurfaceTool`. Vale para personas y carrocerías; lo que se anima por nombre (ruedas) se deja afuera. La forma no cambia, solo bajan las llamadas de dibujo.
+- **Fusión de mallas en tiempo de carga** (`MeshMerger`): por material y tipo de sombra, sobre arrays. Las normales se transforman con la inversa-traspuesta (la iluminación no cambia con escalas no uniformes). Las mallas con textura triplanar no se funden: su patrón depende de la posición de cada pieza y fundirlas lo correría. Por eso las personas usan mapeo UV (las texturas son periódicas, así el patrón sigue a cada pieza). Lo que se anima por nombre (ruedas) se deja afuera.
 - **Sombras**: las piezas chicas (personas, estanterías, objetos) no proyectan sombra; las de contacto (blob) son transparentes y tampoco. Medido: apagarlas en personas y racks bajó la toma más cargada de 423 a 385.
 - **Texturas fingidas** (sin modelos externos): cuadrillé, rayas, vetas de pelo, red con alfa y sombra radial, generadas por `tools/generate_textures.gd` con semillas fijas.
+- **Revisión independiente del commit de inventario** (10 hallazgos verificados): normales de piezas fundidas, patrón triplanar corrido, sombras por pieza, nodos repetidos en el caballo (Godot descartaba las primeras piezas), recorte silencioso de la estantería, caché de materiales por nombre, y el filtro de la red sin mipmaps. Todo corregido salvo que el patrón triplanar de los vehículos queda como antes (no se funden).
 - **Las pruebas no leen el autoguardado del usuario**: arrancan con `new_game()` tras `_ready()`. Antes, al retomar el autoguardado, una prueba de pausa fallaba según lo que hubiera guardado el jugador.
 
 ## Clima, noches y vecinos (10 de octubre, esquema 5)

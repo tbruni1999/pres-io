@@ -75,14 +75,16 @@ static func _part(root: Node3D, mesh: Mesh, scl: Vector3, pos: Vector3, mat: Mat
 	return mi
 
 
+## La clave incluye color y propiedades: dos materiales con el mismo nombre no se pisan.
 static func _mat(key: String, color: Color, roughness: float, metallic: float = 0.0) -> StandardMaterial3D:
-	if not _mats.has(key):
+	var k := "%s|%s|%.2f|%.2f" % [key, color.to_html(), roughness, metallic]
+	if not _mats.has(k):
 		var m := StandardMaterial3D.new()
 		m.albedo_color = color
 		m.roughness = roughness
 		m.metallic = metallic
-		_mats[key] = m
-	return _mats[key]
+		_mats[k] = m
+	return _mats[k]
 
 
 static func _sphere() -> SphereMesh:
