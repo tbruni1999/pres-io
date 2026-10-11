@@ -3,7 +3,26 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: los tres locos en carpa (10 de octubre de 2026)
+## Estado actual: interfaz más clara, personas redondeadas y continuar (11 de octubre de 2026)
+
+Pedidos de Tomás: una interfaz que se entienda sola, decisiones fáciles, y personas menos cubiculares.
+
+- **Línea «Ahora»** arriba: qué hacer y, debajo, **por qué y con qué números** (sed al 11 %, madera 4 de 15, plata, lo que falta de la meta).
+- **Ayuda de controles** en la parte de abajo durante los dos primeros días, y todos los controles en la pausa.
+- **Botones que dicen qué hacen o por qué no se pueden usar**: el fogón («Hervir agua · el fuego está apagado»), la caña de rama («te faltan 2 madera»), la tienda de Salim («te faltan 4 UC») y las compras del comerciante («mochila llena»).
+- **Vender por cantidad**: un selector con el total en el botón, por defecto todo lo que el comerciante acepta.
+- **Dormir de día pide confirmación**: dice cuántas horas de jornada se pierden y cuántos pescados se pueden pudrir. Después de la noche no pregunta.
+- **Continuar**: al abrir el juego se retoma el último día guardado. **Salir** guarda el día antes de cerrar.
+- **Personas**: torsos, cabezas, brazos y piernas en formas redondeadas (cápsulas y elipsoides), con cara (nariz, orejas, ojos, bigote o anteojos) y ropa con textura de tela y piel con manchas suaves. Locos y conductores de los vehículos usan el mismo cuerpo.
+- **Progresión**: las propuestas medidas con el bot están en [`PROGRESION.md`](PROGRESION.md). **No están aplicadas**: son cambios de balance y los decide Tomás.
+
+| Comprobación | Resultado |
+|---|---|
+| Pruebas de dominio | **70 pruebas, 1.024 comprobaciones OK** |
+| Prueba de humo | **85 comprobaciones OK** (incluye el aviso de dormir y el fin de la jornada desde el aviso) |
+| Capturas | recorrido completo sin errores de script; máximo 341 llamadas de dibujo |
+
+## Estado anterior: los tres locos en carpa (10 de octubre de 2026)
 
 - **Salim** (vende sal, cinta aisladora y sombrilla; megáfono a la mañana) y **Raúl "Antena"** (pizarrón con el día;
   espanta a los comerciantes con la antena) se suman a Beto. Cada uno llega solo, atraído por algo, y elegís dónde va su carpa.

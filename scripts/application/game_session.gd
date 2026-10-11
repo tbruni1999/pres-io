@@ -35,6 +35,8 @@ var settings := SettingsStore.new()
 ## Callable sin argumentos que devuelve la pose del jugador para guardarla.
 var player_pose_provider: Callable
 var autosave_enabled := true
+## True si al arrancar se retomó el autoguardado (y no una partida nueva).
+var continued := false
 ## Resultado del último autoguardado al cerrar jornada (null si no hubo).
 var last_autosave: CommandResult
 
@@ -53,10 +55,15 @@ func _ready() -> void:
 	clock.configure(content.balance)
 	settings.load_settings()
 	settings.apply_audio()
-	new_game()
+	# Al arrancar se retoma el último día guardado; si no hay (o está roto), empieza una partida nueva.
+	if has_save(AUTOSAVE_SLOT) and load_game(AUTOSAVE_SLOT).ok:
+		continued = true
+	else:
+		new_game()
 
 
 func new_game(seed_value: int = DEFAULT_SEED) -> void:
+	continued = false
 	state = GameState.create_new(content, seed_value)
 	clock.reset()
 	_replaced()

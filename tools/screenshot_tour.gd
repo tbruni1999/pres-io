@@ -132,6 +132,15 @@ func _run() -> void:
 	ui.open_panel(ui.report, {"report": rep})
 	await _frames(4)
 	await _capture("21_informe")
+	# UI nueva: aviso al dormir de día, panel de vender por cantidad y fogón con motivos.
+	ui.open_panel(ui.confirm, {"title": Texts.t("CONFIRM_SLEEP_TITLE"), "text": Texts.t("CONFIRM_SLEEP_EARLY", {"time": Texts.t("CONFIRM_TIME", {"h": 4, "m": 20}), "rot": 3}), "ok": Texts.t("CONFIRM_SLEEP_OK")})
+	await _frames(4)
+	await _capture("29_confirmar_dormir")
+	ui.close_panel()
+	ui.open_panel(ui.fire, {})
+	await _frames(4)
+	await _capture("30_fogon_motivos")
+	ui.close_panel()
 	ui.close_panel()
 
 	# Esquema 5: lona, bici, Beto con su carpa, espinel, fogón, lluvia y nublado.

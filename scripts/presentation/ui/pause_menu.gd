@@ -21,7 +21,8 @@ func _init() -> void:
 	_main.add_child(UIKit.button(Texts.t("PAUSE_SETTINGS"), _show_settings.bind(true)))
 	_new_button = UIKit.button(Texts.t("PAUSE_NEW_GAME"), _on_new_game)
 	_main.add_child(_new_button)
-	_main.add_child(UIKit.button(Texts.t("PAUSE_QUIT"), func() -> void: get_tree().quit()))
+	_main.add_child(UIKit.button(Texts.t("PAUSE_QUIT"), _on_quit))
+	_main.add_child(UIKit.label(Texts.t("PAUSE_CONTROLS"), 15, UIKit.COLOR_MUTED, true))
 	_build_settings()
 	body.add_child(_settings)
 	_status = UIKit.label("", 16, UIKit.COLOR_ACCENT, true)
@@ -70,6 +71,12 @@ func _on_new_game() -> void:
 	Game.new_game()
 	ui.post_notice(Texts.t("MSG_NEW_GAME"))
 	request_close()
+
+
+## Salir guarda el día en curso en el autoguardado: al volver se retoma donde estabas.
+func _on_quit() -> void:
+	Game.save_game(Game.AUTOSAVE_SLOT)
+	get_tree().quit()
 
 
 func _reset_new_game() -> void:

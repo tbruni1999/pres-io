@@ -12,6 +12,8 @@ var _wood_bag: Label
 var _hunger: ProgressBar
 var _thirst: ProgressBar
 var _objective: Label
+var _objective_why: Label
+var _hint: Label
 var _crosshair: ColorRect
 var _prompt: Label
 var _status: Label
@@ -52,6 +54,21 @@ func _init() -> void:
 	_objective.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_objective.position.y = 12
 	add_child(_objective)
+
+	_objective_why = _outlined(UIKit.label("", 15, UIKit.COLOR_MUTED))
+	_objective_why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_objective_why.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_objective_why.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_objective_why.position.y = 42
+	add_child(_objective_why)
+
+	_hint = _outlined(UIKit.label("", 15, UIKit.COLOR_MUTED))
+	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hint.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_hint.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_hint.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_hint.position.y -= 14
+	add_child(_hint)
 
 	_crosshair = ColorRect.new()
 	_crosshair.color = Color(1, 1, 1, 0.85)
@@ -110,7 +127,11 @@ func refresh() -> void:
 	_wood_bag.text = "%s   ·   %s" % [Texts.t("HUD_WOOD", {"n": s.camp.wood}), Texts.t("HUD_BAG", {"n": pl.bag_count(), "cap": PlayerActions.bag_capacity(s, Game.content)})]
 	_hunger.value = pl.hunger_bp
 	_thirst.value = pl.thirst_bp
-	_objective.text = Objectives.current(s, Game.content)
+	var step := Objectives.current(s, Game.content)
+	_objective.text = Texts.t("OBJ_NOW") + ": " + String(step["title"])
+	_objective_why.text = String(step["why"])
+	# Los primeros días, los controles a la vista (después molestan).
+	_hint.text = Texts.t("HUD_HINT") if s.current_day() <= 2 else ""
 
 
 func set_prompt(text: String) -> void:

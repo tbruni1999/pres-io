@@ -88,10 +88,23 @@ func refresh() -> void:
 		if craving:
 			row_text += " · " + Texts.t("TRADE_CRAVING")
 		_sell.add_child(UIKit.label(row_text, 18, UIKit.COLOR_ACCENT if craving else UIKit.COLOR_TEXT))
-		var qty := mini(n, maxi(room, 0))
-		var b := UIKit.button(Texts.t("TRADE_SELL_BUTTON", {"total": Money.format(price * qty)}), _on_sell.bind(item_id, qty))
-		b.disabled = qty <= 0
-		_sell.add_child(b)
+		# Cuánto vender: por defecto todo lo que el comerciante acepta; se puede bajar.
+		var max_qty := mini(n, maxi(room, 0))
+		var line := HBoxContainer.new()
+		var spin := SpinBox.new()
+		spin.min_value = 1 if max_qty > 0 else 0
+		spin.max_value = maxi(max_qty, 0)
+		spin.step = 1
+		spin.value = max_qty
+		spin.custom_minimum_size = Vector2(110, 40)
+		var b := UIKit.button(Texts.t("TRADE_SELL_BUTTON_Q", {"n": max_qty, "total": Money.format(price * max_qty)}), func() -> void: _on_sell(item_id, int(spin.value)))
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.disabled = max_qty <= 0
+		spin.value_changed.connect(func(v: float) -> void:
+			b.text = Texts.t("TRADE_SELL_BUTTON_Q", {"n": int(v), "total": Money.format(price * int(v))}))
+		line.add_child(spin)
+		line.add_child(b)
+		_sell.add_child(line)
 	if not any:
 		_sell.add_child(UIKit.label(Texts.t("TRADE_NOTHING"), 16, UIKit.COLOR_MUTED, true))
 	_buy.add_child(UIKit.section(Texts.t("TRADE_BUY")))
@@ -100,8 +113,15 @@ func refresh() -> void:
 		var price := _merchant.sell_price_cents(item_id)
 		var owned := def.kind == ItemDefinition.Kind.TOOL and s.player.has_tool(item_id)
 		var text := Texts.t("TRADE_BUY_ROW", {"name": Texts.t(def.name_key), "price": Money.format(price)})
-		var b := UIKit.button(Texts.t("TRADE_OWNED") + " · " + Texts.t(def.name_key) if owned else text, _on_buy.bind(item_id))
-		b.disabled = owned
+		var reason := ""
+		if owned:
+			text = Texts.t("TRADE_OWNED") + " · " + Texts.t(def.name_key)
+		elif price > s.player.wallet_cents:
+			reason = Texts.t("TRADE_BUY_SHORT", {"missing": Money.format(price - s.player.wallet_cents)})
+		elif def.kind != ItemDefinition.Kind.TOOL and def.kind != ItemDefinition.Kind.MATERIAL and PlayerActions.bag_free(s, Game.content) <= 0:
+			reason = Texts.t("TRADE_BAG_FULL")
+		var b := UIKit.button(text + ("  ·  " + reason if not reason.is_empty() else ""), _on_buy.bind(item_id))
+		b.disabled = owned or not reason.is_empty()
 		_buy.add_child(b)
 
 

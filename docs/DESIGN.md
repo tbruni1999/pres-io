@@ -59,6 +59,9 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Bicicleta | La vende la Chola (220 UC). Andás 1,5× más rápido y gastás 25 % menos hambre y sed. |
 | Primeros peligros | **El zorro** (de noche, si tenés pescado y el fogón apagado, se lleva dos; primero lo ahumado) y **un desconocido de traje** que se lleva leña (si Beto vive acá, a veces lo corre). |
 | Duración del día | 8 minutos reales. |
+| Dormir de día | Antes de la noche pregunta antes de cerrar la jornada: se dice cuántas horas se pierden y cuántos pescados se pueden pudrir. |
+| Continuar y salir | Al abrir el juego se retoma el último día guardado (autoguardado). Salir guarda el día antes de cerrar. |
+| Interfaz | Siempre hay una línea «Ahora» con la razón y los números. Cada botón dice qué hace o qué falta para usarlo. |
 
 ### Beto, el primer loco
 - **Lo trae**: el olor del primer ahumado (al día siguiente de sacar la primera tanda).

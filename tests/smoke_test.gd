@@ -400,6 +400,11 @@ func _run() -> void:
 	await look(Vector3(0.3, 0.05, 1.3), 0, -35)
 	press("interact")
 	await wait_physics()
+	# De día, dormir avisa lo que se pierde antes de cerrar la jornada.
+	if ui.active_panel() == ui.confirm:
+		check(ui.confirm._text.text.contains("te perdés"), "el aviso dice cuánto tiempo se pierde")
+		ui.confirm._confirm()
+		await wait_physics()
 	check(ui.active_panel() == ui.report and game.state.current_day() == day + 1, "dormir termina el día")
 	check(not game.state.reports[-1].events.is_empty(), "antes de dormir pasó algo")
 	ui.report.request_close()

@@ -26,6 +26,7 @@ var report := ReportPanel.new()
 var place := PlacePanel.new()
 var message := MessagePanel.new()
 var neighbor := NeighborPanel.new()
+var confirm := ConfirmPanel.new()
 var pause_menu := PauseMenu.new()
 var debug_overlay := DebugOverlay.new()
 
@@ -58,7 +59,7 @@ func _ready() -> void:
 	_center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_center)
-	for p: GamePanel in [trade, fire, smoker, bag, report, place, message, neighbor, pause_menu]:
+	for p: GamePanel in [trade, fire, smoker, bag, report, place, message, neighbor, confirm, pause_menu]:
 		p.ui = self
 		p.close_requested.connect(close_panel)
 		_center.add_child(p)
@@ -77,9 +78,10 @@ func _ready() -> void:
 	Game.woke_at_home.connect(_on_woke_at_home)
 	Game.notice_posted.connect(post_notice)
 	Game.state_replaced.connect(cancel_activity)
-	if Game.has_save():
-		post_notice.call_deferred(Texts.t("MSG_SAVE_AVAILABLE"))
-	post_notice.call_deferred(Texts.t("MSG_WELCOME"))
+	if Game.continued:
+		post_notice.call_deferred(Texts.t("MSG_CONTINUED", {"day": Game.state.current_day()}))
+	else:
+		post_notice.call_deferred(Texts.t("MSG_WELCOME"))
 
 
 func bind(p: PlayerController, merchant_road: MerchantRoad) -> void:
@@ -266,8 +268,33 @@ func _use_context() -> void:
 			open_panel(smoker)
 		"sleep":
 			cancel_activity()
-			var rep := Game.sleep()
-			open_panel(report, {"report": rep})
+			var s := Game.state
+			# Dormir antes de la noche cierra el día con horas por delante: se avisa qué se pierde.
+			if not DayTime.is_night(s, Game.content) and s.ticks_left_in_day() > 0:
+				var lost := DayTime.ticks_to_minutes(s, Game.content, s.ticks_left_in_day())
+				open_panel(confirm, {
+					"title": Texts.t("CONFIRM_SLEEP_TITLE"),
+					"text": Texts.t("CONFIRM_SLEEP_EARLY", {"time": Texts.t("CONFIRM_TIME", {"h": lost / 60, "m": lost % 60}), "rot": _perishable_count()}),
+					"ok": Texts.t("CONFIRM_SLEEP_OK"),
+					"on_ok": func() -> void: _sleep_now(),
+				})
+			else:
+				_sleep_now()
+
+
+func _sleep_now() -> void:
+	var rep := Game.sleep()
+	open_panel(report, {"report": rep})
+
+
+## Pescado perecedero en la mochila: lo que se pudre si dormís ahora (aprox., sin contar la sal).
+func _perishable_count() -> int:
+	var n := 0
+	for id in Game.state.player.bag.keys():
+		var def := Game.content.find_item(id)
+		if def != null and def.perishable:
+			n += Game.state.player.count(id)
+	return n
 
 
 func _hold(seconds: float, on_done: Callable) -> void:

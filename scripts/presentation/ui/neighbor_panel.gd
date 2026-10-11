@@ -55,8 +55,15 @@ func _shop() -> void:
 		info.add_child(UIKit.label(Texts.t("ITEM_" + String(item_id).to_upper()), 18))
 		info.add_child(UIKit.label(Texts.t("SHOP_" + String(item_id).to_upper()), 14, UIKit.COLOR_MUTED, true))
 		row.add_child(info)
-		var b := UIKit.button(Texts.t("SHOP_BUY", {"price": Money.format(price)}), _buy.bind(item_id))
-		b.disabled = price > s.player.wallet_cents or (item_id == "umbrella" and s.player.has_tool("umbrella"))
+		var short: bool = price > s.player.wallet_cents
+		var owned: bool = item_id == "umbrella" and s.player.has_tool("umbrella")
+		var label := Texts.t("SHOP_BUY", {"price": Money.format(price)})
+		if owned:
+			label = Texts.t("SHOP_OWNED")
+		elif short:
+			label += " · " + Texts.t("SHOP_SHORT", {"missing": Money.format(price - s.player.wallet_cents)})
+		var b := UIKit.button(label, _buy.bind(item_id))
+		b.disabled = short or owned
 		row.add_child(b)
 		_content.add_child(row)
 

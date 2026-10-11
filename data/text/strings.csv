@@ -317,7 +317,7 @@ PAUSE_LOAD,Cargar partida
 PAUSE_SETTINGS,Ajustes
 PAUSE_NEW_GAME,Nueva partida
 PAUSE_NEW_GAME_CONFIRM,Confirmar: empezar de cero
-PAUSE_QUIT,Salir del juego
+PAUSE_QUIT,Salir (guarda el día antes)
 SETTINGS_TITLE,Ajustes
 SETTINGS_SENSITIVITY,Sensibilidad del mouse
 SETTINGS_FOV,Campo de visión
@@ -543,3 +543,37 @@ BETO_TALK_TITLE,Beto
 PLACE_BODY_BETO,"«Donde digas, jefe. Lejos del ronquido, si se puede. Del mío.»"
 PLACE_BODY_SALIM,"«Cerca del camino vendo más. Cerca del lago grito más. Vos elegís, maestro.»"
 PLACE_BODY_RAUL,"«Necesito señal. Cuanto más cerca del camino, mejor escaneo. A los comerciantes no les gusta.»"
+OBJ_NOW,Ahora
+WHY_NIGHT,Pasan los comerciantes de día. De noche no pica nada: andá a la cama (E en la cama) o te dormís afuera.
+WHY_DRINK,Sed al {pct}. Tomá del lago (mantené E) o hervila en el fogón: sin hervir cae mal.
+WHY_EAT,Hambre al {pct}. Asá pescado en el fogón o comé algo de la mochila (Tab).
+WHY_NO_ROD,Armá una caña de rama en el fogón: 3 madera (tenés {wood}).
+WHY_PLACE,Hablale (E) y elegí dónde pone la carpa. Da igual: después se rearma todo.
+WHY_FIRST_FISH,Esperá el pique y apretá E cuando la aguja esté en la zona. Acertás dos seguidas: tararira.
+WHY_HAIL,"Un comerciante que pase por el camino frena si le hacés señas (E frente a la choza). Si pasa de largo, llegaste tarde."
+WHY_BUILD,Madera {wood} de {need} · plata {money} de {cost}. La madera la juntás en el camino y en los árboles.
+WHY_GOAL,Faltan: {left}. Mirá el detalle en la mochila (Tab).
+WHY_DONE,"Próximamente: empleos, minería y la computadora."
+HUD_HINT,"E: usar o hablar · Tab: mochila · Esc: pausa · Shift: correr · Mantené E en ramas, agua y espinel"
+PAUSE_CONTROLS,"Controles: WASD mover · Shift correr · E usar o hablar · Tab mochila · Esc pausa · mantené E en ramas, agua y espinel · F3 diagnóstico."
+MSG_CONTINUED,Seguimos donde estabas: día {day}.
+FIRE_ADD_WOOD_OK,Echar leña (1 madera · tenés {n})
+FIRE_ADD_WOOD_NONE,Echar leña · no tenés madera
+FIRE_ADD_WOOD_RAIN,Echar leña · llueve y el fuego no prende sin lona
+FIRE_ADD_WOOD_FULL,Echar leña · ya tiene leña de sobra
+FIRE_BOIL_OK,Hervir agua (le quita la sed)
+FIRE_BOIL_OUT,Hervir agua · el fuego está apagado: echale leña
+FIRE_COOK_OUT,Asar {name} · el fuego está apagado
+FIRE_MAKE_ROD_OK,Armar caña de rama ({n} madera)
+FIRE_MAKE_ROD_NO,Armar caña de rama · te faltan {missing} madera
+TRADE_SELL_BUTTON_Q,Vender {n} · {total}
+TRADE_BUY_SHORT,te faltan {missing}
+TRADE_BAG_FULL,mochila llena
+SHOP_OWNED,Ya lo tenés
+SHOP_SHORT,te faltan {missing}
+CONFIRM_BACK,Seguir
+CONFIRM_OK,Sí
+CONFIRM_TIME,{h} h {m} min
+CONFIRM_SLEEP_TITLE,¿Dormir ahora?
+CONFIRM_SLEEP_EARLY,Dormir ahora cierra el día y te perdés {time} de jornada. Lo que llevás sin sal (hasta {rot} pescado(s)) se pudre.
+CONFIRM_SLEEP_OK,Dormir igual
