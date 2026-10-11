@@ -90,6 +90,7 @@ func _initialize() -> void:
 		"test_salim_megaphone_and_salt",
 		"test_raul_board_and_scan",
 		"test_raul_board_only_shows_whats_coming",
+		"test_demo_save_loads",
 	]
 	for t in tests:
 		_current = t
@@ -1526,4 +1527,18 @@ func test_raul_board_only_shows_whats_coming() -> bool:
 		Simulation.step(fed(s), CONTENT)
 	board = Neighbors.raul_board(s, CONTENT)
 	check(board.all(func(l: Dictionary) -> bool: return l["key"] == "RAUL_BOARD_WEATHER"), "a la noche ya no anota lluvia pasada, ni comerciantes ni antojo que se fueron (%s)" % str(board))
+	return true
+
+
+func test_demo_save_loads() -> bool:
+	# La partida de muestra para ver el juego (tools/make_demo.gd) tiene que cargar sin errores.
+	var r := _load_fixture("res://docs/partida_demo.json")
+	check(r["ok"], "la partida de muestra carga: %s" % r.get("message", ""))
+	if not r["ok"]:
+		return false
+	var s: GameState = r["state"]
+	eq(s.current_day(), 6, "es el sexto día")
+	check(Neighbors.is_living(s, "beto") and Neighbors.is_living(s, "salim") and Neighbors.is_living(s, "raul"), "los tres locos en carpa")
+	check(s.camp.has_building("longline") and s.camp.has_building("tarp"), "con espinel y lona")
+	check(s.player.count("fish_big") == 2, "pescado en la mochila")
 	return true

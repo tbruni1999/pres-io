@@ -1,0 +1,347 @@
+{
+	"applied_operations": [],
+	"camp": {
+		"branches_taken": [],
+		"buildings": [
+			"fire",
+			"sign",
+			"smokehouse",
+			"dock",
+			"tarp",
+			"longline",
+			"shack"
+		],
+		"craving": {
+			"item": "fish_big_smoked",
+			"merchant": "chola"
+		},
+		"fire_until": "2720",
+		"last_rain_day": 0,
+		"longline_items": [
+			{
+				"count": 2,
+				"id": "fish_small"
+			}
+		],
+		"merchant_visits": [],
+		"neighbors": [
+			{
+				"ep": 4,
+				"id": "beto",
+				"since": 3,
+				"spot": "back",
+				"talked_day": 5
+			},
+			{
+				"ep": 1,
+				"id": "raul",
+				"since": 6,
+				"spot": "lake",
+				"talked_day": 5
+			},
+			{
+				"ep": 2,
+				"id": "salim",
+				"since": 5,
+				"spot": "road",
+				"talked_day": 5
+			}
+		],
+		"next_pass_id": 25,
+		"night_thread": 2,
+		"passes": [
+			{
+				"bought": 0,
+				"id": 21,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "2435",
+				"status": "gone",
+				"stop_tick": "-1",
+				"v": 2.5714285714285694,
+				"visited": false,
+				"x": 92.5714285714285
+			},
+			{
+				"bought": 0,
+				"id": 22,
+				"leave_tick": "-1",
+				"merchant": "chola",
+				"start": "2502",
+				"status": "gone",
+				"stop_tick": "-1",
+				"v": 6.0,
+				"visited": false,
+				"x": 90.0
+			},
+			{
+				"bought": 0,
+				"id": 23,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "2558",
+				"status": "passing",
+				"stop_tick": "-1",
+				"v": 2.571428571428573,
+				"visited": false,
+				"x": 17.999999999999964
+			},
+			{
+				"bought": 0,
+				"id": 24,
+				"leave_tick": "-1",
+				"merchant": "ramiro",
+				"start": "2622",
+				"status": "scheduled",
+				"stop_tick": "-1",
+				"v": 0.0,
+				"visited": false,
+				"x": -91.0
+			}
+		],
+		"rain_end": "-1",
+		"rain_start": "-1",
+		"smoker_items": [],
+		"smoker_ready_tick": "-1",
+		"storage": [
+			{
+				"count": 2,
+				"id": "cement"
+			},
+			{
+				"count": 3,
+				"id": "sheet_metal"
+			}
+		],
+		"trees_cut": [],
+		"weather": "sun",
+		"wood": 9
+	},
+	"facts": [
+		{
+			"facts": [],
+			"subject": "neighbor_rosa"
+		},
+		{
+			"facts": [
+				"busy_road",
+				"lake_lights_2",
+				"smoked_once"
+			],
+			"subject": "player"
+		}
+	],
+	"game_version": "0.5.0-beto",
+	"office": "neighbor",
+	"player": null,
+	"player_state": {
+		"bag": [
+			{
+				"count": 1,
+				"id": "bread"
+			},
+			{
+				"count": 2,
+				"id": "fish_big"
+			},
+			{
+				"count": 1,
+				"id": "fish_big_smoked"
+			},
+			{
+				"count": 3,
+				"id": "fish_small"
+			},
+			{
+				"count": 1,
+				"id": "water_jug"
+			}
+		],
+		"day_earned_cents": "33000",
+		"day_faint_penalty_cents": "0",
+		"day_fainted": false,
+		"day_fish": 0,
+		"day_spent_cents": "0",
+		"donated_total_cents": "0",
+		"earned_total_cents": "33000",
+		"faint_count": 0,
+		"fish_caught_total": 0,
+		"hunger_bp": 8200,
+		"opening_cents": "2000",
+		"spent_total_cents": "0",
+		"thirst_bp": 7600,
+		"tool_wear": [
+			{
+				"id": "axe",
+				"uses": 14
+			},
+			{
+				"id": "rod_basic",
+				"uses": 31
+			}
+		],
+		"tools": [
+			"rod_basic",
+			"axe",
+			"bike"
+		],
+		"wallet_cents": "35000"
+	},
+	"projects": [
+		{
+			"approved_day": 0,
+			"approved_tick": "-1",
+			"completed_day": 0,
+			"completion_day": 0,
+			"id": "well_repair",
+			"operation_key": "",
+			"operational_from_day": 0,
+			"paid_cents": "0",
+			"site_id": "well_main",
+			"status": "available"
+		}
+	],
+	"reports": [
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 1,
+			"earned_cents": "0",
+			"events": [],
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 20,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"slept_outside": false,
+			"spent_cents": "0",
+			"wallet_end_cents": "2000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		},
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 2,
+			"earned_cents": "0",
+			"events": [],
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 20,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"slept_outside": false,
+			"spent_cents": "0",
+			"wallet_end_cents": "2000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		},
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 3,
+			"earned_cents": "0",
+			"events": [],
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 20,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"slept_outside": false,
+			"spent_cents": "0",
+			"wallet_end_cents": "2000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		},
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 4,
+			"earned_cents": "0",
+			"events": [],
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 20,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"slept_outside": false,
+			"spent_cents": "0",
+			"wallet_end_cents": "2000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		},
+		{
+			"cash_end_cents": "0",
+			"cash_start_cents": "0",
+			"completed_projects": [],
+			"day": 5,
+			"earned_cents": "0",
+			"events": [],
+			"faint_penalty_cents": "0",
+			"fainted": false,
+			"fish_caught": 0,
+			"fund_cents": "0",
+			"income_cents": "0",
+			"next_water_capacity": 20,
+			"payment_lines": [],
+			"payments_cents": "0",
+			"reaction_key": "REACTION_WATER_OK",
+			"rotten": 0,
+			"slept_outside": false,
+			"spent_cents": "0",
+			"wallet_end_cents": "2000",
+			"water_capacity": 20,
+			"water_coverage_bp": 10000,
+			"water_demand": 0,
+			"water_served": 0
+		}
+	],
+	"rng_seed": "20261010",
+	"rng_state": "7100385815118262641",
+	"schema_version": 5,
+	"seed": "20261010",
+	"settlement": {
+		"base_water_capacity": 20,
+		"population": 0
+	},
+	"tick": "2600",
+	"ticks_per_day": 480,
+	"treasury": {
+		"cash_cents": "0",
+		"ledger": [],
+		"next_entry_id": 1,
+		"opening_cents": "0"
+	}
+}

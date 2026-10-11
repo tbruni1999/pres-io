@@ -41,6 +41,16 @@ godot --headless --path . res://tests/smoke_test.tscn   # prueba de humo de la e
 
 Ambas pruebas terminan solas y devuelven código distinto de cero si algo falla.
 
+## Cómo ver la última versión (partida de muestra)
+
+1. Bajá el branch `claude/elegant-babbage-mfhma6` (`git clone` y `git checkout claude/elegant-babbage-mfhma6`, o el zip del branch en GitHub).
+2. Instalá Godot 4.7.2, abrí `project.godot` y apretá F5.
+3. Para ver ya la estantería, la red, el leñero y los tres locos en carpa: copiá `docs/partida_demo.json` a la carpeta de partidas con el nombre `manual_1.json`. En Windows es `%APPDATA%\Godot\app_userdata\Proyecto Presidente\saves\`; en Mac, `~/Library/Application Support/Godot/app_userdata/Proyecto Presidente/saves/`; en Linux, `~/.local/share/godot/app_userdata/Proyecto Presidente/saves/`. Después, en el juego, apretá Esc y elegí Cargar.
+
+La partida de muestra es el sexto día por la tarde. Reemplaza solo la partida manual, no el autoguardado. Para regenerarla: `godot --headless --path . --script tools/make_demo.gd`.
+
+Dónde mirar: la estantería está a la derecha de la carpa; la red de pescados a la izquierda, cerca del ahumadero; el leñero junto al fogón. Salim está en el camino, Beto atrás de la carpa y Raúl a la orilla del lago. E frente a la estantería abre el inventario.
+
 ## Controles
 
 | Tecla | Acción |
