@@ -62,6 +62,7 @@ A medida que algo se automatiza aparecen temas nuevos y todo se complejiza (comi
 | Dormir de día | Antes de la noche pregunta antes de cerrar la jornada: se dice cuántas horas se pierden y cuántos pescados se pueden pudrir. |
 | Continuar y salir | Al abrir el juego se retoma el último día guardado (autoguardado). Salir guarda el día antes de cerrar. |
 | Interfaz | Siempre hay una línea «Ahora» con la razón y los números. Cada botón dice qué hace o qué falta para usarlo. |
+| Inventario en el mundo | Estantería, red de pescados y leñero muestran lo que tenés. E sobre ellos abre la mochila (inventario con dibujos). |
 
 ### Beto, el primer loco
 - **Lo trae**: el olor del primer ahumado (al día siguiente de sacar la primera tanda).

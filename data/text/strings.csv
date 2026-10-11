@@ -376,7 +376,7 @@ MSG_FIRE_FED,Una más al fuego. Crepita lindo.
 ERR_HAS_ROD,Ya tenés caña.
 MSG_ROD_MADE,"Caña de rama lista. Fea, pero pesca."
 MSG_TOOL_BROKE,Se rompió: {name}. Descansa en paz.
-BAG_USES,{name} · {n} usos
+BAG_USES,{n} usos
 BAG_STORAGE,Acopio
 BAG_STORAGE_EMPTY,Nada guardado todavía.
 MSG_BOUGHT_STORAGE,{name} al acopio. Ya tenés {n}.
@@ -577,3 +577,6 @@ CONFIRM_TIME,{h} h {m} min
 CONFIRM_SLEEP_TITLE,¿Dormir ahora?
 CONFIRM_SLEEP_EARLY,Dormir ahora cierra el día y te perdés {time} de jornada. Lo que llevás sin sal (hasta {rot} pescado(s)) se pudre.
 CONFIRM_SLEEP_OK,Dormir igual
+BAG_SECTION,Lo que llevás · {n}/{cap}
+ACTION_SHELF,Ver lo que tenés (E)
+RACK_SHELF_HINT,Estantería

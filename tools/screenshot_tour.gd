@@ -203,6 +203,26 @@ func _run() -> void:
 	(main.get_node("DayNight") as DayNight).overcast = 0.8
 	await _frames(30)
 	await _shot_at("28_lluvia", Vector3(-1.0, 0.05, 7.0), Vector3(2.0, 0.9, 2.0))
+	# Esquema 6: lo que tenés se ve en el mundo y en el inventario.
+	s.player.add_item("fish_big", 2)
+	s.player.add_item("fish_small", 3)
+	s.player.add_item("fish_big_smoked", 1)
+	s.player.add_item("bread", 1)
+	s.camp.storage["sheet_metal"] = 3
+	s.camp.storage["cement"] = 2
+	s.camp.longline_items = {"fish_small": 2}
+	s.camp.wood = 9
+	game.camp_changed.emit()
+	game.player_changed.emit()
+	await _frames(6)
+	await _shot_at("31_estanteria", Vector3(3.1, 1.2, 3.0), Vector3(3.1, 1.0, 0.8))
+	await _shot_at("32_red_pescados", Vector3(-7.0, 1.3, 4.2), Vector3(-7.0, 1.1, 1.6))
+	await _shot_at("33_lenero", Vector3(5.9, 1.3, 5.8), Vector3(5.9, 0.4, 3.0))
+	await _shot_at("34_persona_cerca", Vector3(4.9, 1.0, 4.6), Vector3(4.9, 1.2, 2.3))
+	ui.open_panel(ui.bag, {})
+	await _frames(4)
+	await _capture("35_inventario")
+	ui.close_panel()
 	print("capturas en ", ProjectSettings.globalize_path(out_dir))
 	get_tree().quit(0)
 

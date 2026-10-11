@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
 [ext_resource type="Material" path="res://assets/materials/car_rust.tres" id="3_car_rust"]
 [ext_resource type="Material" path="res://assets/materials/cloth_apron.tres" id="4_cloth_apron"]
-[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="5_hair_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark_streak.tres" id="5_hair_dark_st"]
 
 [node name="Dog" type="Node3D"]
 script = ExtResource("1_dog_follower")
@@ -39,7 +39,7 @@ material = ExtResource("4_cloth_apron")
 position = Vector3(0, 0.58, 0.63)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.06, 0.05, 0.04)
-material = ExtResource("5_hair_dark")
+material = ExtResource("5_hair_dark_st")
 casts_shadow = false
 
 [node name="EarL" type="MeshInstance3D" parent="Body"]
@@ -47,27 +47,27 @@ position = Vector3(-0.1, 0.72, 0.36)
 rotation_degrees = Vector3(0, 0, 25)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.05, 0.14, 0.09)
-material = ExtResource("5_hair_dark")
+material = ExtResource("5_hair_dark_st")
 
 [node name="EarR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.1, 0.72, 0.36)
 rotation_degrees = Vector3(0, 0, -25)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.05, 0.14, 0.09)
-material = ExtResource("5_hair_dark")
+material = ExtResource("5_hair_dark_st")
 
 [node name="EyeL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.06, 0.64, 0.51)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.03, 0.03, 0.02)
-material = ExtResource("5_hair_dark")
+material = ExtResource("5_hair_dark_st")
 casts_shadow = false
 
 [node name="EyeR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.06, 0.64, 0.51)
 script = ExtResource("2_kit_shape")
 size = Vector3(0.03, 0.03, 0.02)
-material = ExtResource("5_hair_dark")
+material = ExtResource("5_hair_dark_st")
 casts_shadow = false
 
 [node name="Tail" type="MeshInstance3D" parent="Body"]

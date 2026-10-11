@@ -10,6 +10,11 @@ var _moving := true
 var _t := 0.0
 
 
+func _ready() -> void:
+	# Carrocería y personas: se funden por material (las ruedas giran aparte, no se tocan).
+	MeshMerger.merge(_body, PackedStringArray(["Wheel"]))
+
+
 func set_moving(moving: bool) -> void:
 	_moving = moving
 

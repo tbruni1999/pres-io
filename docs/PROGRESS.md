@@ -3,7 +3,38 @@
 Documento de continuidad: qué funciona, qué se probó, qué falta y qué sigue.
 La dirección de juego actual está en [`DESIGN.md`](DESIGN.md).
 
-## Estado actual: interfaz más clara, personas redondeadas y continuar (11 de octubre de 2026)
+## Estado actual: inventario en el mundo y personas con más detalle (11 de octubre de 2026, tercera tanda)
+
+Pedidos de Tomás: ver lo que tenés (estanterías, una red con los pescados colgados) y personas mejor hechas,
+aunque haya que fingir texturas.
+
+- **Estantería** junto a la carpa: muestra todo lo que llevás (bolsa, acopio y herramientas) con un dibujo por objeto y la cantidad.
+- **Red de pescados** (rojo, con rombos de cuerda): cuelgan los pescados de la mochila y los del espinel, hasta 12.
+- **Leñero** junto al fogón: la leña apilada, con «+N» si hay más de 14.
+- **E sobre cualquiera de los tres** abre el inventario.
+- **Inventario (Tab)** rehecho: la mochila es una grilla de celdas con dibujos (una celda por unidad), las herramientas con sus usos,
+  el acopio sobre una tabla, comer y tomar debajo, y la meta a la derecha. Es desplazable para que entre en 720p.
+- **Personas**: ojos con blanco y pupila, cejas, cinturón con hebilla, dos bolsillos, cuadrillé en la camisa de Beto,
+  rayas en la de Salim, cabello con vetas, y una sombra de contacto bajo los pies. Se funden por material al cargar
+  (de unas 45 mallas por persona a 11), así que cuesta menos dibujar y queda lugar para el detalle. Se mueven apenas (balanceo).
+- **Vehículos**: la carrocería también se funde (las ruedas giran aparte).
+- Las sombras de las personas y de las estanterías están apagadas: no se notan y ahorran dibujos.
+
+| Comprobación | Resultado |
+|---|---|
+| Pruebas de dominio | **70 pruebas, 1.024 comprobaciones OK** |
+| Prueba de humo | **87 comprobaciones OK** (la red muestra los pescados que se agregan; el inventario tiene celdas) |
+| Capturas | recorrido completo sin errores de script; la toma más cargada (lluvia) baja a **385 llamadas de dibujo** (presupuesto 400); las demás, 150 a 340 |
+
+Medición: el bajo número de llamadas viene de fundir las mallas. Antes de esta tanda la misma toma de la lluvia daba 328 con
+personas sin fundir. Después de agregar estanterías, red y leñero subió a 423; apagando sombras en personas y estanterías bajó a 385.
+La medición con piezas escondidas no dio resultados estables (la luz del fogón se reconfigura al ocultarse), así que se usó la captura entera.
+
+### Lo que queda de la lista técnica
+- Fundir también las ramas, el pasto y los árboles (pendiente; hoy solo personas, vehículos y racks se funden).
+- Las personas todavía son primitivas: un modelo hecho a mano sería el próximo salto de calidad.
+
+## Estado anterior: interfaz más clara, personas redondeadas y continuar (11 de octubre de 2026)
 
 Pedidos de Tomás: una interfaz que se entienda sola, decisiones fáciles, y personas menos cubiculares.
 

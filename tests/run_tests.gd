@@ -636,6 +636,7 @@ func test_backup_used_when_main_save_corrupt() -> bool:
 func test_session_load_failure_keeps_current_game() -> bool:
 	var session: Node = SESSION_SCRIPT.new()
 	session._ready()
+	session.new_game()  # las pruebas arrancan siempre de una partida nueva, nunca de un autoguardado
 	session.autosave_enabled = false
 	session.saves.save_dir = TEST_SAVE_DIR
 	session.drink_lake()
@@ -655,6 +656,7 @@ func test_session_load_failure_keeps_current_game() -> bool:
 func test_pause_does_not_advance_economy() -> bool:
 	var session: Node = SESSION_SCRIPT.new()
 	session._ready()
+	session.new_game()  # las pruebas arrancan siempre de una partida nueva, nunca de un autoguardado
 	session.autosave_enabled = false
 	var thirst: int = session.state.player.thirst_bp
 	session.push_pause("ui")
@@ -671,6 +673,7 @@ func test_pause_does_not_advance_economy() -> bool:
 func test_session_faint_wakes_next_day() -> bool:
 	var session: Node = SESSION_SCRIPT.new()
 	session._ready()
+	session.new_game()  # las pruebas arrancan siempre de una partida nueva, nunca de un autoguardado
 	session.autosave_enabled = false
 	var got: Array = []
 	session.woke_at_home.connect(func(rep: DayReport) -> void: got.append(rep))
@@ -870,6 +873,7 @@ func test_smoked_fish_keeps_and_sells_better() -> bool:
 func test_session_wakes_home_when_day_ends_outside() -> bool:
 	var session: Node = SESSION_SCRIPT.new()
 	session._ready()
+	session.new_game()  # las pruebas arrancan siempre de una partida nueva, nunca de un autoguardado
 	session.autosave_enabled = false
 	fed(session.state)
 	var got: Array = []

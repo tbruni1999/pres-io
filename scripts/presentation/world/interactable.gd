@@ -4,7 +4,7 @@ extends StaticBody3D
 ## La interacción abre un panel o arranca una actividad; nunca modifica estado por sí misma.
 ## El texto de la acción lo arma UIRoot según el estado actual.
 
-enum Kind { DIALOGUE, FISH, SLEEP, BRANCHES, TREE, BUILD, LAKE_WATER }
+enum Kind { DIALOGUE, FISH, SLEEP, BRANCHES, TREE, BUILD, LAKE_WATER, SHELF }
 
 @export var kind: Kind = Kind.FISH
 ## Id estable del contenido: lugar de pesca ("shore"/"dock"), árbol, montón de ramas, construcción.

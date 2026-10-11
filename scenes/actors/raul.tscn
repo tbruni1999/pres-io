@@ -1,19 +1,24 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/presentation/world/loco_actor.gd" id="1_loco_actor"]
-[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="2_kit_shape"]
-[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="3_hair_dark"]
-[ext_resource type="Material" path="res://assets/materials/cloth_khaki2.tres" id="4_cloth_khaki2"]
-[ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="5_cloth_navy"]
-[ext_resource type="Material" path="res://assets/materials/skin.tres" id="6_skin"]
-[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="7_metal_dark"]
-[ext_resource type="Material" path="res://assets/materials/hair_gray.tres" id="8_hair_gray"]
-[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="9_metal_rust"]
-[ext_resource type="Material" path="res://assets/materials/bulb.tres" id="10_bulb"]
-[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="11_concrete_dar"]
-[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="12_wood_old"]
-[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="13_interactable"]
-[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="14_sign_label"]
+[ext_resource type="Script" path="res://scripts/presentation/world/person_model.gd" id="2_person_model"]
+[ext_resource type="Script" path="res://scripts/presentation/world/kit_shape.gd" id="3_kit_shape"]
+[ext_resource type="Material" path="res://assets/materials/blob_shadow.tres" id="4_blob_shadow"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="5_hair_dark"]
+[ext_resource type="Material" path="res://assets/materials/cloth_khaki2.tres" id="6_cloth_khaki2"]
+[ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="7_cloth_navy"]
+[ext_resource type="Material" path="res://assets/materials/belt_leather.tres" id="8_belt_leather"]
+[ext_resource type="Material" path="res://assets/materials/metal_dark.tres" id="9_metal_dark"]
+[ext_resource type="Material" path="res://assets/materials/skin.tres" id="10_skin"]
+[ext_resource type="Material" path="res://assets/materials/eye_white.tres" id="11_eye_white"]
+[ext_resource type="Material" path="res://assets/materials/eye_dark.tres" id="12_eye_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_gray_streak.tres" id="13_hair_gray_st"]
+[ext_resource type="Material" path="res://assets/materials/metal_rust.tres" id="14_metal_rust"]
+[ext_resource type="Material" path="res://assets/materials/bulb.tres" id="15_bulb"]
+[ext_resource type="Material" path="res://assets/materials/concrete_dark.tres" id="16_concrete_dar"]
+[ext_resource type="Material" path="res://assets/materials/wood_old.tres" id="17_wood_old"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="18_interactable"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="19_sign_label"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.7, 1.8, 0.6)
@@ -24,254 +29,326 @@ neighbor_id = "raul"
 wait_point = Vector3(-1.8, 0, -13.2)
 
 [node name="Body" type="Node3D" parent="."]
+script = ExtResource("2_person_model")
+
+[node name="BlobShadow" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.006, 0)
+script = ExtResource("3_kit_shape")
+size = Vector3(1, 0.004, 1)
+material = ExtResource("4_blob_shadow")
+casts_shadow = false
 
 [node name="ShoeL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.11, 0.05, 0.06)
 scale = Vector3(1, 1, 1.8)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.2, 0.1, 0.2)
-material = ExtResource("3_hair_dark")
+material = ExtResource("5_hair_dark")
 casts_shadow = false
 
 [node name="LegL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.11, 0.53, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 4
 size = Vector3(0.17, 0.92, 0.17)
-material = ExtResource("4_cloth_khaki2")
+material = ExtResource("6_cloth_khaki2")
 
 [node name="ShoeR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.11, 0.05, 0.06)
 scale = Vector3(1, 1, 1.8)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.2, 0.1, 0.2)
-material = ExtResource("3_hair_dark")
+material = ExtResource("5_hair_dark")
 casts_shadow = false
 
 [node name="LegR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.11, 0.53, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 4
 size = Vector3(0.17, 0.92, 0.17)
-material = ExtResource("4_cloth_khaki2")
+material = ExtResource("6_cloth_khaki2")
 
 [node name="Pelvis" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 0.92, 0)
 scale = Vector3(1, 1, 0.7143)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.42, 0.3, 0.42)
-material = ExtResource("4_cloth_khaki2")
+material = ExtResource("6_cloth_khaki2")
 
 [node name="Torso" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.33, 0)
 scale = Vector3(1, 1, 0.6957)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.46, 0.66, 0.46)
-material = ExtResource("5_cloth_navy")
+material = ExtResource("7_cloth_navy")
+
+[node name="Belt" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.02, 0)
+script = ExtResource("3_kit_shape")
+size = Vector3(0.44, 0.07, 0.3)
+material = ExtResource("8_belt_leather")
+casts_shadow = false
+
+[node name="BeltBuckle" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.02, 0.158)
+script = ExtResource("3_kit_shape")
+size = Vector3(0.07, 0.06, 0.02)
+material = ExtResource("9_metal_dark")
+casts_shadow = false
+
+[node name="PocketL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.12, 1.2, 0.158)
+script = ExtResource("3_kit_shape")
+size = Vector3(0.12, 0.1, 0.03)
+material = ExtResource("7_cloth_navy")
+casts_shadow = false
+
+[node name="PocketR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.12, 1.2, 0.158)
+script = ExtResource("3_kit_shape")
+size = Vector3(0.12, 0.1, 0.03)
+material = ExtResource("7_cloth_navy")
+casts_shadow = false
 
 [node name="ShoulderL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.27, 1.55, 0)
 scale = Vector3(1, 1, 1)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.2, 0.2, 0.2)
-material = ExtResource("5_cloth_navy")
+material = ExtResource("7_cloth_navy")
 
 [node name="ShoulderR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.27, 1.55, 0)
 scale = Vector3(1, 1, 1)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.2, 0.2, 0.2)
-material = ExtResource("5_cloth_navy")
+material = ExtResource("7_cloth_navy")
 
 [node name="Neck" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.64, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 4
 size = Vector3(0.12, 0.14, 0.12)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 
 [node name="ArmL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.33, 1.25, 0)
 rotation_degrees = Vector3(0, 0, -6)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 4
 size = Vector3(0.13, 0.62, 0.13)
-material = ExtResource("5_cloth_navy")
+material = ExtResource("7_cloth_navy")
 
 [node name="HandL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.37, 0.8, 0)
 scale = Vector3(1, 1, 1)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.12, 0.14, 0.12)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 
 [node name="ArmR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.33, 1.25, 0)
 rotation_degrees = Vector3(0, 0, 6)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 4
 size = Vector3(0.13, 0.62, 0.13)
-material = ExtResource("5_cloth_navy")
+material = ExtResource("7_cloth_navy")
 
 [node name="HandR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.37, 0.8, 0)
 scale = Vector3(1, 1, 1)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.12, 0.14, 0.12)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 
 [node name="Head" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.8, 0)
 scale = Vector3(1, 1, 0.9259)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.27, 0.32, 0.27)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 
 [node name="Nose" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.77, 0.13)
 scale = Vector3(1, 1, 1.1111)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.045, 0.07, 0.045)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 casts_shadow = false
 
 [node name="EarL" type="MeshInstance3D" parent="Body"]
 position = Vector3(-0.135, 1.8, -0.02)
 scale = Vector3(1, 1, 0.8333)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.06, 0.09, 0.06)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 casts_shadow = false
 
 [node name="EarR" type="MeshInstance3D" parent="Body"]
 position = Vector3(0.135, 1.8, -0.02)
 scale = Vector3(1, 1, 0.8333)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.06, 0.09, 0.06)
-material = ExtResource("6_skin")
+material = ExtResource("10_skin")
 casts_shadow = false
 
 [node name="EyeL" type="MeshInstance3D" parent="Body"]
-position = Vector3(-0.06, 1.84, 0.12)
-scale = Vector3(1, 1, 0.5)
-script = ExtResource("2_kit_shape")
+position = Vector3(-0.06, 1.835, 0.115)
+scale = Vector3(1, 1, 0.6)
+script = ExtResource("3_kit_shape")
 shape = 3
-size = Vector3(0.04, 0.045, 0.04)
-material = ExtResource("3_hair_dark")
+size = Vector3(0.05, 0.05, 0.05)
+material = ExtResource("11_eye_white")
+casts_shadow = false
+
+[node name="PupilL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.06, 1.83, 0.135)
+scale = Vector3(1, 1, 0.7692)
+script = ExtResource("3_kit_shape")
+shape = 3
+size = Vector3(0.026, 0.03, 0.026)
+material = ExtResource("12_eye_dark")
+casts_shadow = false
+
+[node name="BrowL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.06, 1.895, 0.12)
+rotation_degrees = Vector3(0, 0, 80)
+script = ExtResource("3_kit_shape")
+shape = 4
+size = Vector3(0.022, 0.075, 0.022)
+material = ExtResource("13_hair_gray_st")
 casts_shadow = false
 
 [node name="EyeR" type="MeshInstance3D" parent="Body"]
-position = Vector3(0.06, 1.84, 0.12)
-scale = Vector3(1, 1, 0.5)
-script = ExtResource("2_kit_shape")
+position = Vector3(0.06, 1.835, 0.115)
+scale = Vector3(1, 1, 0.6)
+script = ExtResource("3_kit_shape")
 shape = 3
-size = Vector3(0.04, 0.045, 0.04)
-material = ExtResource("3_hair_dark")
+size = Vector3(0.05, 0.05, 0.05)
+material = ExtResource("11_eye_white")
+casts_shadow = false
+
+[node name="PupilR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.06, 1.83, 0.135)
+scale = Vector3(1, 1, 0.7692)
+script = ExtResource("3_kit_shape")
+shape = 3
+size = Vector3(0.026, 0.03, 0.026)
+material = ExtResource("12_eye_dark")
+casts_shadow = false
+
+[node name="BrowR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.06, 1.895, 0.12)
+rotation_degrees = Vector3(0, 0, -80)
+script = ExtResource("3_kit_shape")
+shape = 4
+size = Vector3(0.022, 0.075, 0.022)
+material = ExtResource("13_hair_gray_st")
 casts_shadow = false
 
 [node name="Glasses" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.85, 0.135)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.2, 0.02, 0.02)
-material = ExtResource("7_metal_dark")
+material = ExtResource("9_metal_dark")
 casts_shadow = false
 
 [node name="Hair" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 1.93, -0.01)
 scale = Vector3(1, 1, 0.9333)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.3, 0.14, 0.3)
-material = ExtResource("8_hair_gray")
+material = ExtResource("13_hair_gray_st")
 
 [node name="Helmet" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 2.02, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 1
 size = Vector3(0.36, 0.1, 0.36)
-material = ExtResource("9_metal_rust")
+material = ExtResource("14_metal_rust")
 
 [node name="HelmetAntenna" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 2.25, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.02, 0.45, 0.02)
-material = ExtResource("7_metal_dark")
+material = ExtResource("9_metal_dark")
 casts_shadow = false
 
 [node name="HelmetBall" type="MeshInstance3D" parent="Body"]
 position = Vector3(0, 2.49, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 3
 size = Vector3(0.07, 0.07, 0.07)
-material = ExtResource("10_bulb")
+material = ExtResource("15_bulb")
 casts_shadow = false
 
 [node name="Mast" type="MeshInstance3D" parent="."]
 position = Vector3(-0.9, 1.6, -0.3)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.05, 3.2, 0.05)
-material = ExtResource("7_metal_dark")
+material = ExtResource("9_metal_dark")
 
 [node name="Dish" type="MeshInstance3D" parent="."]
 position = Vector3(-0.9, 3, -0.25)
 rotation_degrees = Vector3(60, 0, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 shape = 1
 size = Vector3(0.7, 0.08, 0.7)
-material = ExtResource("9_metal_rust")
+material = ExtResource("14_metal_rust")
 
 [node name="Cross" type="MeshInstance3D" parent="."]
 position = Vector3(-0.9, 2.6, -0.3)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.9, 0.03, 0.03)
-material = ExtResource("7_metal_dark")
+material = ExtResource("9_metal_dark")
 casts_shadow = false
 
 [node name="Board" type="MeshInstance3D" parent="."]
 position = Vector3(0.9, 1.15, 0.2)
 rotation_degrees = Vector3(0, -25, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(1, 0.7, 0.05)
-material = ExtResource("11_concrete_dar")
+material = ExtResource("16_concrete_dar")
 
 [node name="BoardFrame" type="MeshInstance3D" parent="."]
 position = Vector3(0.9, 1.15, 0.18)
 rotation_degrees = Vector3(0, -25, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(1.08, 0.78, 0.03)
-material = ExtResource("12_wood_old")
+material = ExtResource("17_wood_old")
 
 [node name="BoardLegL" type="MeshInstance3D" parent="."]
 position = Vector3(0.5, 0.45, 0.35)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.04, 0.9, 0.04)
-material = ExtResource("12_wood_old")
+material = ExtResource("17_wood_old")
 casts_shadow = false
 
 [node name="BoardLegR" type="MeshInstance3D" parent="."]
 position = Vector3(1.3, 0.45, 0)
-script = ExtResource("2_kit_shape")
+script = ExtResource("3_kit_shape")
 size = Vector3(0.04, 0.9, 0.04)
-material = ExtResource("12_wood_old")
+material = ExtResource("17_wood_old")
 casts_shadow = false
 
 [node name="Talk" type="StaticBody3D" parent="."]
 position = Vector3(0, 0.9, 0)
 collision_layer = 4
 collision_mask = 0
-script = ExtResource("13_interactable")
+script = ExtResource("18_interactable")
 kind = 0
 target_id = "raul"
 
@@ -286,5 +363,5 @@ font_size = 30
 outline_size = 8
 modulate = Color(1, 0.95, 0.85, 1)
 outline_modulate = Color(0, 0, 0, 0.85)
-script = ExtResource("14_sign_label")
+script = ExtResource("19_sign_label")
 text_key = "NPC_RAUL"

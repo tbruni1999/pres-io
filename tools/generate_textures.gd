@@ -25,6 +25,11 @@ func _initialize() -> void:
 	_mask("noise_mask", 71)
 	_fabric("fabric", 81)
 	_skin("skin_mottle", 91)
+	_plaid("plaid", 101)
+	_stripes("stripes", 111)
+	_hair_streaks("hair_streaks", 121)
+	_net("net", 131)
+	_blob_shadow("blob_shadow")
 	print("texturas generadas en ", OUT)
 	quit(0)
 
@@ -175,6 +180,71 @@ func _skin(name: String, seed_value: int) -> void:
 			c = c.darkened(maxf(0.0, pores.get_pixel(x, y).r - 0.7) * 0.4)
 			img.set_pixel(x, y, c)
 	_save(img, name)
+
+
+## Cuadrillé de camisa: líneas oscuras cada 64 px y un hilo fino cada 16 (divide a 512, tileable).
+func _plaid(name: String, seed_value: int) -> void:
+	var grain := _noise(seed_value, 0.2, 2).get_seamless_image(SIZE, SIZE, false, false, 0.1)
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			var l := 0.92
+			if x % 64 < 12 or y % 64 < 12:
+				l -= 0.24
+			if x % 16 < 2 or y % 16 < 2:
+				l -= 0.07
+			l += (grain.get_pixel(x, y).r - 0.5) * 0.05
+			img.set_pixel(x, y, Color(l, l, l))
+	_save(img, name)
+
+
+## Rayas verticales de camiseta: franjas de 64 px (divide a 512).
+func _stripes(name: String, seed_value: int) -> void:
+	var grain := _noise(seed_value, 0.2, 2).get_seamless_image(SIZE, SIZE, false, false, 0.1)
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			var l := 0.95 if x % 64 < 32 else 0.78
+			l += (grain.get_pixel(x, y).r - 0.5) * 0.05
+			img.set_pixel(x, y, Color(l, l, l))
+	_save(img, name)
+
+
+## Pelo con vetas: una onda en X desplazada por ruido suave (periodo 64 px en X, tileable).
+func _hair_streaks(name: String, seed_value: int) -> void:
+	var base := _noise(seed_value, 0.03, 3).get_seamless_image(SIZE, SIZE, false, false, 0.2)
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGB8)
+	for y in SIZE:
+		for x in SIZE:
+			var b := base.get_pixel(x, y).r
+			var streak := sin((x + 30.0 * b) * TAU / 64.0) * 0.5 + 0.5
+			var l := 0.62 + streak * 0.3 + (b - 0.5) * 0.12
+			img.set_pixel(x, y, Color(l, l, l))
+	_save(img, name)
+
+
+## Red de pesca: rombos de cuerda con alfa (solo las líneas tienen color).
+func _net(name: String, seed_value: int) -> void:
+	var img := Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var cell := 64
+	for y in SIZE:
+		for x in SIZE:
+			var a := posmod(x + y, cell) < 4 or posmod(x - y, cell) < 4
+			if a:
+				img.set_pixel(x, y, Color(0.72, 0.16, 0.12, 1.0))
+	_save(img, name)
+
+
+## Sombra bajo los pies: mancha negra con borde suave (alfa).
+func _blob_shadow(name: String) -> void:
+	var img := Image.create(128, 128, false, Image.FORMAT_RGBA8)
+	for y in 128:
+		for x in 128:
+			var d := Vector2(x - 63.5, y - 63.5).length() / 63.5
+			var a := clampf(1.0 - d, 0.0, 1.0)
+			img.set_pixel(x, y, Color(0, 0, 0, a * a * 0.55))
+	img.save_png(OUT + name + ".png")
 
 
 func _save(img: Image, name: String) -> void:

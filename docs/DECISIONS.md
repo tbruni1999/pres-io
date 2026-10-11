@@ -2,6 +2,13 @@
 
 Cada decisión indica qué se eligió y por qué. Se revisan cuando una prueba lo justifique.
 
+## Inventario visible y personas (11 de octubre, sin cambio de esquema)
+- **Lo que se ve es derivado del estado**: estanterías, red y leñero se rearman cuando cambian la mochila, el acopio, el espinel o la leña (`camp_changed`, `player_changed`). No se guarda nada nuevo.
+- **Fusión de mallas en tiempo de carga** (`MeshMerger`): por material, con `SurfaceTool`. Vale para personas y carrocerías; lo que se anima por nombre (ruedas) se deja afuera. La forma no cambia, solo bajan las llamadas de dibujo.
+- **Sombras**: las piezas chicas (personas, estanterías, objetos) no proyectan sombra; las de contacto (blob) son transparentes y tampoco. Medido: apagarlas en personas y racks bajó la toma más cargada de 423 a 385.
+- **Texturas fingidas** (sin modelos externos): cuadrillé, rayas, vetas de pelo, red con alfa y sombra radial, generadas por `tools/generate_textures.gd` con semillas fijas.
+- **Las pruebas no leen el autoguardado del usuario**: arrancan con `new_game()` tras `_ready()`. Antes, al retomar el autoguardado, una prueba de pausa fallaba según lo que hubiera guardado el jugador.
+
 ## Clima, noches y vecinos (10 de octubre, esquema 5)
 - **Todo lo nuevo que sortea usa el generador de la partida**: clima, ventana de lluvia, antojo,
   espinel, hallazgos al pescar y el evento antes de dormir. Por eso una partida cargada repite

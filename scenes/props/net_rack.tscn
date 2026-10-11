@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/world/inventory_rack.gd" id="1_inventory_ra"]
+[ext_resource type="Script" path="res://scripts/presentation/world/interactable.gd" id="2_interactable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2.2, 2.1, 0.6)
+
+[node name="NetRack" type="Node3D"]
+script = ExtResource("1_inventory_ra")
+mode = 1
+
+[node name="Look" type="StaticBody3D" parent="."]
+position = Vector3(0, 1, 0.2)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_interactable")
+kind = 7
+
+[node name="Shape" type="CollisionShape3D" parent="Look"]
+shape = SubResource("BoxShape3D_1")

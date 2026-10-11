@@ -163,6 +163,8 @@ func _find_context() -> Dictionary:
 			return {"kind": "fish", "spot": target.target_id, "text": Texts.t("ACTION_FISH_DOCK" if target.target_id == "dock" else "ACTION_FISH")}
 		Interactable.Kind.LAKE_WATER:
 			return {"kind": "lake", "text": Texts.t("ACTION_DRINK_LAKE")}
+		Interactable.Kind.SHELF:
+			return {"kind": "bag", "text": Texts.t("ACTION_SHELF")}
 		Interactable.Kind.SLEEP:
 			return {"kind": "sleep", "text": Texts.t("ACTION_SLEEP")}
 		Interactable.Kind.DIALOGUE:
@@ -262,6 +264,8 @@ func _use_context() -> void:
 				play_feedback(r.ok))
 		"place":
 			open_panel(place, {"id": ctx["id"]})
+		"bag":
+			open_panel(bag)
 		"talk":
 			open_panel(neighbor, {"id": ctx["id"]})
 		"smoker":

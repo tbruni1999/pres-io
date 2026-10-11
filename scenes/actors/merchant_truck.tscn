@@ -10,8 +10,11 @@
 [ext_resource type="Material" path="res://assets/materials/tire.tres" id="8_tire"]
 [ext_resource type="Material" path="res://assets/materials/cloth_navy.tres" id="9_cloth_navy"]
 [ext_resource type="Material" path="res://assets/materials/skin_dark.tres" id="10_skin_dark"]
-[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="11_hair_dark"]
-[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="12_sign_label"]
+[ext_resource type="Material" path="res://assets/materials/eye_white.tres" id="11_eye_white"]
+[ext_resource type="Material" path="res://assets/materials/eye_dark.tres" id="12_eye_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark.tres" id="13_hair_dark"]
+[ext_resource type="Material" path="res://assets/materials/hair_dark_streak.tres" id="14_hair_dark_st"]
+[ext_resource type="Script" path="res://scripts/presentation/world/sign_label.gd" id="15_sign_label"]
 
 [node name="MerchantTruck" type="Node3D"]
 script = ExtResource("1_merchant_veh")
@@ -167,21 +170,57 @@ material = ExtResource("10_skin_dark")
 casts_shadow = false
 
 [node name="EyeL" type="MeshInstance3D" parent="Body"]
-position = Vector3(2.04, 1.91, 0.42)
-scale = Vector3(1, 1, 0.5)
+position = Vector3(2.04, 1.905, 0.415)
+scale = Vector3(1, 1, 0.6)
 script = ExtResource("2_kit_shape")
 shape = 3
-size = Vector3(0.04, 0.045, 0.04)
-material = ExtResource("11_hair_dark")
+size = Vector3(0.05, 0.05, 0.05)
+material = ExtResource("11_eye_white")
+casts_shadow = false
+
+[node name="PupilL" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.04, 1.9, 0.435)
+scale = Vector3(1, 1, 0.7692)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.026, 0.03, 0.026)
+material = ExtResource("12_eye_dark")
+casts_shadow = false
+
+[node name="BrowL" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.04, 1.965, 0.42)
+rotation_degrees = Vector3(0, 0, 80)
+script = ExtResource("2_kit_shape")
+shape = 4
+size = Vector3(0.022, 0.075, 0.022)
+material = ExtResource("13_hair_dark")
 casts_shadow = false
 
 [node name="EyeR" type="MeshInstance3D" parent="Body"]
-position = Vector3(2.16, 1.91, 0.42)
-scale = Vector3(1, 1, 0.5)
+position = Vector3(2.16, 1.905, 0.415)
+scale = Vector3(1, 1, 0.6)
 script = ExtResource("2_kit_shape")
 shape = 3
-size = Vector3(0.04, 0.045, 0.04)
-material = ExtResource("11_hair_dark")
+size = Vector3(0.05, 0.05, 0.05)
+material = ExtResource("11_eye_white")
+casts_shadow = false
+
+[node name="PupilR" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.16, 1.9, 0.435)
+scale = Vector3(1, 1, 0.7692)
+script = ExtResource("2_kit_shape")
+shape = 3
+size = Vector3(0.026, 0.03, 0.026)
+material = ExtResource("12_eye_dark")
+casts_shadow = false
+
+[node name="BrowR" type="MeshInstance3D" parent="Body"]
+position = Vector3(2.16, 1.965, 0.42)
+rotation_degrees = Vector3(0, 0, -80)
+script = ExtResource("2_kit_shape")
+shape = 4
+size = Vector3(0.022, 0.075, 0.022)
+material = ExtResource("13_hair_dark")
 casts_shadow = false
 
 [node name="Hair" type="MeshInstance3D" parent="Body"]
@@ -190,7 +229,7 @@ scale = Vector3(1, 1, 0.931)
 script = ExtResource("2_kit_shape")
 shape = 3
 size = Vector3(0.29, 0.15, 0.29)
-material = ExtResource("11_hair_dark")
+material = ExtResource("14_hair_dark_st")
 
 [node name="ArmL" type="MeshInstance3D" parent="Body"]
 position = Vector3(2.4, 1.5, 0.08)
@@ -232,5 +271,5 @@ font_size = 30
 outline_size = 8
 modulate = Color(1, 0.95, 0.85, 1)
 outline_modulate = Color(0, 0, 0, 0.85)
-script = ExtResource("12_sign_label")
+script = ExtResource("15_sign_label")
 text_key = "MERCHANT_COCO_TAG"
